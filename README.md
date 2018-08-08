@@ -1,10 +1,10 @@
 # COMP7230 Group Project
-Winter Semester, 2017
+Winter Semester, 2018
 
 This `README.md` document describes the project requirements and method of assessment.
 Please read through the entire document carefully.
 
-_The group project is worth **40%** of your course grade._
+_The group project is worth **30%** of your course grade._
 
 ## Academic Honesty and Integrity
 
@@ -54,7 +54,7 @@ the role of each group member and assign tasks accordingly.
 At the start of the project, one group member must fork this
 repository in GitLab and add the other group members as members of the
 project with `Master` project access. You should also make sure that
-the `comp7230-marker-2017` user is a member of the project with `Developer`
+the `comp7230-marker-2018` user is a member of the project with `Developer`
 access. And finally, check that the project's visibility is set to
 `Private`.  While one group member is the designated owner of the
 repository, it is every group member's responsibility to contribute to
@@ -102,7 +102,7 @@ must include (under the headings specified):
 
 ## Code and Final Report
 
-Your project must be completed by **Sunday, 8 October, 23:59**. By this
+Your project must be completed by **Sunday, 7 October, 23:59**. By this
 date your repository should include:
 
 - a working version of your code in the `master` branch
@@ -113,26 +113,26 @@ date your repository should include:
 
 ## Assessment
 
-Your **project grade** (40%) will be assessed based on the following criteria:
+Your **project grade** (30%) will be assessed based on the following criteria:
 
-- Compelling Problem / Complexity of Problem (10%)
+- Compelling Problem / Complexity of Problem (5%)
 - Logic & Integration of Program (10%)
 - Structure (15%) comprising:
  - Programming Style / Syntax / Use of Programming Constructs – 10%
  - Use of python for entirety of program – 5%
-- Program Complexity (45%) comprising:
- - Data Pipeline (Number of datasets) – 15%
- - Data integration/aggregation – 15%
- - Visualisation – 15%
-- Issue Management, Project Management and Report (10%)
-- Regular Commits in Gitlab and Notes/README (10%)
+- Program Complexity (60%) comprising:
+ - Data Pipeline (Number of datasets) – 20%
+ - Data integration/aggregation – 20%
+ - Visualisation – 20%
+- Issue Management, Project Management and Report (5%)
+- Regular Commits in Gitlab and Notes/README (5%)
  
 
 
 ## Important Dates
 
-- **Sunday, 10 September:** Project proposals due via GitLab
-- **Sunday, 8 October, 23:59:** Final project deliverable due via GitLab
+- **Sunday, 9 September:** Project proposals due via GitLab
+- **Sunday, 7 October, 23:59:** Final project deliverable due via GitLab
 
 ## Data Sources
 
