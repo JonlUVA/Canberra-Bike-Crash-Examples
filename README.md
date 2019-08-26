@@ -1,5 +1,5 @@
 # COMP7230 Group Project
-Winter Semester, 2018
+Winter Semester, 2019
 
 This `README.md` document describes the project requirements and method of assessment.
 Please read through the entire document carefully.
@@ -27,14 +27,17 @@ project, ensuring that a truthful statement is committed and pushed to your repo
 
 ## Overview
 
-The group project is an opportunity for you to put your newly learned _data analysis skills_ using Python into practice on an interesting problem of your choosing. Projects
-are done in groups of four.
+The group project is an opportunity for you to put your newly learned 
+_data analysis skills_ using Python into practice on an interesting problem of your 
+choosing. Projects are done in groups of four.
 
 Projects should have the flavour of what we have been doing in the course. That is,
 they need to involve some sort of data processing and analysis or simulation, and
 some form of visualisation. Apart from that, the projects can be very open ended
-and you are free to propose anything that interests you. Public Datasets that you use at work or that have some relevance to your job are highly encouraged. We will provide feedback on projects that we think are either too ambitious, too simple, or otherwise
-inappropriate.
+and you are free to propose anything that interests you. Public Datasets that you
+use at work or that have some relevance to your job are highly encouraged. We will 
+provide feedback on projects that we think are either too ambitious, too simple, or 
+otherwise inappropriate.
 
 As a guideline each group member should be spending 5-6 hours per week on the
 project. Taking into account some project management overhead, we would expect
@@ -54,7 +57,7 @@ the role of each group member and assign tasks accordingly.
 At the start of the project, one group member must fork this
 repository in GitLab and add the other group members as members of the
 project with `Master` project access. You should also make sure that
-the `comp7230-marker-2018` user is a member of the project with `Developer`
+the `comp7230-marker-2019` user is a member of the project with `Developer`
 access. And finally, check that the project's visibility is set to
 `Private`.  While one group member is the designated owner of the
 repository, it is every group member's responsibility to contribute to
@@ -81,7 +84,7 @@ better, a script for automatically downloading the data.
 
 ## Project Proposal
 
-By **Sunday, 10 September** you must have have setup your repository
+By **Sunday, 8 September** you must have have setup your repository
 and added a project proposal (`PROPOSAL.md`). The project proposal
 must include (under the headings specified):
 
@@ -102,7 +105,7 @@ must include (under the headings specified):
 
 ## Code and Final Report
 
-Your project must be completed by **Sunday, 7 October, 23:59**. By this
+Your project must be completed by **Sunday, 6 October, 23:59**. By this
 date your repository should include:
 
 - a working version of your code in the `master` branch
@@ -131,8 +134,8 @@ Your **project grade** (30%) will be assessed based on the following criteria:
 
 ## Important Dates
 
-- **Sunday, 9 September:** Project proposals due via GitLab
-- **Sunday, 7 October, 23:59:** Final project deliverable due via GitLab
+- **Sunday, 8 September:** Project proposals due via GitLab
+- **Sunday, 6 October, 23:59:** Final project deliverable due via GitLab
 
 ## Data Sources
 
