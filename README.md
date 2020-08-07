@@ -1,5 +1,5 @@
 # COMP7230 Group Project
-Winter Semester, 2019
+Winter Semester, 2020
 
 This `README.md` document describes the project requirements and method of assessment.
 Please read through the entire document carefully.
@@ -57,7 +57,7 @@ the role of each group member and assign tasks accordingly.
 At the start of the project, one group member must fork this
 repository in GitLab and add the other group members as members of the
 project with `Master` project access. You should also make sure that
-the `comp7230-marker-2019` user is a member of the project with `Developer`
+the `comp7230-marker-2020` user is a member of the project with `Developer`
 access. And finally, check that the project's visibility is set to
 `Private`.  While one group member is the designated owner of the
 repository, it is every group member's responsibility to contribute to
@@ -84,7 +84,7 @@ better, a script for automatically downloading the data.
 
 ## Project Proposal
 
-By **Sunday, 8 September** you must have have setup your repository
+By **Sunday, 13 September** you must have have setup your repository
 and added a project proposal (`PROPOSAL.md`). The project proposal
 must include (under the headings specified):
 
@@ -105,7 +105,7 @@ must include (under the headings specified):
 
 ## Code and Final Report
 
-Your project must be completed by **Sunday, 6 October, 23:59**. By this
+Your project must be completed by **Sunday, 11 October, 23:59**. By this
 date your repository should include:
 
 - a working version of your code in the `master` branch
@@ -134,8 +134,8 @@ Your **project grade** (30%) will be assessed based on the following criteria:
 
 ## Important Dates
 
-- **Sunday, 8 September:** Project proposals due via GitLab
-- **Sunday, 6 October, 23:59:** Final project deliverable due via GitLab
+- **Sunday, 13 September:** Project proposals due via GitLab
+- **Sunday, 11 October, 23:59:** Final project deliverable due via GitLab
 
 ## Data Sources
 
@@ -146,8 +146,10 @@ The following data sources may provide useful inspiration for your projects:
 - https://www.kaggle.com/competitions
 - http://mldata.org
 - http://labrosa.ee.columbia.edu/millionsong/
-- http://www.abs.gov.au/ausstats/abs@.nsf/mf/1379.0.55.001/
+- https://www.abs.gov.au/ausstats/abs@.nsf/mf/1410.0
 - http://www.gutenberg.org/
+- http://wikidata.org
+- https://grouplens.org/datasets/movielens/
 
 Remember to cite the source of your data and **do not** commit large
 datasets to your repo.
