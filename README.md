@@ -57,7 +57,7 @@ the role of each group member and assign tasks accordingly.
 At the start of the project, one group member must fork this
 repository in GitLab and add the other group members as members of the
 project with `Master` project access. You should also make sure that
-the `comp7230-marker-2020` user is a member of the project with `Developer`
+the `comp7230-2020-s2-marker` user is a member of the project with `Developer`
 access. And finally, check that the project's visibility is set to
 `Private`.  While one group member is the designated owner of the
 repository, it is every group member's responsibility to contribute to
@@ -89,19 +89,19 @@ and added a project proposal (`PROPOSAL.md`). The project proposal
 must include (under the headings specified):
 
 - Title
- - The title of the project
+  - The title of the project
 - Group Members
- - List of group members (names and university IDs)
+  - List of group members (names and university IDs)
 - Overview
- - A 2-3 paragraph overview of what the project is about and
+  - A 2-3 paragraph overview of what the project is about and
    what will be delivered at the end of the semester.
 - Data
- - A description of where you will get your data.
+  - A description of where you will get your data.
 - Milestones
- - A brief list of milestones (with dates) for tasks that you
+  - A brief list of milestones (with dates) for tasks that you
    aim to achieve towards delivery of your project.
 - References
- - Any preliminary references that may be relevant for your project.
+  - Any preliminary references that may be relevant for your project.
 
 ## Code and Final Report
 
@@ -121,12 +121,12 @@ Your **project grade** (30%) will be assessed based on the following criteria:
 - Compelling Problem / Complexity of Problem (5%)
 - Logic & Integration of Program (10%)
 - Structure (15%) comprising:
- - Programming Style / Syntax / Use of Programming Constructs – 10%
- - Use of python for entirety of program – 5%
+  - Programming Style / Syntax / Use of Programming Constructs – 10%
+  - Use of python for entirety of program – 5%
 - Program Complexity (60%) comprising:
- - Data Pipeline (Number of datasets) – 20%
- - Data integration/aggregation – 20%
- - Visualisation – 20%
+  - Data Pipeline (Number of datasets) – 20%
+  - Data integration/aggregation – 20%
+  - Visualisation – 20%
 - Issue Management, Project Management and Report (5%)
 - Regular Commits in Gitlab and Notes/README (5%)
  
