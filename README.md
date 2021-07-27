@@ -1,5 +1,5 @@
 # COMP7230 Group Project
-Winter Semester, 2020
+Winter Semester, 2021
 
 This `README.md` document describes the project requirements and method of assessment.
 Please read through the entire document carefully.
@@ -57,7 +57,7 @@ the role of each group member and assign tasks accordingly.
 At the start of the project, one group member must fork this
 repository in GitLab and add the other group members as members of the
 project with `Master` project access. You should also make sure that
-the `comp7230-2020-s2-marker` user is a member of the project with `Developer`
+the `comp7230-2021-s2-marker` user is a member of the project with `Developer`
 access. And finally, check that the project's visibility is set to
 `Private`.  While one group member is the designated owner of the
 repository, it is every group member's responsibility to contribute to
@@ -84,7 +84,7 @@ better, a script for automatically downloading the data.
 
 ## Project Proposal
 
-By **Sunday, 13 September** you must have have setup your repository
+By **Sunday, 12 September** you must have have setup your repository
 and added a project proposal (`PROPOSAL.md`). The project proposal
 must include (under the headings specified):
 
@@ -134,8 +134,8 @@ Your **project grade** (30%) will be assessed based on the following criteria:
 
 ## Important Dates
 
-- **Sunday, 13 September:** Project proposals due via GitLab
-- **Sunday, 11 October, 23:59:** Final project deliverable due via GitLab
+- **Sunday, 12 September 2021, 23:59:** Project proposals due via GitLab
+- **Sunday, 10 October 2021, 23:59:** Final project deliverable due via GitLab
 
 ## Data Sources
 
