@@ -105,7 +105,7 @@ must include (under the headings specified):
 
 ## Code and Final Report
 
-Your project must be completed by **Sunday, 11 October, 23:59**. By this
+Your project must be completed by **Sunday, 10 October, 23:59**. By this
 date your repository should include:
 
 - a working version of your code in the `master` branch
