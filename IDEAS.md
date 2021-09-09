@@ -14,3 +14,5 @@ Winter Semester, 2021
 - 2020 Olympic standings vs COVID impact on each country
 - Success of Olympic host country relative to performance when not hosting
 - Some longitudinal analysis around the HILDA Survey
+- Determine dominance of Federer vs Nadal vs Djokovic
+- Crime vs weather
