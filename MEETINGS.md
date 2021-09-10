@@ -25,3 +25,19 @@ Winter Semester, 2021
 - Agreed upon plan to formalise idea by Friday, Sep 10, with proposal drafted for Sunday, Sep 12 deadline.
 - Discussed several project ideas (cf. `IDEAS.md`).
 - Current leading contender is ACT cycling incidents vs weather, endeavour to discuss with Armin during final day of intensive week to better gauge appropriateness of project scope.
+
+### Fri Sep 10, 2021 - 2:30 PM
+
+#### Attendance
+- Jonathon Longden (u7333077)
+- Tim Arney (u7378856)
+- Hugh Porter (u7398670)
+
+#### Notes
+- Discussed various ideas with Armin, determined that:
+ - the datasets need not be overly large if the scope of the analysis is broader,
+ - need to consider some data integration beyond simple space/time, eg. something semantic or more geospatial
+ - assessment will be based on the computer science rather than the analytical outcomes
+- Settled on cycling idea for project.
+- Expanded scope to include geospatial integration with place names.
+- Assigned visualations to Hugh.
