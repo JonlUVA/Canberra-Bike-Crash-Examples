@@ -3,13 +3,12 @@ Winter Semester, 2021
 
 ## Project Proposal
 
-### Title
-
-The title of the project
+### Canberra: Changing Gears on Bike Safety
+_An investigation on the uphill battle facing cyclists_
 
 ### Group Members
 
-1. William Stephens (u7164496)
+1. William Stephens (u7164496) (TBC!)
 
 2. Jonathon Longden (u7333077)
 
@@ -23,11 +22,17 @@ A 2-3 paragraph overview of what the project is about and what will be delivered
 
 ### Data
 
-A description of where you will get your data.
+- [Cyclist Crashes](https://www.data.act.gov.au/Justice-Safety-and-Emergency/Cyclist-Crashes/n2kg-qkwj/data)
+- [Bike Barometer](https://www.data.act.gov.au/Transport/ACT-Bike-Barometer-MacArthur-Avenue/62sb-92ea)
+- [Weather Observations](http://www.bom.gov.au/products/IDN60903/IDN60903.94926.shtml)
+- Sunrise / Sunset
+- [Place Names](https://placenames.fsdf.org.au/)
 
 ### Milestones
 
-A brief list of milestones (with dates) for tasks that you aim to achieve towards delivery of your project.
+- 12/09/2021: finalise Proposal
+- ...
+- 10/10/2021: final submission
 
 ### References
 
