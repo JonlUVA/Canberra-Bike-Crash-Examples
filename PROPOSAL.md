@@ -40,6 +40,8 @@ The project can also potentially explore:
 1. If speed cameras reduce the number of cycling crashes;
 2. The effects of street light distribution on cycling crashes which occur during hours of low lighting; 
 
+![Dashboard Draft](img/Dashboard_Image.PNG)
+
 ### END OF HUGH ADDED ###
 
 
