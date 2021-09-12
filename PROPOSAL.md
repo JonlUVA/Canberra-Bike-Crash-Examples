@@ -31,14 +31,14 @@ This project will explore a number of aspects around cycling in the ACT:
 This project will explore a number of aspects related to cycling in the Australian Capital Territory (ACT), producing actionable suggestions on what can be done to reduce the rate of cycling accidents. This research will primaryly make use of the ACT 'Cyclist Crashes' data (See Data section below for link), along with other datasets, to identitfy any possible links between bicycles crashes: weather, time of day, and street lighting (also potentially speed camera if time permits).
 
 The project will expolore the following ideas:
-    1. Whether their is a relationship between the number of cyclist and varying weather conditions;
-    2. If the rate of cycling crashes varies depending on weather conditions;
-    3. How the seasonal changes in natural light (sunrise/sunset) effects the rate of cycling crashes;
-    4. The geographical location of cycling crashes;
-    5. The effects of street light on cycling crashes which occur during hours of low lighting (dusk and night);
+1. Whether their is a relationship between the number of cyclist and varying weather conditions;
+2. If the rate of cycling crashes varies depending on weather conditions;
+3. How the seasonal changes in natural light (sunrise/sunset) effects the rate of cycling crashes;
+4. The geographical location of cycling crashes;
+5. The effects of street light on cycling crashes which occur during hours of low lighting (dusk and night);
 
 The project may also potentially explore:
-    1. If speeding cameras reduce the number of cycling crashes;
+1. If speeding cameras reduce the number of cycling crashes;
 
 ### Dashboard Mockups
 
