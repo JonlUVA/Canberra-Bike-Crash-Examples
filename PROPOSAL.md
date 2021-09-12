@@ -47,20 +47,20 @@ The project may also potentially explore:
 ### Data
 
 - [Cyclist Crashes](https://www.data.act.gov.au/Justice-Safety-and-Emergency/Cyclist-Crashes/n2kg-qkwj/data) - data.act.gov.au
- - 04/01/2012 - 03/10/2020
+    - 04/01/2012 - 03/10/2020
 - [Bike Barometer](https://www.data.act.gov.au/Transport/ACT-Bike-Barometer-MacArthur-Avenue/62sb-92ea) - data.act.gov.au
- - 23/11/2017 - 18/05/2021
- - Hourly
+    - 23/11/2017 - 18/05/2021
+    - Hourly
 - [Rainfall - Canberra Airport](http://www.bom.gov.au/jsp/ncc/cdio/weatherData/av?p_nccObsCode=136&p_display_type=dailyDataFile&p_startYear=&p_c=&p_stn_num=070351) - bom.gov.au
- - 2008 - current
- - Daily
+    - 2008 - current
+    - Daily
 - [Rainfall - Tuggeranong](http://www.bom.gov.au/jsp/ncc/cdio/weatherData/av?p_nccObsCode=136&p_display_type=dailyDataFile&p_startYear=&p_c=&p_stn_num=070339) - bom.gov.au
- - 1996 - current
- - Daily
+    - 1996 - current
+    - Daily
 - [Sunrise, Sunset & Twilight Times](https://geodesyapps.ga.gov.au/sunrise) - geodesyapps.ga.gov.au
- - No apparent download option / API
+    - No apparent download option / API
 - [Suburb/Locality Boundaries](https://data.gov.au/dataset/ds-dga-0257a9da-b558-4d86-a987-535c775cf8d8/details) - data.gov.au
- - Current as of 01/09/2021
+    - Current as of 01/09/2021
 - [Street Lights](https://www.data.act.gov.au/Infrastructure-and-Utilities/ACT-Streetlights-Map-View/n9u5-bt96) - data.act.gov.au
 
 _Optional Data_
