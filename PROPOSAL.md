@@ -16,6 +16,8 @@ _An investigation on the uphill battle facing cyclists_
 
 ### Overview
 
+<!--
+
 _A 2-3 paragraph overview of what the project is about and what will be delivered at the end of the semester._
 
 This project will explore a number of aspects around cycling in the ACT:
@@ -24,25 +26,23 @@ This project will explore a number of aspects around cycling in the ACT:
 3. The incidence of cycling crashes under varying natural light conditions;
 3. The prevalence of cycling crashes by geographical area.
 
-### Hugh ADDED ###
+-->
 
-This project will explore a number of aspects related to cycling in the Australian Capital Territory (ACT), producing actionable suggestions on what can be done to reduce the rate of cycling accidents.
+This project will explore a number of aspects related to cycling in the Australian Capital Territory (ACT), producing actionable suggestions on what can be done to reduce the rate of cycling accidents. This research will primaryly make use of the ACT 'Cyclist Crashes' data (See Data section below for link), along with other datasets, to identitfy any possible links between bicycles crashes: weather, time of day, and street lighting (also potentially speed camera if time permits).
 
-The project will expolore the following idea:
-1. Whether their is a relationship between the number of cyclist and varying weather conditions;
-2. If the rate of cycling crashes varies depending on weather conditions;
-3. How the seasonal changes in natural light (sunrise/sunset) effects the rate of cycling crashes;
-4. The geographical location of cycling crashes;
+The project will expolore the following ideas:
+    1. Whether their is a relationship between the number of cyclist and varying weather conditions;
+    2. If the rate of cycling crashes varies depending on weather conditions;
+    3. How the seasonal changes in natural light (sunrise/sunset) effects the rate of cycling crashes;
+    4. The geographical location of cycling crashes;
+    5. The effects of street light on cycling crashes which occur during hours of low lighting (dusk and night);
 
-The project can also potentially explore:
-1. If speed cameras reduce the number of cycling crashes;
-2. The effects of street light distribution on cycling crashes which occur during hours of low lighting;
+The project may also potentially explore:
+    1. If speeding cameras reduce the number of cycling crashes;
+
+### Dashboard Mockups
 
 ![Dashboard Draft](img/Dashboard_Image.PNG)
-
-### END OF HUGH ADDED ###
-
-
 
 ### Data
 
@@ -51,15 +51,18 @@ The project can also potentially explore:
 - [Weather Observations](http://www.bom.gov.au/products/IDN60903/IDN60903.94926.shtml) - bom.gov.au
 - [Sunrise, Sunset & Twilight Times](https://geodesyapps.ga.gov.au/sunrise) - geodesyapps.ga.gov.au
 - [Suburb/Locality Boundaries](https://data.gov.au/dataset/ds-dga-0257a9da-b558-4d86-a987-535c775cf8d8/details) - data.gov.au
+- [Street Lights](https://www.data.act.gov.au/Infrastructure-and-Utilities/ACT-Streetlights-Map-View/n9u5-bt96) - data.gov.au
 
 _Optional Data_
-- [Speed Cameras](https://www.data.act.gov.au/Justice-Safety-and-Emergency/Traffic-speed-camera-locations/426s-vdu4)
-- [Street Lights](https://www.data.act.gov.au/Infrastructure-and-Utilities/ACT-Streetlights-Map-View/n9u5-bt96)
+- [Speed Cameras](https://www.data.act.gov.au/Justice-Safety-and-Emergency/Traffic-speed-camera-locations/426s-vdu4)  - data.gov.au
+
+### Questions:
+We are playing on linking weather and street lighting in a similar way (using latitude and longitude). Is this an ideal method if we are looking to maximise our marks?
 
 ### Milestones
 
 - 12/09/2021: finalise proposal
-- ...
+- 15/09/2021: Team meeting to discuss proposal feedback, and establish internal timeline
 - 10/10/2021: final submission
 
 ### References
