@@ -53,12 +53,13 @@ The project may also potentially explore:
     - Hourly
 - [Rainfall - Canberra Airport](http://www.bom.gov.au/jsp/ncc/cdio/weatherData/av?p_nccObsCode=136&p_display_type=dailyDataFile&p_startYear=&p_c=&p_stn_num=070351) - bom.gov.au
     - 2008 - current
-    - Daily
+    - Daily - is more frequent available?
 - [Rainfall - Tuggeranong](http://www.bom.gov.au/jsp/ncc/cdio/weatherData/av?p_nccObsCode=136&p_display_type=dailyDataFile&p_startYear=&p_c=&p_stn_num=070339) - bom.gov.au
     - 1996 - current
-    - Daily
+    - Daily - is more frequent available?
 - [Sunrise, Sunset & Twilight Times](https://geodesyapps.ga.gov.au/sunrise) - geodesyapps.ga.gov.au
-    - No apparent download option / API
+    - No apparent download option / API?
+    - Calculate manually rather than use observed data?
 - [Suburb/Locality Boundaries](https://data.gov.au/dataset/ds-dga-0257a9da-b558-4d86-a987-535c775cf8d8/details) - data.gov.au
     - Current as of 01/09/2021
 - [Street Lights](https://www.data.act.gov.au/Infrastructure-and-Utilities/ACT-Streetlights-Map-View/n9u5-bt96) - data.act.gov.au
