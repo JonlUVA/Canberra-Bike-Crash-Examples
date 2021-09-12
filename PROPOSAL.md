@@ -8,13 +8,11 @@ _An investigation on the uphill battle facing cyclists_
 
 ### Group Members
 
-1. William Stephens (u7164496)
+1. Jonathon Longden (u7333077)
 
-2. Jonathon Longden (u7333077)
+2. Tim Arney (u7378856)
 
-3. Tim Arney (u7378856)
-
-4. Hugh Porter (u7398670)
+3. Hugh Porter (u7398670)
 
 ### Overview
 
@@ -38,7 +36,7 @@ The project will expolore the following idea:
 
 The project can also potentially explore:
 1. If speed cameras reduce the number of cycling crashes;
-2. The effects of street light distribution on cycling crashes which occur during hours of low lighting; 
+2. The effects of street light distribution on cycling crashes which occur during hours of low lighting;
 
 ![Dashboard Draft](img/Dashboard_Image.PNG)
 

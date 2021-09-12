@@ -7,4 +7,4 @@ work, with the following documented exceptions:
 
     ...
 
-**Signed:** Group Member 1 (u2345678), Group Member 2 (u3456789), and Group Member 3 (u0123456)
+**Signed:** Jonathon Longden (u7333077), Tim Arney (u7378856), and Hugh Porter (u7398670)
