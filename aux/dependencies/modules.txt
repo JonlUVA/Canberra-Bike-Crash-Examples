@@ -2,3 +2,4 @@ python
 pandas
 numpy
 requests
+matplotlib

@@ -4,12 +4,13 @@
 # _Canberra: Changing Gears on Bike Safety_
 _An investigation on the uphill battle facing cyclists_
 
-## Project Requirements
+## System Requirements
 
-Plus known compatible system configurations:
+With known compatible configurations:
 
 | Module | (1) |
 |--------|--------|
+| matplotlib | 3.3.4 |
 | numpy | 1.20.2 |
 | pandas | 1.2.4 |
 | python | 3.8.8 |
