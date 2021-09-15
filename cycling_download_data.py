@@ -159,7 +159,7 @@ def download_data(data_sources, download_dir):
         
         print()
         print(f"Downloading: {download_path}")
-        print(f"  url: {url}")
+        print(f"{'URL:':>12} {url}")
         # print(r.headers['content-type'])
         
         file_name = parse_filename_from_headers(r.headers.get('content-disposition'))
@@ -196,7 +196,7 @@ def download_data(data_sources, download_dir):
         data_source['path'] = file_path
         
         if file_path:
-            print(f'  saved to: {file_path}')
+            print(f"{'Local:':>12} {file_path}")
         
     return data_sources
   
