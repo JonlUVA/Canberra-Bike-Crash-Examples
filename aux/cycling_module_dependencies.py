@@ -46,6 +46,10 @@ def read_modules(file_name):
     modules = []
     file_path = Path(file_name)
     
+    if not file_path.is_file():
+        print(f"Warning: file '{file_name}' not found")
+        return []
+    
     with open(file_path) as fin:
         for line in fin:
             modules.append(line.strip())
@@ -88,13 +92,17 @@ def get_module_versions(module_list):
         if module.lower() == 'python':
             D['python'] = get_python_version()
             continue
-            
-        loaded_module = importlib.import_module(module)
         
-        if hasattr(loaded_module,'__version__'):
-            D[module] = loaded_module.__version__
-        else:
-            D[module] = 'unknown'
+        try: 
+            loaded_module = importlib.import_module(module)
+            
+            if hasattr(loaded_module,'__version__'):
+                D[module] = loaded_module.__version__
+            else:
+                D[module] = 'unknown'
+        except ModuleNotFoundError:
+            print(f"Warning: module '{module}' not found")
+            D[module] = 'not found'
             
     return D
 
@@ -316,6 +324,11 @@ def update_dependencies(modules_file, dependencies_file):
     print(f'  Reading modules file: {modules_file}')
     
     mods = read_modules(modules_file)
+    
+    if len(mods) == 0:
+        print('  No modules found')
+        return False
+    
     D = get_module_versions(mods)
     df = convert_dict_to_df(D)
     hostname = get_hostname()
@@ -333,6 +346,8 @@ def update_dependencies(modules_file, dependencies_file):
     print(f'  Writing dependencies file: {dependencies_file}')
     
     write_dependencies(dependencies_file, df)
+    
+    return True
 
 
 def update_requirements(requirementes_file, requirementes_template_file, dependencies_file):
@@ -380,6 +395,6 @@ if __name__ == '__main__':
     requirementes_template_file = 'dependencies/REQUIREMENTS.template'
     requirementes_file = '../REQUIREMENTS.md'
     
-    update_dependencies(modules_file, dependencies_file)
-    update_requirements(requirementes_file, requirementes_template_file, dependencies_file)
+    if update_dependencies(modules_file, dependencies_file):
+        update_requirements(requirementes_file, requirementes_template_file, dependencies_file)
     
