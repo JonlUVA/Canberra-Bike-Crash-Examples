@@ -8,10 +8,10 @@ _An investigation on the uphill battle facing cyclists_
 
 With known compatible configurations:
 
-| Module | (1) |
-|--------|--------|
-| matplotlib | 3.3.4 |
-| numpy | 1.20.2 |
-| pandas | 1.2.4 |
-| python | 3.8.8 |
-| requests | 2.25.1 |
+| Module | (1) | (2) |
+|--------|--------|--------|
+| matplotlib | 3.4.3 | 3.3.4 |
+| numpy | 1.21.2 | 1.20.2 |
+| pandas | 1.3.2 | 1.2.4 |
+| python | 3.9.6 | 3.8.8 |
+| requests | 2.26.0 | 2.25.1 |
