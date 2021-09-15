@@ -1,0 +1,7 @@
+type,description,format,url
+crash,,csv,https://www.data.act.gov.au/api/views/n2kg-qkwj/rows.csv?accessType=DOWNLOAD
+cyclist,,csv,https://www.data.act.gov.au/api/views/62sb-92ea/rows.csv?accessType=DOWNLOAD
+rainfall,canberra airport,csv,http://www.bom.gov.au/jsp/ncc/cdio/weatherData/av?p_display_type=dailyZippedDataFile&p_stn_num=070351&p_c=-989968743&p_nccObsCode=136&p_startYear=2021
+rainfall,tuggeranong,csv,http://www.bom.gov.au/jsp/ncc/cdio/weatherData/av?p_display_type=dailyZippedDataFile&p_stn_num=070339&p_c=-989631087&p_nccObsCode=136&p_startYear=2021
+streetlight,,csv,https://www.data.act.gov.au/api/views/cfpr-4tpw/rows.csv?accessType=DOWNLOAD
+suburb boundary,,shp,https://data.gov.au/data/dataset/0257a9da-b558-4d86-a987-535c775cf8d8/resource/d9100544-182d-470c-b3b2-75812322c495/download/act_loc_polygon_shp.zip
