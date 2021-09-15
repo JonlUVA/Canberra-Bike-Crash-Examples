@@ -317,7 +317,8 @@ def update_dependencies(modules_file, dependencies_file):
 
     Returns
     -------
-    None.
+    bool
+        True if dependencies file successfully updated, False otherwise.
 
     """
     print('Building dependencies:')
