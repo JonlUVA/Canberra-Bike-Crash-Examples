@@ -36,6 +36,7 @@ import requests
 import zipfile
 import io
 import re
+import os
 
 
 ##############################################################################
@@ -92,7 +93,14 @@ def parse_filename_from_headers(content_disposition):
     if len(fname) == 0:
         return None
     
-    return fname[0] # return the first file name
+    fname = fname[0]
+    
+    if fname.find(';'):
+        fname = fname.split(';', 1)[0]
+        
+    fname = fname.replace('"','')
+    
+    return fname
 
 
 def parse_filename_from_url(url):
@@ -432,13 +440,14 @@ def download_data(data_sources, download_dir):
         file_name = parse_filename_from_headers(r.headers.get('content-disposition'))
         if file_name == None:
             file_name = parse_filename_from_url(url)
-            
+        
+        file_ext = os.path.splitext(file_name)[1].lower()
         file_path = ''
         
         # if the downloaded file is a zip file, then try to unzip it and determine
         # which bundled file is the relevant data source, otherwise just download
         # the file directly
-        if r.headers['content-type'] == 'application/zip':
+        if r.headers['content-type'] == 'application/zip' or file_ext == '.zip':
             try:
                 z = zipfile.ZipFile(io.BytesIO(r.content))
                 z.extractall(path=download_path)
