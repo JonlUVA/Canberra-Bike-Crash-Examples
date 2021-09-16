@@ -14,4 +14,4 @@ With known compatible configurations:
 | numpy | 1.20.3 | 1.21.2 | 1.20.2 |
 | pandas | 1.3.2 | 1.3.2 | 1.2.4 |
 | python | 3.9.6 | 3.9.6 | 3.8.8 |
-| requests | not found | 2.26.0 | 2.25.1 |
+| requests | 2.26.0 | 2.26.0 | 2.25.1 |
