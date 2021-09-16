@@ -152,14 +152,14 @@ def add_to_git_ignore(file_or_dir):
     git_ignore_path = Path(git_ignore_file)
     this_module_path = Path(__file__)
     
-    comment = f'# Added by {this_module_path.name}\n'
-    ignore = file_or_dir.strip() + '\n'
+    comment_line = f'# Added by {this_module_path.name}\n'
+    ignore_line = file_or_dir.strip() + '\n'
     already_ignoring = False
     
     if not git_ignore_path.exists():
         with open(git_ignore_path, 'w') as fout:
-            fout.write(comment)
-            fout.write(ignore)
+            fout.write(comment_line)
+            fout.write(ignore_line)
     else:
         with open(git_ignore_path, 'r') as fin:
             for line in fin:
@@ -170,13 +170,79 @@ def add_to_git_ignore(file_or_dir):
         if not already_ignoring:
             with open(git_ignore_path, 'a') as fout:
                 fout.write('\n')
-                fout.write(comment)
-                fout.write(ignore)
+                fout.write(comment_line)
+                fout.write(ignore_line)
                 
     if not already_ignoring:
         print()
         print(f"'{file_or_dir}' added to local '{git_ignore_file}' file")
                 
+
+def remove_from_git_ignore(file_or_dir):
+    """
+    Removes a file or directory from the .gitignore file in the current working
+    directory.  If there's a comment on the preceding line it is also removed.
+
+    Parameters
+    ----------
+    file_or_dir : str
+        File or directory to remove.
+
+    Returns
+    -------
+    None.
+
+    """
+    
+    git_ignore_file = '.gitignore'
+    git_ignore_path = Path(git_ignore_file)
+    
+    if not git_ignore_path.exists():
+        return
+    
+    this_module_path = Path(__file__)
+    
+    comment_line = f'# Added by {this_module_path.name}\n'
+    ignore_line = file_or_dir.strip() + '\n'
+    
+    line_found = False
+    line_counter = 0
+    
+    # find the line and retain its line index
+    with open(git_ignore_path) as fin:
+        for line in fin:
+            if line == ignore_line:
+                line_found = True
+                line_number = line_counter
+                break
+            line_counter += 1
+    
+    
+    if not line_found:
+        return
+    
+    temp_file_path = git_ignore_path.with_suffix('.bak')
+    line_counter = 0
+    
+    # duplicate the file contents to a temp file, skipping the relevant line
+    # as well as the line prior if it matches the relevant comment line
+    with open(git_ignore_path) as fin, open(temp_file_path, 'w') as fout:
+        for line in fin:
+            if (line_counter == line_number - 1 and line == comment_line) or \
+                line_counter == line_number:
+                pass
+            else:
+                fout.write(line)
+                
+            line_counter += 1
+    
+    # delete the original file and copy the temp file over
+    git_ignore_path.unlink()
+    temp_file_path.rename(git_ignore_path)
+    
+    print()
+    print(f"'{file_or_dir}' removed from local '{git_ignore_file}' file")
+    
 
 def delete_previous_download(file_or_dir, force=False):
     """
@@ -192,7 +258,8 @@ def delete_previous_download(file_or_dir, force=False):
 
     Returns
     -------
-    None.
+    bool
+        True if delete, False otherwise.
 
     """
     
@@ -200,16 +267,19 @@ def delete_previous_download(file_or_dir, force=False):
     response = 'n'
     
     if not path_to_delete.exists():
-        return
+        return False
     
     if not force:
-        print(f"WARNING: '{path_to_delete}' already exists!", end='')
-        response = input(f"Would you like to delete all contents of '{path_to_delete}' first? This action can not be undone (y/n): ").strip()
+        print(f"WARNING: '{path_to_delete}' already exists!")
+        print(f"Would you like to delete all contents of '{path_to_delete}' first?", end='')
+        response = input("This action can not be undone (y/n): ").strip()
         
     if force or response.lower() == 'y':
         shutil.rmtree(path_to_delete, ignore_errors=True)
         print(f"'{path_to_delete}' deleted")
+        return True
 
+    return False
 
 def read_data_source_csv(csv_file_name):
     """
@@ -406,10 +476,12 @@ def download_data(data_sources, download_dir):
 if __name__ == '__main__':
 
     data_source_file = 'data_sources.csv'
-    download_dir = 'data'
+    download_dir = 'data_temp'
     local_data_file = 'local_data.csv'
     
-    delete_previous_download(download_dir)
+    if delete_previous_download(download_dir):
+        remove_from_git_ignore(download_dir)
+        
     data_sources = read_data_source_csv(data_source_file)
     data_sources = download_data(data_sources, download_dir)
     write_data_source_csv(local_data_file, data_sources)
