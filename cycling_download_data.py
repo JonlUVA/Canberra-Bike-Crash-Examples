@@ -281,6 +281,7 @@ def delete_previous_download(file_or_dir, force=False):
 
     return False
 
+
 def read_data_source_csv(csv_file_name):
     """
     Reads a CSV file containing details of the data sources to download and 
@@ -315,7 +316,7 @@ def read_data_source_csv(csv_file_name):
 
     """
     
-    data_source_path = Path(data_source_file)
+    data_source_path = Path(csv_file_name)
     
     if not data_source_path.is_file():
         return []
