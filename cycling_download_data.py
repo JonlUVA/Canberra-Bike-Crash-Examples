@@ -186,7 +186,7 @@ def download_data(data_sources, download_dir):
                     file_path = download_path / data_files_in_zip[0]
                 else:
                     file_path = download_path / data_files_in_zip[0]
-            except BadZipFile:
+            except zipfile.BadZipFile:
                 print(f"Warning: bad zip file '{file_name}', download skipped")
         else:
             file_path = download_path / file_name
