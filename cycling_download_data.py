@@ -259,7 +259,7 @@ def delete_previous_download(file_or_dir, force=False):
     Returns
     -------
     bool
-        True if delete, False otherwise.
+        True if successfully deleted, False otherwise.
 
     """
     
@@ -476,7 +476,7 @@ def download_data(data_sources, download_dir):
 if __name__ == '__main__':
 
     data_source_file = 'data_sources.csv'
-    download_dir = 'data_temp'
+    download_dir = 'data'
     local_data_file = 'local_data.csv'
     
     if delete_previous_download(download_dir):
