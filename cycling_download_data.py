@@ -5,9 +5,9 @@ This module provides tools to download online data sets and store them on the
 local machine.  Details on each data source are read in from a CSV file given
 in the following format:
 
-        type  | description | format |  url
-        ------------------------------------
-        (str) |    (str)    |  (str) | (str)
+        type  | description | format |  url  |  backup_url
+        --------------------------------------------------
+        (str) |    (str)    |  (str) | (str) |    (str)
         
 Where values are:
     
@@ -16,7 +16,8 @@ Where values are:
                       same type
         format : the file extension of the intended data source to identify
                  the specific file if downloading a bundle
-        url : the url of the data source.
+        url : the url of the data source
+        backup url : a mirror link should the initial download fail.
 
 The module can also generate a similar local data directory that includes a
 'path' field with the path to the downloaded data stored on the local machine.
@@ -68,62 +69,80 @@ def clean_folder_name(folder_name):
     return folder_name
 
 
-def parse_filename_from_headers(content_disposition):
+def http_request(url):
     """
-    Returns a file name, if found, in the header information from an HTTP 
-    request.
+    Send an HTTP request to the given URL and returns the request response
+    if valid.
 
     Parameters
     ----------
-    cd : str
-        The Content-Disposition header from an HTTP request.
+    url : str
+        The URL to query.
 
     Returns
     -------
-    str
-        The file name if found, otherwise None.
+    requests.Response
+        The HTTP request Response object if successful, otherwise returns False.
 
     """
-    
-    if not content_disposition:
-        return None
-    
-    fname = re.findall('filename=(.+)', content_disposition)
-    
-    if len(fname) == 0:
-        return None
-    
-    fname = fname[0]
-    
-    if fname.find(';'):
-        fname = fname.split(';', 1)[0]
+    try:
+        request_headers = {'User-Agent': 'XYZ/3.0'}
+        request_response = requests.get(url, headers=request_headers, allow_redirects=True)
         
-    fname = fname.replace('"','')
-    
-    return fname
+        if request_response.status_code == requests.codes.ok:
+            return request_response
+        else:
+            return False
+    except:
+        return False
 
 
-def parse_filename_from_url(url):
+def get_remote_file_name(request_response, url):
     """
-    Returns the substring of a URL after the last forward slash.
+    Attempts to discern the file name at the other end of an HTTP request,
+    first by examining the contents of the request response headers, then
+    by examining the URL itself.
 
     Parameters
     ----------
+    request_response : requests.Response
+        An HTTP request Response object, as returned by http_request.
     url : str
         The URL.
 
     Returns
     -------
     file_name : str
-        The URL substring.
+        The file name if determined, otherwise an empty string.
 
     """
     
     file_name = ''
     
-    if url.find('/'):
-        file_name = url.rsplit('/', 1)[1]
+    # Look in the content disposition header.  If the content is intended
+    # as an attachment, to be downloaded and saved locally, will typically
+    # reference a 'filename'
+    content_disposition = request_response.headers.get('content-disposition')
+    
+    if content_disposition:
+        file_names = re.findall('filename=(.+)', content_disposition)
         
+        if len(file_names) == 0:
+            return None
+        
+        file_name = file_names[0]
+        
+        if file_name.find(';'):
+            file_name = file_name.split(';', 1)[0]
+            
+        file_name = file_name.replace('"','')
+    
+    # If the content disposition doesn't reveal a filename, look for any
+    # characters after the final forward slash in the URL
+    if file_name == '':
+        if url.find('/'):
+            file_name = url.rsplit('/', 1)[1]
+            
     return file_name
 
 
@@ -298,13 +317,14 @@ def read_data_source_csv(csv_file_name):
     
     Expected CSV format is:
         
-        type  | description | format |  url
-        ------------------------------------
-        (str) |    (str)    |  (str) | (str)
+        type  | description | format |  url  |  backup_url
+        --------------------------------------------------
+        (str) |    (str)    |  (str) | (str) |    (str)
         
     Which is mapped to:
         
-        {'type': (str), 'description': (str), 'format': (str), 'url': (str)}
+        {'type': (str), 'description': (str), 'format': (str), 
+         'url': (str), 'backup_url': (str)}
 
     Parameters
     ----------
@@ -320,7 +340,8 @@ def read_data_source_csv(csv_file_name):
                           same type
             format : the file extension of the intended data source to identify
                      the specific file if downloading a bundle
-            url : the url of data to download.
+            url : the url of data to download
+            backup url : a mirror link should the initial download fail.
 
     """
     
@@ -347,13 +368,14 @@ def write_data_source_csv(csv_file_name, data_sources):
     
     Input dictionary format is:
         
-        {'type': (str), 'description': (str), 'format': (str), 'url': (str), 'path': (str)}
+        {'type': (str), 'description': (str), 'format': (str), 
+         'url': (str), 'backup_url': (str), 'path': (str)}
     
     Output CSV format is:
         
-        type  | description | format |  url  | path
-        --------------------------------------------
-        (str) |    (str)    |  (str) | (str) | (str)
+        type  | description | format |  url  |  backup_url | path
+        ----------------------------------------------------------
+        (str) |    (str)    |  (str) | (str) |    (str)    | (str)
         
 
     Parameters
@@ -368,6 +390,7 @@ def write_data_source_csv(csv_file_name, data_sources):
     None.
 
     """
+    
     if not data_sources:
         return
     
@@ -401,7 +424,8 @@ def download_data(data_sources, download_dir):
     ----------
     data_sources : list of dict
         A list of dicitonaries containing the information for each data source:
-             {'type': (str), 'description': (str), 'format': (str), 'url': (str)}
+             {'type': (str), 'description': (str), 'format': (str), 
+              'url': (str), 'backup_url': (str)}
     download_dir : str
         The local path to store the downloads.
 
@@ -409,9 +433,11 @@ def download_data(data_sources, download_dir):
     -------
     data_sources : list of dict
         A list of dicitonaries containing the information for each data source:
-             {'type': (str), 'description': (str), 'format': (str), 'url': (str), 'path': (str)}
+            {'type': (str), 'description': (str), 'format': (str), 
+             'url': (str), 'backup_url': (str), 'path': (str)}
 
     """
+    
     download_root_dir = Path(download_dir)
 
     for data_source in data_sources:
@@ -424,76 +450,76 @@ def download_data(data_sources, download_dir):
         # create the download folder and any parent directories if it doesn't exist
         if not download_path.exists():
             download_path.mkdir(parents=True)
-            
-    
-        # make the HTTP request with a custom header to coerce the remote
-        # server that it isn't a bot
+        
+        downloaded = False 
+        tried_backup = False
         url = data_source['url']
-        h = {'User-Agent': 'XYZ/3.0'}
-        r = requests.get(url, headers=h, allow_redirects=True)
         
-        print()
-        print(f"Downloading: {download_path}")
-        print(f"{'URL:':>12} {url}")
-        
-        # try to determine the name of the file that will be downloaded
-        file_name = parse_filename_from_headers(r.headers.get('content-disposition'))
-        if file_name == None:
-            file_name = parse_filename_from_url(url)
-        
-        file_ext = os.path.splitext(file_name)[1].lower()
-        file_path = ''
-        
-        # if the downloaded file is a zip file, then try to unzip it and determine
-        # which bundled file is the relevant data source, otherwise just download
-        # the file directly
-        if r.headers['content-type'] == 'application/zip' or file_ext == '.zip':
-            try:
-                z = zipfile.ZipFile(io.BytesIO(r.content))
-                z.extractall(path=download_path)
-                file_format = data_source['format'].strip().lower()
-                glob_pattern = '**/*.' + file_format
-                data_files_in_zip = list(download_path.glob(glob_pattern))
-                
-                if len(data_files_in_zip) == 0:
-                    print(f"{'WARNING:':>12} no {file_format} files found in '{download_path}'")
-                    file_path = ''
-                elif len(data_files_in_zip) > 1:
-                    print(f"{'WARNING:':>12} multiple {file_format} files found in '{download_path}', assuming first one")
-                    file_path = data_files_in_zip[0]
+        while not downloaded and not tried_backup:
+            response = http_request(url)
+            
+            # invalid response, try backup URL if supplied and not yet tried
+            if not response:
+                if url == data_source['backup_url'] or data_source['backup_url'] == '':
+                    tried_backup = True
                 else:
-                    file_path = data_files_in_zip[0]
-            except zipfile.BadZipFile:
-                url = data_source['backup_url']
-                
-                if not url:
-                    print(f"{'WARNING:':>12} bad zip file found, skipping download")
+                    url = data_source['backup_url']
+                continue
+            
+            print()
+            print(f"Downloading: {download_path}")
+            print(f"{'URL:':>12} {url}")
+            
+            file_name = get_remote_file_name(response, url)
+            
+            # invalid file name, try backup URL if supplied and not yet tried
+            if not file_name:
+                if url == data_source['backup_url'] or data_source['backup_url'] == '':
+                    tried_backup = True
                 else:
-                    print(f"{'WARNING:':>12} bad zip file found, trying backup source")
-                    print(f"{'URL:':>12} {url}")
-                    r = requests.get(url, headers=h, allow_redirects=True)
+                    url = data_source['backup_url']
+                continue
+            
+            file_ext = os.path.splitext(file_name)[1].lower()
+            file_path = ''
+            
+            # check if file to be downloaded is zip, in which case decompress
+            # and try to identify relevant source file within contents,
+            # otherwise just download file directly
+            if response.headers['content-type'] == 'application/zip' or file_ext == '.zip':
+                try:
+                    z = zipfile.ZipFile(io.BytesIO(response.content))
+                    z.extractall(path=download_path)
                     
-                    try:
-                        z = zipfile.ZipFile(io.BytesIO(r.content))
-                        z.extractall(path=download_path)
-                        file_format = data_source['format'].strip().lower()
-                        glob_pattern = '**/*.' + file_format
-                        data_files_in_zip = list(download_path.glob(glob_pattern))
+                    # look for file in contents that matches data source format
+                    file_format = data_source['format'].strip().lower()
+                    glob_pattern = '**/*.' + file_format
+                    data_files_in_zip = list(download_path.glob(glob_pattern))
+                    
+                    if len(data_files_in_zip) == 0:
+                        print(f"{'WARNING:':>12} no {file_format} files found in '{download_path}'")
+                        file_path = ''
+                    elif len(data_files_in_zip) > 1:
+                        print(f"{'WARNING:':>12} multiple {file_format} files found in '{download_path}', assuming first one")
+                        file_path = data_files_in_zip[0]
+                    else:
+                        file_path = data_files_in_zip[0]
                         
-                        if len(data_files_in_zip) == 0:
-                            print(f"{'WARNING:':>12} no {file_format} files found in '{download_path}'")
-                            file_path = ''
-                        elif len(data_files_in_zip) > 1:
-                            print(f"{'WARNING:':>12} multiple {file_format} files found in '{download_path}', assuming first one")
-                            file_path = data_files_in_zip[0]
-                        else:
-                            file_path = data_files_in_zip[0]
-                    except zipfile.BadZipFile:
+                    downloaded = True
+                except zipfile.BadZipFile:
+                    # invalid zip file, try backup URL if supplied and not yet tried
+                    if url == data_source['backup_url'] or data_source['backup_url'] == '':
                         print(f"{'WARNING:':>12} bad zip file found, skipping download")
-        else:
-            file_path = download_path / file_name
-            with open(file_path, mode="wb") as outfile:
-                outfile.write(r.content)
+                        tried_backup = True
+                    else:
+                        print(f"{'WARNING:':>12} bad zip file found, trying backup source")
+                        url = data_source['backup_url']
+                    continue
+            else:
+                file_path = download_path / file_name
+                with open(file_path, mode="wb") as outfile:
+                    outfile.write(response.content)
+                downloaded = True
                 
         # if the download was successful and a valid local file path is created
         # add it to the data source dictionary
@@ -509,6 +535,11 @@ def download_data(data_sources, download_dir):
 ##############################################################################
 
 if __name__ == '__main__':
+    
+    print('###########################################################')
+    print('#                   DOWNLOADING DATA                      #')
+    print('###########################################################')
+    print()
 
     data_source_file = 'data_sources.csv'
     download_dir = 'data'
