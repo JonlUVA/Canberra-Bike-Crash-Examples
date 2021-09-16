@@ -460,11 +460,36 @@ def download_data(data_sources, download_dir):
                     file_path = ''
                 elif len(data_files_in_zip) > 1:
                     print(f"{'WARNING:':>12} multiple {file_format} files found in '{download_path}', assuming first one")
-                    file_path = download_path / data_files_in_zip[0]
+                    file_path = data_files_in_zip[0]
                 else:
-                    file_path = download_path / data_files_in_zip[0]
+                    file_path = data_files_in_zip[0]
             except zipfile.BadZipFile:
-                print(f"{'WARNING:':>12} bad zip file found, skipping download")
+                url = data_source['backup_url']
+                
+                if not url:
+                    print(f"{'WARNING:':>12} bad zip file found, skipping download")
+                else:
+                    print(f"{'WARNING:':>12} bad zip file found, trying backup source")
+                    print(f"{'URL:':>12} {url}")
+                    r = requests.get(url, headers=h, allow_redirects=True)
+                    
+                    try:
+                        z = zipfile.ZipFile(io.BytesIO(r.content))
+                        z.extractall(path=download_path)
+                        file_format = data_source['format'].strip().lower()
+                        glob_pattern = '**/*.' + file_format
+                        data_files_in_zip = list(download_path.glob(glob_pattern))
+                        
+                        if len(data_files_in_zip) == 0:
+                            print(f"{'WARNING:':>12} no {file_format} files found in '{download_path}'")
+                            file_path = ''
+                        elif len(data_files_in_zip) > 1:
+                            print(f"{'WARNING:':>12} multiple {file_format} files found in '{download_path}', assuming first one")
+                            file_path = data_files_in_zip[0]
+                        else:
+                            file_path = data_files_in_zip[0]
+                    except zipfile.BadZipFile:
+                        print(f"{'WARNING:':>12} bad zip file found, skipping download")
         else:
             file_path = download_path / file_name
             with open(file_path, mode="wb") as outfile:
