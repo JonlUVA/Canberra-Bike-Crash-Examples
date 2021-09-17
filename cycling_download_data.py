@@ -39,6 +39,7 @@ import io
 import re
 import os
 
+from cycling_globals import *
 
 ##############################################################################
 #                               HELPER FUNCTIONS                             #
@@ -394,7 +395,7 @@ def write_data_source_csv(csv_file_name, data_sources):
     if not data_sources:
         return
     
-    data_source_path = Path(download_dir) / csv_file_name
+    data_source_path = Path(DATA_FOLDER) / csv_file_name
     
     columns = list(data_sources[0].keys())
     
@@ -540,15 +541,11 @@ if __name__ == '__main__':
     print('#                   DOWNLOADING DATA                      #')
     print('###########################################################')
     print()
-
-    data_source_file = 'data_sources.csv'
-    download_dir = 'data'
-    local_data_file = 'local_data.csv'
     
-    if delete_previous_download(download_dir):
-        remove_from_git_ignore(download_dir)
+    if delete_previous_download(DATA_FOLDER):
+        remove_from_git_ignore(DATA_FOLDER)
         
-    data_sources = read_data_source_csv(data_source_file)
-    data_sources = download_data(data_sources, download_dir)
-    write_data_source_csv(local_data_file, data_sources)
-    add_to_git_ignore(download_dir)
+    data_sources = read_data_source_csv(DATA_SOURCES)
+    data_sources = download_data(data_sources, DATA_FOLDER)
+    write_data_source_csv(DATA_INDEX, data_sources)
+    add_to_git_ignore(DATA_FOLDER)
