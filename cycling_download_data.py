@@ -353,7 +353,7 @@ def read_data_source_csv(csv_file_name):
     data_sources= []
     
     with open(data_source_path, encoding='utf-8-sig') as fin:
-        csv_reader = csv.DictReader(fin)
+        csv_reader = csv.DictReader(fin, delimiter=',')
         
         for row in csv_reader:
             data_sources.append(row)
@@ -399,7 +399,7 @@ def write_data_source_csv(csv_file_name, data_sources):
     columns = list(data_sources[0].keys())
     
     with open(data_source_path, 'w') as fout:
-        csv_writer = csv.DictWriter(fout, fieldnames=columns)
+        csv_writer = csv.DictWriter(fout, fieldnames=columns, delimiter=',')
         csv_writer.writeheader()
         csv_writer.writerows(data_sources)
         
