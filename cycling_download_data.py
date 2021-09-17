@@ -260,7 +260,7 @@ def remove_from_git_ignore(file_or_dir):
                 line_counter == line_number:
                 pass
             else:
-                fout.write(line)
+                fout.write(line.strip())
                 
             line_counter += 1
     
