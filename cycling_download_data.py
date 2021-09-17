@@ -47,7 +47,7 @@ import os
 
 def clean_folder_name(folder_name):
     """
-    Normalised a folder name by removing any superfluous whitespace, converting
+    Normalises a folder name by removing any superfluous whitespace, converting
     spaces to underscores, and converting to lower case.
 
     Parameters
