@@ -9,13 +9,13 @@ For defining system wide variables.
 """
 
 # CSV file containing information on data sets to download (eg. type, url)
-# path is relative to project root
+# path of file is relative to project root
 DATA_SOURCES = 'data_sources.csv'
 
 # name of folder to store downloaded data
-# path is relative to project root
+# path of folder is relative to project root
 DATA_FOLDER = 'data'
 
 # CSV file to create containing information on local data sets (eg. type, path) 
-# path is relative to DATA_FOLDER
+# path of file is relative to DATA_FOLDER
 DATA_INDEX = 'local_data.csv'
