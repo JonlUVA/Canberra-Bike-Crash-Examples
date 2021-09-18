@@ -13,6 +13,11 @@ import sys
 from cycling_globals import *
 from cycling_check_dependencies import *
 
+
+def data_demo(data):
+    pass
+
+
 if __name__ == '__main__':
     
     print()
@@ -31,7 +36,6 @@ if __name__ == '__main__':
         print(dependencies)
     else:
         print('Required modules missing, please install:')
-        print()
         for i, module in enumerate(dependencies.get_missing_modules()):
             print(f'{i + 1}: {module}')
         sys.exit()
