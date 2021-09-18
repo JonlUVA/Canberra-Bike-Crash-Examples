@@ -1,7 +1,7 @@
-type,description,format,url,backup_url
-crash,,csv,https://www.data.act.gov.au/api/views/n2kg-qkwj/rows.csv?accessType=DOWNLOAD,https://www.dropbox.com/s/9ozlmg6ufm40hov/Cyclist_Crashes.csv?dl=1
-cyclist,,csv,https://www.data.act.gov.au/api/views/62sb-92ea/rows.csv?accessType=DOWNLOAD,https://www.dropbox.com/s/8b1wmg5gawvqa4w/ACT_Bike_Barometer_-_MacArthur_Avenue.csv?dl=1
-rainfall,canberra airport,csv,http://www.bom.gov.au/jsp/ncc/cdio/weatherData/av?p_display_type=dailyZippedDataFile&p_stn_num=070351&p_c=-989968743&p_nccObsCode=136&p_startYear=2021,https://www.dropbox.com/s/ogytkt14566bl0i/IDCJAC0009_070351_1800.zip?dl=1
-rainfall,tuggeranong,csv,http://www.bom.gov.au/jsp/ncc/cdio/weatherData/av?p_display_type=dailyZippedDataFile&p_stn_num=070339&p_c=-989631087&p_nccObsCode=136&p_startYear=2021,https://www.dropbox.com/s/wd7pdi4pzxxb8ic/IDCJAC0009_070339_1800.zip?dl=1
-streetlight,,csv,https://www.data.act.gov.au/api/views/cfpr-4tpw/rows.csv?accessType=DOWNLOAD,https://www.dropbox.com/s/otfiljycldd9pjx/ACT_Streetlights.csv?dl=1
-suburb boundary,,shp,https://data.gov.au/data/dataset/0257a9da-b558-4d86-a987-535c775cf8d8/resource/d9100544-182d-470c-b3b2-75812322c495/download/act_loc_polygon_shp.zip,https://www.dropbox.com/s/bbikmg5vi11ikun/act_loc_polygon_shp.zip?dl=1
+type,description,format,date_time_fields,lat_long_fields,url,backup_url
+crash,,csv,CRASH_DATE;CRASH_TIME,LATITUDE;LONGITUDE,https://www.data.act.gov.au/api/views/n2kg-qkwj/rows.csv?accessType=DOWNLOAD,https://www.dropbox.com/s/9ozlmg6ufm40hov/Cyclist_Crashes.csv?dl=1
+cyclist,,csv,Date & Time,,https://www.data.act.gov.au/api/views/62sb-92ea/rows.csv?accessType=DOWNLOAD,https://www.dropbox.com/s/8b1wmg5gawvqa4w/ACT_Bike_Barometer_-_MacArthur_Avenue.csv?dl=1
+rainfall,canberra airport,csv,Year;Month;Day,,http://www.bom.gov.au/jsp/ncc/cdio/weatherData/av?p_display_type=dailyZippedDataFile&p_stn_num=070351&p_c=-989968743&p_nccObsCode=136&p_startYear=2021,https://www.dropbox.com/s/ogytkt14566bl0i/IDCJAC0009_070351_1800.zip?dl=1
+rainfall,tuggeranong,csv,Year;Month;Day,,http://www.bom.gov.au/jsp/ncc/cdio/weatherData/av?p_display_type=dailyZippedDataFile&p_stn_num=070339&p_c=-989631087&p_nccObsCode=136&p_startYear=2021,https://www.dropbox.com/s/wd7pdi4pzxxb8ic/IDCJAC0009_070339_1800.zip?dl=1
+streetlight,,csv,,LOCATION,https://www.data.act.gov.au/api/views/cfpr-4tpw/rows.csv?accessType=DOWNLOAD,https://www.dropbox.com/s/otfiljycldd9pjx/ACT_Streetlights.csv?dl=1
+suburb,,shp,,,https://data.gov.au/data/dataset/0257a9da-b558-4d86-a987-535c775cf8d8/resource/d9100544-182d-470c-b3b2-75812322c495/download/act_loc_polygon_shp.zip,https://www.dropbox.com/s/bbikmg5vi11ikun/act_loc_polygon_shp.zip?dl=1
