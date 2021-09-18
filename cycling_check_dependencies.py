@@ -20,7 +20,8 @@ except ModuleNotFoundError as me:
 
 
 class Dependencies:
-    def __init__(self, root_path, ignore_module_prefix='', include_subs=False, self_ignore=True):
+    def __init__(self, root_path, ignore_module_prefix='', include_subs=False,
+                 self_ignore=True):
         self._path = root_path
         
         if isinstance(self._path, str):
@@ -243,7 +244,6 @@ if __name__ == '__main__':
     
     print('Source code files examined')
     print('--------------------------')
-    print()
     for file in dependencies.get_file_list():
         print(file)
     print()
@@ -251,7 +251,6 @@ if __name__ == '__main__':
     
     print('Modules referenced')
     print('------------------')
-    print()
     for module in dependencies.get_module_list():
         print(module)
     print()
@@ -259,7 +258,6 @@ if __name__ == '__main__':
     
      
     print('System compatibility')  
-    print('--------------------')     
-    print()
+    print('--------------------')
     print(dependencies)
     print()
