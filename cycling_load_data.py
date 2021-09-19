@@ -143,6 +143,42 @@ def parse_field_params(field_params):
         return field_params
     
 
+def check_local_data(data_index_csv):
+    data_index = read_data_directory_csv(data_index_csv)
+    
+    print(f'Checking data index: {data_index_csv} ...', end=' ')
+    if not data_index:
+        print('NOT FOUND')
+        return False
+    else:
+        print('found')
+        
+    max_width = 0
+    for data_source in data_index:
+        if len(data_source['path']) > max_width:
+            max_width = len(data_source['path'])
+    
+    all_found = True
+    
+    print('')
+    print('Checking data sources:')
+    for data_source in data_index:
+        path = Path(data_source['path'])
+        padding = '.' * (max_width - len(data_source['path']) + 3)
+        
+        print(f'  {path} {padding}', end=' ')
+        
+        if path.is_file():
+            print('found')
+        else:
+            print('NOT FOUND')
+            all_found = False
+            
+    return all_found
+        
+    
+    
+
 # data_directory_file = 'data/local_data.csv'
 
 
@@ -299,72 +335,105 @@ class Suburb:
                 
         return res
                 
-                
-                
+     
+def load_data(data_index_path):
+    data_index = read_data_directory_csv(data_index_path)
+    data = {}
+    
+    for data_source in data_index:
+        data_path = data_source['path']
+        data_type = data_source['type']
+        data_description = data_source['description']
+        data_format = data_source['format']
         
-data_directory_path = Path(DATA_FOLDER) / DATA_INDEX
-data_index = read_data_directory_csv(data_directory_path)
-data = {}
-
-for data_source in data_index:
-    data_path = data_source['path']
-    data_type = data_source['type']
-    data_description = data_source['description']
-    data_format = data_source['format']
-    
-    date_time = parse_field_params(data_source['date_time_fields'])
-    lat_long = parse_field_params(data_source['lat_long_fields'])
-    
-    if data_format.lower() == 'csv':
-        data_content = read_csv_into_df(data_path, date_time_cols=date_time, lat_long_cols=lat_long)
-    elif data_format.lower() == 'shp':
-        data_content = Suburb(data_path)     
-    else:
-        continue    
+        date_time = parse_field_params(data_source['date_time_fields'])
+        lat_long = parse_field_params(data_source['lat_long_fields'])
         
-    if data_type.lower() == 'rainfall':
-        data_content = Rainfall(data_source, data_content)
-    
-    if data_description:
-        if data_type in data:
-            data[data_type][data_description] = data_content
+        if data_format.lower() == 'csv':
+            data_content = read_csv_into_df(data_path, date_time_cols=date_time, lat_long_cols=lat_long)
+        elif data_format.lower() == 'shp':
+            data_content = Suburb(data_path)     
         else:
-            data[data_type] = {data_description: data_content}
-    else:
-        data[data_type] = data_content
-    
-
-## SHAPE DEMO
-
-# all_shapes = data['suburb boundary'].shapes()
-# all_records = data['suburb boundary'].records()   
- 
-# for station in data['rainfall']:
-#     station_location = Point(data['rainfall'][station].get_station_long_lat())
-#     station_name = data['rainfall'][station].get_station_name()
-    
-#     for i, this_shape in enumerate(all_shapes):
-#         boundary = shape(this_shape)
+            continue    
+            
+        if data_type.lower() == 'rainfall':
+            data_content = Rainfall(data_source, data_content)
         
-#         if station_location.within(boundary):
-#             locality_name = all_records[i][3]
-#             locality_level = all_records[i][4]
-#             print(f"Rainfall station '{station_name}' is located within the {locality_level} {locality_name}")
-
-print()
-
-for station in data['rainfall']:
-    lat = data['rainfall'][station].get_station_lat()
-    long = data['rainfall'][station].get_station_long()
+        if data_description:
+            if data_type in data:
+                data[data_type][data_description] = data_content
+            else:
+                data[data_type] = {data_description: data_content}
+        else:
+            data[data_type] = data_content
+            
+    return data
+     
+if __name__ == '__main__':             
+        
+    data_directory_path = Path(DATA_FOLDER) / DATA_INDEX
+    data_index = read_data_directory_csv(data_directory_path)
+    data = {}
     
-    located = data['suburb'].locate(lat, long)
+    for data_source in data_index:
+        data_path = data_source['path']
+        data_type = data_source['type']
+        data_description = data_source['description']
+        data_format = data_source['format']
+        
+        date_time = parse_field_params(data_source['date_time_fields'])
+        lat_long = parse_field_params(data_source['lat_long_fields'])
+        
+        if data_format.lower() == 'csv':
+            data_content = read_csv_into_df(data_path, date_time_cols=date_time, lat_long_cols=lat_long)
+        elif data_format.lower() == 'shp':
+            data_content = Suburb(data_path)     
+        else:
+            continue    
+            
+        if data_type.lower() == 'rainfall':
+            data_content = Rainfall(data_source, data_content)
+        
+        if data_description:
+            if data_type in data:
+                data[data_type][data_description] = data_content
+            else:
+                data[data_type] = {data_description: data_content}
+        else:
+            data[data_type] = data_content
+        
     
-    name = data['rainfall'][station].get_station_name()
-    print(f"Weather station '{name}' is located within:")
-    for level, area in located.items():
-        print(f"  {level.title()}: {area}")
+    ## SHAPE DEMO
+    
+    # all_shapes = data['suburb boundary'].shapes()
+    # all_records = data['suburb boundary'].records()   
+     
+    # for station in data['rainfall']:
+    #     station_location = Point(data['rainfall'][station].get_station_long_lat())
+    #     station_name = data['rainfall'][station].get_station_name()
+        
+    #     for i, this_shape in enumerate(all_shapes):
+    #         boundary = shape(this_shape)
+            
+    #         if station_location.within(boundary):
+    #             locality_name = all_records[i][3]
+    #             locality_level = all_records[i][4]
+    #             print(f"Rainfall station '{station_name}' is located within the {locality_level} {locality_name}")
+    
     print()
+    
+    for station in data['rainfall']:
+        lat = data['rainfall'][station].get_station_lat()
+        long = data['rainfall'][station].get_station_long()
         
-distance = data['rainfall']['canberra airport'].distance_from_station(lat, long)
-
-print(f'They are {distance:.2f} km apart')
+        located = data['suburb'].locate(lat, long)
+        
+        name = data['rainfall'][station].get_station_name()
+        print(f"Weather station '{name}' is located within:")
+        for level, area in located.items():
+            print(f"  {level.title()}: {area}")
+        print()
+            
+    distance = data['rainfall']['canberra airport'].distance_from_station(lat, long)
+    
+    print(f'They are {distance:.2f} km apart')
