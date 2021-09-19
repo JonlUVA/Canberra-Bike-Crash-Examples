@@ -17,6 +17,9 @@ from cycling_check_dependencies import *
 def data_demo(data):
     pass
 
+##############################################################################
+#                                    MAIN                                    #
+##############################################################################
 
 if __name__ == '__main__':
     
@@ -41,16 +44,60 @@ if __name__ == '__main__':
         print('Once installed, please re-run the program.')
         sys.exit()
     
-    # import everything else
+    
+    ##########################################################################
+    #    DEPENDENCIES MET, CAN NOW SAFELY IMPORT ALL ADDITIONAL MODULES      #
+    ##########################################################################
     from cycling_globals import *
     from cycling_update_compatible_systems import *
+    from cycling_download_data import *
+    from cycling_load_data import *
     
-    # if dependencies met update compatible systems (or move to end?)
     
-    # if no local data, download data
+    print()
+    print('###########################################################')
+    print('#              UPDATING COMPATIBLE SYSTEMS                #')
+    print('###########################################################')
+    print()
+       
+    compatible_systems_csv = 'compatible_systems/compatible_systems.csv'
+    requirements_doc_template = 'compatible_systems/REQUIREMENTS.template'
+    requirements_doc = 'REQUIREMENTS.md'
     
-    # load data
+    update_compatible_systems_csv(sys_config, compatible_systems_csv)
+    update_requirements_doc(compatible_systems_csv, requirements_doc_template, requirements_doc)
     
+    print()
+    print('Please feel free to commit these files to the remote repository.')
+    
+
+    print()
+    print('###########################################################')
+    print('#              CHECKING LOCAL DATA SOURCES                #')
+    print('###########################################################')
+    print()    
+
+    data_index_path = Path(DATA_FOLDER) / DATA_INDEX
+
+    if not check_local_data(data_index_path):
+        print()
+        print('###########################################################')
+        print('#                     DOWNLOADING DATA                    #')
+        print('###########################################################')
+        print()  
+        download_all_data(DATA_SOURCES, DATA_FOLDER, DATA_INDEX)
+    else:
+        print()
+        print('All data sources found')
+
+    
+    print()
+    print('###########################################################')
+    print('#                       LOADING DATA                      #')
+    print('###########################################################')
+    print()  
+    
+    data = load_data(data_index_path)
     # analyse data
     
     # visualise data
