@@ -362,7 +362,7 @@ def read_data_source_csv(csv_file_name):
     return data_sources
 
 
-def write_data_source_csv(csv_file_name, data_sources):
+def write_data_index_csv(csv_file_name, data_sources):
     """
     Writes a CSV file containing details of the data sources downloaded and
     their location on the local system.
@@ -529,7 +529,17 @@ def download_data(data_sources, download_dir):
             print(f"{'Local:':>12} {file_path}")
         
     return data_sources
-  
+ 
+    
+def download_all_data(sources_csv, download_folder, output_index_csv):
+    # if delete_previous_download(download_folder):
+    #     remove_from_git_ignore(download_folder)
+     
+    delete_previous_download(DATA_FOLDER)
+    data_sources = read_data_source_csv(sources_csv)
+    data_sources = download_data(data_sources, download_folder)
+    write_data_index_csv(output_index_csv, data_sources)
+    add_to_git_ignore(download_folder)    
   
 ##############################################################################
 #                                    MAIN                                    #
@@ -548,5 +558,5 @@ if __name__ == '__main__':
         
     data_sources = read_data_source_csv(DATA_SOURCES)
     data_sources = download_data(data_sources, DATA_FOLDER)
-    write_data_source_csv(DATA_INDEX, data_sources)
+    write_data_index_csv(DATA_INDEX, data_sources)
     add_to_git_ignore(DATA_FOLDER)
