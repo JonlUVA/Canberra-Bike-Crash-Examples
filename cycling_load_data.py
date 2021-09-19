@@ -340,6 +340,12 @@ def load_data(data_index_path):
     data_index = read_data_directory_csv(data_index_path)
     data = {}
     
+    max_width = 0
+    for data_source in data_index:
+        if len(data_source['path']) > max_width:
+            max_width = len(data_source['path'])
+    print('Reading data:')
+    
     for data_source in data_index:
         data_path = data_source['path']
         data_type = data_source['type']
@@ -348,6 +354,9 @@ def load_data(data_index_path):
         
         date_time = parse_field_params(data_source['date_time_fields'])
         lat_long = parse_field_params(data_source['lat_long_fields'])
+        
+        padding = '.' * (max_width - len(data_source['path']) + 3)
+        print(f'  {data_path} {padding}', end=' ')
         
         if data_format.lower() == 'csv':
             data_content = read_csv_into_df(data_path, date_time_cols=date_time, lat_long_cols=lat_long)
@@ -367,6 +376,8 @@ def load_data(data_index_path):
         else:
             data[data_type] = data_content
             
+        print('loaded')
+        
     return data
      
 if __name__ == '__main__':             

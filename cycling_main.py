@@ -24,10 +24,10 @@ def data_demo(data):
 if __name__ == '__main__':
     
     print()
-    print('###########################################################')
-    print('#                   DEPENDENCY CHECK                      #')
-    print('###########################################################')
-    print()
+    print('############################################################################')
+    print('#                         CHECKING DEPENDENCIES                            #')
+    print('############################################################################')
+    print()  
     
     root_path = Path.cwd()
     local_module_prefix = 'cycling'
@@ -55,10 +55,10 @@ if __name__ == '__main__':
     
     
     print()
-    print('###########################################################')
-    print('#              UPDATING COMPATIBLE SYSTEMS                #')
-    print('###########################################################')
-    print()
+    print('############################################################################')
+    print('#                       UPDATING COMPATIBLE SYSTEMS                        #')
+    print('############################################################################')
+    print()  
        
     compatible_systems_csv = 'compatible_systems/compatible_systems.csv'
     requirements_doc_template = 'compatible_systems/REQUIREMENTS.template'
@@ -72,18 +72,18 @@ if __name__ == '__main__':
     
 
     print()
-    print('###########################################################')
-    print('#              CHECKING LOCAL DATA SOURCES                #')
-    print('###########################################################')
-    print()    
+    print('############################################################################')
+    print('#                       CHECKING LOCAL DATA SOURCES                        #')
+    print('############################################################################')
+    print()  
 
     data_index_path = Path(DATA_FOLDER) / DATA_INDEX
 
     if not check_local_data(data_index_path):
         print()
-        print('###########################################################')
-        print('#                     DOWNLOADING DATA                    #')
-        print('###########################################################')
+        print('############################################################################')
+        print('#                             DOWNLOADING DATA                             #')
+        print('############################################################################')
         print()  
         download_all_data(DATA_SOURCES, DATA_FOLDER, DATA_INDEX)
     else:
@@ -92,12 +92,17 @@ if __name__ == '__main__':
 
     
     print()
-    print('###########################################################')
-    print('#                       LOADING DATA                      #')
-    print('###########################################################')
+    print('############################################################################')
+    print('#                               LOADING DATA                               #')
+    print('############################################################################')
     print()  
     
     data = load_data(data_index_path)
-    # analyse data
+    print()
+    print('All data sources loaded')
     
-    # visualise data
+    ##########################################################################
+    #     CAN NOW PASS THE DATA TO THE ANALYSIS / VISUALISATION MODULES      #
+    ##########################################################################
+    
+    data_demo(data)
