@@ -13,6 +13,11 @@ from pathlib import Path
 
 from cycling_check_dependencies import *
 
+
+##############################################################################
+#                               HELPER FUNCTIONS                             #
+##############################################################################
+
 def print_header(header_text, header_width=77, all_caps=True):
     if all_caps:
         header_text = header_text.upper()
@@ -115,8 +120,11 @@ if __name__ == '__main__':
     print('All data sources loaded')
     
     ##########################################################################
-    #     CAN NOW PASS THE DATA TO THE ANALYSIS / VISUALISATION MODULES      #
+    #                         ANALYSE / VISUALISE DATA                       #
     ##########################################################################
     
+    # Here's a little demo of the data that is available:
     from cycling_data_demo import *
+    print()
+    print_header('Data Demo')
     data_demo(data)
