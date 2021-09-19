@@ -14,9 +14,10 @@ from cycling_load_data import *
 
 def suburb_demo(suburb, data):
     print()
-    print('it stores all the geospatial data which allows a particular point,')
+    print('It stores all the geospatial data which allows a particular point,')
     print('given by a lat and long, to be located by suburb and district.')
-    print('for example:')
+    print()
+    print('For example:')
     
     for station in data['rainfall']:
         name = data['rainfall'][station].get_station_name()
@@ -33,7 +34,7 @@ def suburb_demo(suburb, data):
 
 def rainfall_demo(rainfall):
     print()
-    print('it stores information such as:')
+    print('It stores information such as:')
     station_id = rainfall.get_station_id()
     station_name = rainfall.get_station_name()
     station_lat = rainfall.get_station_lat()
@@ -46,15 +47,16 @@ def rainfall_demo(rainfall):
     print(f'  station height: {station_height}')
     
     print()
-    print('it can also give you the distance to any lat and long')
+    print('It can also calculate the distance from another point.')
+    print()
     lat = -35.308056
     long = 149.124444
-    print(f'for example, parliament house is at ({lat:.2f}, {long:.2f})')
+    print(f'For example, Parliament House is located at ({lat:.2f}, {long:.2f}),')
     distance = rainfall.distance_from_station(lat, long)
     print(f'the distance from the station is: {distance:.2f}km')
     
     print()
-    print('it also contains a pandas dataframe...')
+    print('It also contains a pandas dataframe...')
     df = rainfall.get_data()
     
     dataframe_demo(df)
@@ -63,25 +65,25 @@ def dataframe_demo(df):
     print()
     
     rows, cols = df.shape
-    print(f'the dataframe consists of {rows:,} rows and {cols} columns')
+    print(f'The dataframe consists of {rows:,} rows and {cols} columns')
     
     columns = list(df.columns)
     print()
-    print('its columns are:')
+    print('Its columns are:')
     for i, column in enumerate(columns):
         print(f'  {i+1}: {column}')
     
     if 'date_time' in df or 'lat' in df:
         print()
-        print('of particular note:')
+        print('Of particular note:')
         if 'date_time' in df:
-            print("  the column 'date_time' contains datetime objects")
+            print(" - the column 'date_time' contains datetime objects")
             
         if 'lat' in df:
-            print("  the columns 'lat' and 'long' contain floating point values")
+            print(" - the columns 'lat' and 'long' contain floating point values")
             
     print()
-    print("here's a sample of the data:")
+    print("Here's a sample of the data:")
     print()        
     print(df)
 
@@ -99,7 +101,7 @@ def data_demo(data):
             line_length = len(key) + 8
             print(f"data['{key}']")
             print('-' * line_length)
-            print("is a pandas dataframe")
+            print("Is a pandas dataframe")
             dataframe_demo(value)
             # tdf = value
             print()
@@ -109,7 +111,7 @@ def data_demo(data):
                 line_length = len(key) + len(sub_key) + 12
                 print(f"data['{key}']['{sub_key}']")
                 print('-' * line_length)
-                print("is a Rainfall object")
+                print("Is a Rainfall object")
                 rainfall_demo(sub_value)
                 print()
                 
@@ -117,6 +119,6 @@ def data_demo(data):
             line_length = len(key) + 8
             print(f"data['{key}']")
             print('-' * line_length)
-            print("is a Suburb object")
+            print("Is a Suburb object")
             suburb_demo(value, data)
             print()
