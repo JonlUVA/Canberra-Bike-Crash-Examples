@@ -34,20 +34,20 @@ def suburb_demo(suburb, data):
 
 def rainfall_demo(rainfall):
     print()
-    print('It stores information such as:')
+    print('Attributes are:')
     station_id = rainfall.get_station_id()
     station_name = rainfall.get_station_name()
     station_lat = rainfall.get_station_lat()
     station_long = rainfall.get_station_long()
     station_height = rainfall.get_station_height()
-    print(f'  station id: {station_id}')
-    print(f'  station name: {station_name}')
-    print(f'  station latitude: {station_lat}')
-    print(f'  station longitude: {station_long}')
-    print(f'  station height: {station_height}')
+    print(f'  Station ID: {station_id}')
+    print(f'  Station Name: {station_name}')
+    print(f'  Station Latitude: {station_lat}')
+    print(f'  Station Longitude: {station_long}')
+    print(f'  Station Height: {station_height}')
     
     print()
-    print('It can also calculate the distance from another point.')
+    print('It can also calculate the distance from another point...')
     print()
     lat = -35.308056
     long = 149.124444
@@ -69,18 +69,18 @@ def dataframe_demo(df):
     
     columns = list(df.columns)
     print()
-    print('Its columns are:')
+    print('Columns are:')
     for i, column in enumerate(columns):
         print(f'  {i+1}: {column}')
     
     if 'date_time' in df or 'lat' in df:
         print()
-        print('Of particular note:')
+        print('Note:')
         if 'date_time' in df:
-            print(" - the column 'date_time' contains datetime objects")
+            print(" - column 'date_time' contains datetime objects")
             
         if 'lat' in df:
-            print(" - the columns 'lat' and 'long' contain floating point values")
+            print(" - columns 'lat' and 'long' contain floating point values")
             
     print()
     print("Here's a sample of the data:")
