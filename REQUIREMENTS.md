@@ -6,7 +6,7 @@ _An investigation on the uphill battle facing cyclists_
 
 ## System Requirements
 
-With known compatible configurations:
+With tested system configurations:
 
 | Module | (1) | (2) | (3) |
 |--------|--------|--------|--------|
