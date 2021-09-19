@@ -262,6 +262,10 @@ class Rainfall:
     
         return all_attributes_found
     
+    def get_data(self):
+        if 'id' in self.station:
+            return self.df
+    
     def get_station_id(self):
         if 'id' in self.station:
             return self.station['id']

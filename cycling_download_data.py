@@ -298,6 +298,7 @@ def delete_previous_download(file_or_dir, force=False):
         return False
     
     if not force:
+        print()
         print(f"WARNING: '{path_to_delete}' already exists!")
         print(f"Would you like to delete all contents of '{path_to_delete}' first?", end='')
         response = input("This action can not be undone (y/n): ").strip()
