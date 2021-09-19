@@ -13,16 +13,30 @@ from pathlib import Path
 
 from cycling_check_dependencies import *
 
+def print_header(header_text, header_width=77, all_caps=True):
+    if all_caps:
+        header_text = header_text.upper()
+        
+    print('#' * header_width)
+    
+    header_line = f'#{header_text:^{header_width-2}}#'
+    print(header_line)
+    
+    print('#' * header_width)
+    
+
 ##############################################################################
 #                                    MAIN                                    #
 ##############################################################################
 
 if __name__ == '__main__':
     
+    
+    ##########################################################################
+    #                            CHECK DEPENDENCIES                          #
+    ##########################################################################
     print()
-    print('############################################################################')
-    print('#                         CHECKING DEPENDENCIES                            #')
-    print('############################################################################')
+    print_header('Checking Dependencies')
     print()  
     
     root_path = Path.cwd()
@@ -50,10 +64,12 @@ if __name__ == '__main__':
     from cycling_load_data import *
     
     
+    ##########################################################################
+    #             UPDATE COMPATIBLE SYSTEMS / REQUIREMENTS DOC               #
+    ##########################################################################
+    
     print()
-    print('############################################################################')
-    print('#                       UPDATING COMPATIBLE SYSTEMS                        #')
-    print('############################################################################')
+    print_header('Updating Compatible Systems')
     print()  
        
     compatible_systems_csv = 'compatible_systems/compatible_systems.csv'
@@ -67,19 +83,19 @@ if __name__ == '__main__':
     print('Please feel free to commit these files to the remote repository.')
     
 
+    ##########################################################################
+    #                CHECK LOCAL DATA OTHERWISE DOWNLOAD DATA                #
+    ##########################################################################
+
     print()
-    print('############################################################################')
-    print('#                       CHECKING LOCAL DATA SOURCES                        #')
-    print('############################################################################')
+    print_header('Checking Local Data Sources')
     print()  
 
     data_index_path = Path(DATA_FOLDER) / DATA_INDEX
 
     if not check_local_data(data_index_path):
         print()
-        print('############################################################################')
-        print('#                             DOWNLOADING DATA                             #')
-        print('############################################################################')
+        print_header('Downloading Data')
         
         download_all_data(DATA_SOURCES, DATA_FOLDER, DATA_INDEX)
     else:
@@ -87,10 +103,11 @@ if __name__ == '__main__':
         print('All data sources found')
 
     
+    ##########################################################################
+    #                                LOAD DATA                               #
+    ##########################################################################
     print()
-    print('############################################################################')
-    print('#                               LOADING DATA                               #')
-    print('############################################################################')
+    print_header('Loading Data')
     print()  
     
     data = load_data(data_index_path)
