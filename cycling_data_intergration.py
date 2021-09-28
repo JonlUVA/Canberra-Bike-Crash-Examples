@@ -29,9 +29,11 @@ def estimated_cyclist_number_daily_rainfall(cyclist_data, weather):
     """
     cyclist_data = estimating_cyclist_number(cyclist_data)
     weather = weather['canberra airport'].get_data()
-    print(weather)
+    weather = weather.fillna(0)
+    weather['date'] = pandas.to_datetime(weather['date_time']).dt.date
+    weather_and_cyclist_date = pandas.merge(cyclist_data, weather, on='date', how='left')
+    return weather_and_cyclist_date
 
-    return
 
 
 
