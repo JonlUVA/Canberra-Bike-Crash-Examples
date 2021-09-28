@@ -2,6 +2,7 @@
 import openpyxl
 import pandas
 
+
 from cycling_load_data import *
 data_index_path = Path(DATA_FOLDER) / DATA_INDEX
 
@@ -36,7 +37,37 @@ def estimated_cyclist_number_daily_rainfall(cyclist_data, weather):
 
 
 
+from suntime import Sun, SunTimeException
+from datetime import datetime, time
+import numpy
+
+def crash_dusk_shit(crash_data, weather):
+    """this function takes the cyclist data, and the weather data
+    this functions uses the Canberra Airport weather station over the Tuggernong station as the canberra airport station
+    is only 8.6km while the tuggernong stations is 18.1km
+
+    :argument  ACT government Bike Barometer - MacArthur Avenue , daily rainfall
+    :return a pandas df with the daily sums of cyclists and the daily rainfall.
+    """
+    crash_data['date'] = pandas.to_datetime(crash_data['date_time']).dt.date
+    # On a special date in your machine's local time zone
+    #crash_data['sunset'] = numpy.sqrt(Sun((crash_data['lat']), (crash_data['long'])).get_local_sunset_time())
+    print(crash_data.head())
+    sunset = list()
+    sunrise = list()
+
+    for x in crash_data.index:
+        sun = Sun(float(crash_data['lat'][x]), float(crash_data['long'][x]))
+        sunset.append(sun.get_local_sunset_time(crash_data['date'][x]))
+        sunrise.append(sun.get_local_sunrise_time(crash_data['date'][x]))
+    crash_data['sunrise'] = sunrise
+    crash_data['sunset'] = sunset
+    print(crash_data)
+    return
 
 
-estimated_cyclist_number_daily_rainfall(working['cyclist'], working['rainfall'])
+
+
+
+crash_dusk_shit(working['crash'], working['rainfall'])
 
