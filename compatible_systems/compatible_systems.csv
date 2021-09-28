@@ -2,6 +2,7 @@ Module,DESKTOP-ME2NEFH,Tims-MacBook-Pro.local,DESKTOP-1TBC5UF
 csv,1.0,1.0,unknown
 io,unknown,unknown,unknown
 math,unknown,unknown,unknown
+openpyxl,3.0.7,,
 os,unknown,unknown,unknown
 pandas,1.3.2,1.2.4,1.3.2
 pathlib,unknown,unknown,unknown

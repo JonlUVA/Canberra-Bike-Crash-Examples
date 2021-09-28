@@ -13,6 +13,7 @@ With tested system configurations:
 | csv | 1.0 | 1.0 | unknown |
 | io | unknown | unknown | unknown |
 | math | unknown | unknown | unknown |
+| openpyxl | 3.0.7 | unknown | unknown |
 | os | unknown | unknown | unknown |
 | pandas | 1.3.2 | 1.2.4 | 1.3.2 |
 | pathlib | unknown | unknown | unknown |
