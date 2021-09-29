@@ -11,8 +11,10 @@ With tested system configurations:
 | Module | (1) | (2) | (3) |
 |--------|--------|--------|--------|
 | csv | 1.0 | 1.0 | unknown |
+| datetime | unknown | unknown | unknown |
 | io | unknown | unknown | unknown |
 | math | unknown | unknown | unknown |
+| numpy | 1.20.3 | unknown | unknown |
 | openpyxl | 3.0.7 | unknown | unknown |
 | os | unknown | unknown | unknown |
 | pandas | 1.3.2 | 1.2.4 | 1.3.2 |
@@ -23,5 +25,6 @@ With tested system configurations:
 | shapefile | 2.1.3 | 2.1.3 | unknown |
 | shapely | 1.7.0 | 1.7.1 | unknown |
 | shutil | unknown | unknown | unknown |
+| suntime | unknown | unknown | unknown |
 | sys | unknown | unknown | unknown |
 | zipfile | unknown | unknown | unknown |
