@@ -1,36 +1,97 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-
+General helper functions, not module specific
 
 @author:  tarney
 @uid:     u7378856
 @created: Thu Sep 30 18:29:00 2021
 """
 
+
 from pathlib import Path
 import pandas as pd
 
-from cycling_globals import *
+
+##############################################################################
+#                               HELPER FUNCTIONS                             #
+##############################################################################
 
 
 def file_exists(file):
+    """
+    Checks a file exists.
+
+    Parameters
+    ----------
+    file : str or path
+        Path/name of file to check.
+
+    Returns
+    -------
+    bool
+        True if exists, False otherwise.
+
+    """
+    
     file_path = Path(file)
     
     return file_path.is_file()
 
 
 def read_excel_to_df(file):
+    """
+    Loads an Excel sheet into a pandas DataFrame.
+
+    Parameters
+    ----------
+    file : str or path
+        Path/name of file to load.
+
+    Returns
+    -------
+    pandas.DataFrame
+        The loaded data.
+
+    """
+    
     file_path = Path(file)
     return pd.read_excel(file, header=0, index_col=0)
     
     
 def write_df_to_excel(df, file):
+    """
+    Writes a pandas DataFrame to an Excel file.
+
+    Parameters
+    ----------
+    df : pandas.DataFrame
+        Data to write.
+    file : str or path
+        Output file.
+
+    Returns
+    -------
+    None.
+
+    """
+    
     file_path = Path(file)
     df.to_excel(file_path, header=True, index=True)
-    
+  
+   
+  
+##############################################################################
+#                                    MAIN                                    #
+##############################################################################
     
 if __name__ == '__main__':
+    
+    ##########################################################################
+    #                CONDITIONALLY READING/WRITING DATAFRAME DEMO            #
+    ##########################################################################    
+    
+    from cycling_globals import *
     
     # let's give the file a name
     data_file = 'test_file.xlsx'
