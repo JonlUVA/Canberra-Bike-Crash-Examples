@@ -62,12 +62,10 @@ def crash_sun_weather(crash_data, weather):
 
     crash_data['date'] = pandas.to_datetime(crash_data['date_time']).dt.date
     crash_data['time'] = pandas.to_datetime(crash_data['date_time']).dt.time
-    # On a special date in your machine's local time zone
-    # crash_data['sunset'] = numpy.sqrt(Sun((crash_data['lat']), (crash_data['long'])).get_local_sunset_time())
+
     sunset = list()
     sunrise = list()
     closest_weather_station = list()
-    # approximate radius of earth in km
 
     for x in crash_data.index:
         sun = Sun(float(crash_data['lat'][x]), float(crash_data['long'][x]))
@@ -95,9 +93,28 @@ def crash_sun_weather(crash_data, weather):
     weather_cbra = pandas.merge(weather_cbra, weather_data_clean(weather, 'canberra airport'), on="date", how="left")
     crash_weather_df = pandas.concat([weather_cbra, weather_tug], ignore_index=True)
     crash_weather_df['dark'] = numpy.where((crash_weather_df['sunset'] < crash_weather_df['time']) | (crash_weather_df['sunrise'] > crash_weather_df['time']) , 1, 0)
-    crash_weather_df.to_excel(r"C:\Users\Admin\OneDrive\Documents\assignment 2 working\crash_look.xlsx")
+    #crash_weather_df.to_excel(r"C:\Users\Admin\OneDrive\Documents\assignment 2 working\crash_look.xlsx")
+
+    return crash_weather_df
+
+
+def add_class_suburb(crash_data, suburb):
+    """"
+    add the suburbs based on long lat and not what the report says
+    """
+    suburb_list = list()
+    lat_long = (crash_data[['lat','long']]).values.tolist()
+    def suburb_iter(sub):
+        return (suburb.locate(sub[0],sub[1])).get('suburb')
+    suburb_list = list(map(suburb_iter, lat_long))
+    print(suburb_list)
+    #for x in lat_long:
+    #    working_suburb_list = (suburb.locate(x[0],x[1])).get('suburb')
+    #    print(working_suburb_list)
+    #    suburb_list.append(working_suburb_list)
 
     return
 
+
 #estimated_cyclist_number_daily_rainfall(working['cyclist'],working['rainfall'])
-crash_sun_weather(working['crash'], working['rainfall'])
+add_class_suburb((crash_sun_weather(working['crash'], working['rainfall'])), working['suburb'])
