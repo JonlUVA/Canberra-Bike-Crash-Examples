@@ -99,6 +99,7 @@ if __name__ == '__main__':
     # but let's bang it in the DATA_FOLDER for safe keeping
     data_path = Path(DATA_FOLDER) / data_file
     
+    print()
     
     if file_exists(data_path):
         # great, data on file, let's load that
@@ -115,4 +116,5 @@ if __name__ == '__main__':
         print(f'Writing: {data_path}')
         write_df_to_excel(df, data_path)
     
-    
+    print()
+    print(df)
