@@ -1,13 +1,17 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-
+Auxiliary module to scan project folder for Python source files, scan the code
+in those files for module dependencies, and check if host system has those 
+modules installed.
 
 @author:  tarney
 @uid:     u7378856
 @created: Sat Sep 18 08:56:07 2021
 """
 
+# Dependency check has its own dependencies, best to import those with some
+# added protection...
 try:
     import sys
     import importlib
@@ -15,18 +19,48 @@ try:
     import socket
     from pathlib import Path
 except ModuleNotFoundError as me:
-    print(f"Dependency check requires missing module '{me.name}' (how embarassing!), please install first.")
+    print(f"Dependency check requires missing module '{me.name}' "
+          f"(how embarassing!), please install first.")
     sys.exit() 
 
 
 class Dependencies:
+    """
+    Class to determine module requiremenets of Python coding project and 
+    assess host system.
+    """
+    
     def __init__(self, root_path, ignore_module_prefix='', include_subs=False,
                  self_ignore=True):
+        """
+        Creates a Dependencies object by scanning a project directory for code
+        files, checking any module dependencies, and check if system has
+        each module installed.
+
+        Parameters
+        ----------
+        root_path : str or Path
+            Root directory of the source files.
+        ignore_module_prefix : str, optional
+            Prefix of any local project modules to be ignored. The default is ''.
+        include_subs : bool, optional
+            Examine source code in subdirectories. The default is False.
+        self_ignore : bool, optional
+            Include modules required by dependency check. The default is True.
+
+        Returns
+        -------
+        None.
+
+        """
+        
         self._path = root_path
         
+        # convert project folder string to Path object
         if isinstance(self._path, str):
             self._path = Path(self._path)
-            
+        
+        # make sure project folder exists before continuing
         if not self._path.is_dir():
             return
         
@@ -34,8 +68,10 @@ class Dependencies:
         self._include_subs = include_subs
         self._self_ignore = self_ignore
         
+        # compile list of source code files
         self._list_python_files()
         
+        # make sure source files are found before continuing
         if not self._file_list:
             return
         
@@ -43,17 +79,25 @@ class Dependencies:
         self._get_module_versions()
         self._hostname = socket.gethostname()
         
-        # if not self._modules:
-        #     return
-        
        
     def __str__(self):
+        """
+        Builds printable string of dependency check results.
+
+        Returns
+        -------
+        text : str
+            Dependency check results to pass to print statement.
+
+        """
         text = f'Host: {self._hostname}\n'
         
+        # build table of installed modules
         if len(self._modules_found) > 0:
             max_module_len = 0
             max_version_len = 0
             
+            # figure out table width
             for module, version in self._modules_found.items():
                 if len(module) > max_module_len:
                     max_module_len = len(module) + 1
@@ -61,28 +105,34 @@ class Dependencies:
                 if len(version) > max_version_len:
                     max_version_len = len(version) + 1
             
+            # add table header
             text += '\n'
             text += 'Installed Modules:\n'
             text += '\n'
             text += f"{'Module':{max_module_len}} | Version\n"
             text += '-' * (max_module_len + 1) + '+' + '-' * max_version_len + '\n'
             
+            # add each row
             for module, version in self._modules_found.items():
                 text += f'{module:{max_module_len}} | {version}\n'
             
+        # build table of missing modules
         if len(self._modules_missing) > 0:
             max_module_len = 0
             
+            # figure out table width
             for module in self._modules_missing:
                 if len(module) > max_module_len:
                     max_module_len = len(module)
             
+            # add table header
             text += '\n'
             text += 'Missing Modules:\n'
             text += '\n'
             text += 'Module\n'
             text += '-' * max_module_len + '\n'
             
+            # add each row
             for module in self._modules_missing:
                 text += f'{module}\n'
         else:
@@ -91,7 +141,16 @@ class Dependencies:
             
         return text
     
+    
     def _list_python_files(self):
+        """
+        Builds a list of all '.py' files found in the project directory.
+
+        Returns
+        -------
+        None.
+
+        """
         if self._include_subs:
             file_list = list(self._path.glob('**/*.py'))
         else:
@@ -106,35 +165,53 @@ class Dependencies:
     
     
     def _build_module_list(self):
+        """
+        Builds a list of all modules used in the project.
+
+        Returns
+        -------
+        None.
+
+        """
         modules = set()
-        modules.add('python')
+        modules.add('python')   # also want to check python version
         
         for file_path in self._file_list:
             with open(file_path) as file:
-                # print(file_path)
                 for line in file:
+                    # break each line into words
                     words = line.split()
                     
+                    # empty line, skip to next
                     if not len(words):
                         continue
                     
+                    # check if 'import' appears on an uncommented line
                     if 'import' in words and words[0] != '#':
+                        # relevant 'import' should appear as word 0 or 2
                         if words.index('import') > 2:
                             continue
                         
+                        # figure out if the module name should come after an 
+                        # 'import' or 'from'
                         if 'from' in words:
                             module_index = words.index('from') + 1
                         else:
                             module_index = words.index('import') + 1
-                            
+                        
+                        # no more words on the line, skip to next
                         if module_index < len(words):
                             module = words[module_index]
                         else:
                             continue
                         
+                        # check if import is a module subpackage and extract 
+                        # parent module
                         if module.find('.') > 0:
                             module = module[:module.find('.')]
                         
+                        # check the module isn't internal to project and should
+                        # be ignored
                         if not self._ignore_prefix:
                             modules.add(module)
                         elif not module.startswith(self._ignore_prefix):
@@ -148,30 +225,27 @@ class Dependencies:
         
         self._required_modules = modules
         
+        
     def _get_module_versions(self):
         """
-        Builds a dictionary of modules and the current version running on the 
-        host system.
-    
-        Parameters
-        ----------
-        module_list : list of str
-            A list of module names.
-    
+        Checks whether each module is installed and gathers version information.
+
         Returns
         -------
-        D : dict
-            A dictionary of {'module name': 'module version'} pairs.
-    
+        None.
         """
+        
         D = {}
         missing = set()
         
         for module in self._required_modules:
+            # python requires special version check
             if module.lower() == 'python':
                 D['python'] = self._get_python_version()
                 continue
             
+            # try import module, if successful then check for version info,
+            # otherwise catch the exception
             try: 
                 loaded_module = importlib.import_module(module)
                 
@@ -180,49 +254,105 @@ class Dependencies:
                 else:
                     D[module] = 'unknown'
             except ModuleNotFoundError:
-                # print(f"Warning: module '{module}' not found")
                 missing.add(module)
                 
         self._modules_found = D
         self._modules_missing = missing
       
+        
     def _get_python_version(self):
         """
-        Returns the Python interpreter version running on the host system.
-    
+        Checks the Python interpreter version running on the host system.
+
         Returns
         -------
-        str
-            Python interpreter version.
-    
+        TYPE
+            DESCRIPTION.
+
         """
+        
         return platform.python_version()  
+    
     
     def get_hostname(self):
         """
-        Returns the name of the current host system.
-    
+        Returns the name of the host system.
+
         Returns
         -------
-        str
-            Name of the host system.
-    
+        TYPE
+            DESCRIPTION.
+
         """
+        
         return self._hostname    
     
+    
     def check(self):
+        """
+        Checks if dependencies are met.
+
+        Returns
+        -------
+        bool
+            True if no modules are missing, False otherwise.
+
+        """
+        
         return len(self._modules_missing) == 0
     
+    
     def get_missing_modules(self):
+        """
+        Returns list of missing modules.
+
+        Returns
+        -------
+        list of str
+            Missing modules.
+
+        """
         return list(self._modules_missing)
-        
+    
+    
     def get_system_config(self):
+        """
+        Returns dictionary keyed by installed modules with version as value. 
+
+        Returns
+        -------
+        dict
+            {module as str : version as str}.
+
+        """
+        
         return self._modules_found
+
     
     def get_file_list(self):
+        """
+        Returns a list of all '.py' source files found.
+
+        Returns
+        -------
+        list of str
+            List of '.py' files.
+
+        """
         return self._file_list
+
     
     def get_module_list(self):
+        """
+        Returns a list of modules required by the project.
+
+        Returns
+        -------
+        list of str
+            Required modules.
+
+        """
+        
         return self._required_modules
 
 
