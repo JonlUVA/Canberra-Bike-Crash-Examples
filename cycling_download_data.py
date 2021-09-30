@@ -19,8 +19,8 @@ Where values are:
         url : the url of the data source
         backup url : a mirror link should the initial download fail.
 
-The module can also generate a similar local data directory that includes a
-'path' field with the path to the downloaded data stored on the local machine.
+The module can also generate a similar local data index that includes a 'path'
+field with the path to the downloaded data stored on the local machine.
 
 The module can also create or append a local '.gitignore' file to prevent
 the downloaded data being tracked by the master git repository.
@@ -406,7 +406,7 @@ def write_data_index_csv(csv_file_name, data_sources):
         csv_writer.writerows(data_sources)
         
     print()
-    print(f"Data directory written to: {data_source_path}")
+    print(f"Data index written to: {data_source_path}")
 
 
 def download_data(data_sources, download_dir):
