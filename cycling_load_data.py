@@ -17,6 +17,7 @@ from shapely.geometry import shape, Point
 from collections import defaultdict
 
 from cycling_globals import *
+from cycling_helper_functions import *
 
 def clean_column_name(column_name):
     """
@@ -590,6 +591,23 @@ if __name__ == '__main__':
     print(f'They are {distance:.2f} km apart')
     
     
-    ## SUBURB EFFICIENCY TESTS
+    ## now let's find the suburb/district of each crash and dump to disk
+    
+    crash_file = 'crash_data.xlsx'
+    crash_path = Path(DATA_FOLDER) / crash_file
+    
+    
+    if file_exists(crash_path):
+        print(f'Reading: {data_path}')
+        crash_data = read_excel_to_df(crash_path)
+    else:
+        # geolocate each crash by suburb/district
+        crash_data = data['suburb'].locate(data['crash'])
+        
+        # then write to disk to avoid recomputing
+        print(f'Writing: {data_path}')
+        write_df_to_excel(crash_data, crash_path)
+        
+    print(crash_data)
     
     
