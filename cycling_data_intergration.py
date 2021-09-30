@@ -8,8 +8,8 @@ data_index_path = Path(DATA_FOLDER) / DATA_INDEX
 
 working = load_data(data_index_path)
 
-def weather_data_clean(data,weather_station):
 
+def weather_data_clean(data, weather_station):
     weather_data_frame = data[weather_station].get_data()
     weather_data_frame = weather_data_frame.fillna(0)
     weather_data_frame['date'] = pandas.to_datetime(weather_data_frame['date_time']).dt.date
@@ -82,33 +82,46 @@ def crash_sun_weather(crash_data, weather):
         else:
             closest_weather_station.append("tuggeranong")
 
-    #remove timezones from date_time
+    # remove timezones from date_time
     crash_data['sunset'] = sunset
     crash_data['sunrise'] = sunrise
     crash_data['closest weather station'] = closest_weather_station
 
     weather_tug = crash_data[crash_data['closest weather station'] == 'tuggeranong']
     weather_cbra = crash_data[crash_data['closest weather station'] == 'canberra airport']
-    weather_tug = pandas.merge(weather_tug, weather_data_clean(weather,'tuggeranong'), on="date", how="left")
+    weather_tug = pandas.merge(weather_tug, weather_data_clean(weather, 'tuggeranong'), on="date", how="left")
     weather_cbra = pandas.merge(weather_cbra, weather_data_clean(weather, 'canberra airport'), on="date", how="left")
     crash_weather_df = pandas.concat([weather_cbra, weather_tug], ignore_index=True)
-    crash_weather_df['dark'] = numpy.where((crash_weather_df['sunset'] < crash_weather_df['time']) | (crash_weather_df['sunrise'] > crash_weather_df['time']) , 1, 0)
-    #crash_weather_df.to_excel(r"C:\Users\Admin\OneDrive\Documents\assignment 2 working\crash_look.xlsx")
+    crash_weather_df['dark'] = numpy.where((crash_weather_df['sunset'] < crash_weather_df['time']) | (
+                crash_weather_df['sunrise'] > crash_weather_df['time']), 1, 0)
+    # crash_weather_df.to_excel(r"C:\Users\Admin\OneDrive\Documents\assignment 2 working\crash_look.xlsx")
 
     return crash_weather_df
 
+#from joblib import Parallel, delayed
+#from joblib import wrap_non_picklable_objects
+#from joblib.externals.loky import set_loky_pickler
 
 def add_class_suburb(crash_data, suburb):
     """"
     add the suburbs based on long lat and not what the report says
     """
     suburb_list = list()
-    lat_long = (crash_data[['lat','long']]).values.tolist()
-    def suburb_iter(sub):
-        return (suburb.locate(sub[0],sub[1])).get('suburb')
-    suburb_list = list(map(suburb_iter, lat_long))
-    print(suburb_list)
-    #for x in lat_long:
+    lat_long = (crash_data[['lat', 'long']]).values.tolist()
+    lat = (crash_data[['lat']]).values.tolist()
+    long = (crash_data[['long']]).values.tolist()
+
+    def suburb_iter(lat,long):
+        return (suburb.locate(lat, long)).get('suburb')
+
+
+    #results = Parallel(n_jobs=2)(delayed(suburb_iter)(lat, long) for _ in range(20))
+
+    #suburb_list = list(map(suburb_iter, lat_long))
+    #suburb_list_2 = [(suburb.locate(lat_long[x::2],lat_long[(x + 1)::2])) for x in range(0, len(lat_long))]
+    #suburb_list = list(map(suburb_iter, lat_long_10))
+
+    # for x in lat_long:
     #    working_suburb_list = (suburb.locate(x[0],x[1])).get('suburb')
     #    print(working_suburb_list)
     #    suburb_list.append(working_suburb_list)
@@ -116,5 +129,5 @@ def add_class_suburb(crash_data, suburb):
     return
 
 
-#estimated_cyclist_number_daily_rainfall(working['cyclist'],working['rainfall'])
+# estimated_cyclist_number_daily_rainfall(working['cyclist'],working['rainfall'])
 add_class_suburb((crash_sun_weather(working['crash'], working['rainfall'])), working['suburb'])
