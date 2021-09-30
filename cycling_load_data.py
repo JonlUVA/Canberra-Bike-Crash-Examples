@@ -598,14 +598,15 @@ if __name__ == '__main__':
     
     
     if file_exists(crash_path):
-        print(f'Reading: {data_path}')
+        print(f'Reading: {crash_path}')
         crash_data = read_excel_to_df(crash_path)
     else:
         # geolocate each crash by suburb/district
+        print('Geolocating each crash site...')
         crash_data = data['suburb'].locate(data['crash'])
         
         # then write to disk to avoid recomputing
-        print(f'Writing: {data_path}')
+        print(f'Writing: {crash_path}')
         write_df_to_excel(crash_data, crash_path)
         
     print(crash_data)
