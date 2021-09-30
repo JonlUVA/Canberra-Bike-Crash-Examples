@@ -563,19 +563,50 @@ class Rainfall:
 
 class Suburb:
     """
-    Class to represent GIS data
+    Class to contain GIS polygon/record data and provide methods to position
+    any lat/long point by its suburb and/or district.
     """
+    
+    # dict to map terminology in shapefile records to preferred term
     level_map = {'Gazetted Locality': 'suburb',
                  'District': 'district'}
     
     def __init__(self, data_path):
+        """
+        Takes the path to the '.shp' shapefile and initialises the Suburb object.
+
+        Parameters
+        ----------
+        data_path : str or Path
+            Path to the '.shp' shapefile.
+
+        Returns
+        -------
+        None.
+
+        """
+        
+        # read in the shapefile shapes and records
         sf = shapefile.Reader(data_path)
         self.shapes = sf.shapes()
         self.records = sf.records()
+        
+        # preprocess data for improved efficiency when interrogated
         self.__calculate_record_ranges()
         self.__build_district_lookup()
         
+        
     def __calculate_record_ranges(self):
+        """
+        Examines shapefile records to determine the indexes that relate to 
+        'suburb' and the indexexes that relate to 'district' data.  Allows for
+        more focussed and faster searching.
+
+        Returns
+        -------
+        None.
+
+        """
         num_records = len(self.records)
         first_suburb = num_records - 1
         first_district = num_records - 1
@@ -601,66 +632,134 @@ class Suburb:
         
         
     def __build_district_lookup(self):
+        """
+        Builds an index of each suburb that can be uniquely mapped to a 
+        particular district.  This speeds up searching as once a point is located
+        in a suburb if the district can be mapped there's no need to additionally
+        search the district boundaries to find the correct placement.
+
+        Returns
+        -------
+        None.
+
+        """
+        
         lookup = defaultdict(list)
-        # num_records = len(self.records)
         
         for i in self.suburb_range:
             suburb = self.records[i][3]
-            # index_level = self.records[i][4]
-            
-            # if index_level == 'Gazetted Locality' and not index_name in lookup:
             suburb_boundary = shape(self.shapes[i])
         
             for j in self.district_range:
                 district = self.records[j][3]
-                
-                # if test_level == 'District':
                 district_boundary = shape(self.shapes[j])
         
                 if suburb_boundary.intersects(district_boundary):
-                    # match_name = self.records[j][3]
                     lookup[suburb].append(district)
-                    # print(f'{suburb} --> {district}')
-                    # break
         
+        # only include suburbs that map to a single district
         self.district_lookup = {k: v[0] for k, v in lookup.items() if len(v) == 1}
         
     
-        
-    
     def __locate(self, lat, long):
+        """
+        Takes a latitude and longitude and returns a dictionary containing
+        the suburb and district the point is located in.
+
+        Parameters
+        ----------
+        lat : float
+            Latitude.
+        long : float
+            Longitude.
+
+        Returns
+        -------
+        location : dict
+            Dictionary of location keyed by 'suburb' and 'district'.
+
+        """
+        
         point = Point(long, lat)
-        res = {'suburb': '', 'district': ''}
+        location = {'suburb': '', 'district': ''}
         suburb = ''
         
+        # first find suburb
         for i in self.suburb_range:
             suburb_boundary = shape(self.shapes[i])
         
             if point.within(suburb_boundary):
                 suburb = self.records[i][3]
-                res['suburb'] = suburb
+                location['suburb'] = suburb
                 break
-            
+           
+        # then check if it's in the district lookup
         if suburb in self.district_lookup:
-            res['district'] = self.district_lookup[suburb]
-            return res
+            location['district'] = self.district_lookup[suburb]
+            return location
         
+        # otherwise find the district
         for i in self.district_range:
             district_boundary = shape(self.shapes[i])
         
             if point.within(district_boundary):
-                res['district'] = self.records[i][3]
-                return res
+                location['district'] = self.records[i][3]
+                return location
                 
-        return res
+        return location
+    
     
     def __locate_df(self, df):
+        """
+        Takes a pandas DataFrame that includes 'lat' and 'long' columns and
+        determines the suburb and district for each and returns a copy of
+        the DataFrame with 'suburb' and 'district' columns added.
+
+        Parameters
+        ----------
+        df : pandas.DataFrame
+            DataFrame containing 'lat' and 'long' columns.
+
+        Returns
+        -------
+        pandas.DataFrame
+            Copy of input DataFrame with 'suburb' and 'district' columns added.
+
+        """
+        
         res = [self.__locate(lat, long) for lat, long in zip(df['lat'], df['long'])]  
         res_df = pd.DataFrame(res)
         res_df.fillna('', inplace=True)
         return df.join(res_df, how='left')
     
+    
     def locate(self, *args):
+        """
+        Takes a particular point given by its latitude and longitude, or a
+        pandas DataFrame that includes 'lat' and 'long', and determines the
+        suburb and district of each point.
+        
+        If the input is a point, a dictionary with 'suburb' and 'district' keys
+        is returned.
+        
+        If the input is a DataFrame, a copy of the DataFrame with 'suburb' and
+        'district' columns added is returned
+
+        Parameters
+        ----------
+        *args : float, float or pandas.DataFrame
+            A point lat, long or a DataFrame that includes 'lat' and 'long' 
+            colummns.
+
+        Returns
+        -------
+        dict or pandas.DataFrame
+            A dictionary with 'suburb' and 'district' keys for a single point 
+            input.
+            A pandas.DataFrame with 'suburb' and 'district' columns added for a 
+            DataFrame input.
+
+        """
         
         if len(args) == 2:
             lat, long = args
@@ -673,21 +772,27 @@ class Suburb:
             
             return self.__locate_df(df)
         
-    # def get_district(self, suburb):
-    #     suburb = suburb.strip().lower()
-        
-    #     for i, record in enumerate(self.records):
-        
-    #         if suburb == self.records[i][3].lower():
-    #             return self.records[i][4]
-                
-    #     return ''
 
 ##############################################################################
 #                              UTILITY FUNCTIONS                             #
 ##############################################################################            
      
 def load_data(data_index_path):
+    """
+    
+
+    Parameters
+    ----------
+    data_index_path : TYPE
+        DESCRIPTION.
+
+    Returns
+    -------
+    data : TYPE
+        DESCRIPTION.
+
+    """
+    
     data_index = read_data_index_csv(data_index_path)
     data = {}
     
@@ -729,8 +834,7 @@ def load_data(data_index_path):
             
         print('loaded')
         
-    return data
-     
+    return data 
 
 
 ##############################################################################
