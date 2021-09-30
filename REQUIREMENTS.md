@@ -10,17 +10,21 @@ With tested system configurations:
 
 | Module | (1) | (2) | (3) |
 |--------|--------|--------|--------|
-| csv | 1.0 | unknown | unknown |
+| csv | 1.0 | 1.0 | unknown |
+| datetime | unknown | unknown | unknown |
 | io | unknown | unknown | unknown |
 | math | unknown | unknown | unknown |
+| numpy | 1.20.3 | unknown | unknown |
+| openpyxl | 3.0.7 | unknown | unknown |
 | os | unknown | unknown | unknown |
-| pandas | 1.2.4 | 1.3.2 | 1.3.2 |
+| pandas | 1.3.2 | 1.2.4 | 1.3.2 |
 | pathlib | unknown | unknown | unknown |
-| python | 3.8.8 | 3.9.6 | 3.9.6 |
-| re | 2.2.1 | unknown | unknown |
-| requests | 2.25.1 | 2.26.0 | 2.26.0 |
-| shapefile | 2.1.3 | unknown | unknown |
-| shapely | 1.7.1 | unknown | unknown |
+| python | 3.9.6 | 3.8.8 | 3.9.6 |
+| re | 2.2.1 | 2.2.1 | unknown |
+| requests | 2.26.0 | 2.25.1 | 2.26.0 |
+| shapefile | 2.1.3 | 2.1.3 | unknown |
+| shapely | 1.7.0 | 1.7.1 | unknown |
 | shutil | unknown | unknown | unknown |
+| suntime | unknown | unknown | unknown |
 | sys | unknown | unknown | unknown |
 | zipfile | unknown | unknown | unknown |
