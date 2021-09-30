@@ -134,19 +134,39 @@ def add_class_suburb(crash_data, suburb):
 
 def lights_final(crash, rain, suburb, lights):
     crash_final = add_class_suburb((crash_sun_weather(crash, rain)), suburb)
-    crash_final_dark = crash_final[crash_final['dark'] == 0]
-    crash_final_light = crash_final[crash_final['dark'] == 0]
-    crash_final.to_excel(r"C:\Users\Admin\OneDrive\Documents\assignment 2 working\crash_working.xlsx")
-    lights.to_excel(r"C:\Users\Admin\OneDrive\Documents\assignment 2 working\light_working.xlsx")
+    crash_final_dark = crash_final[crash_final['dark'] == 1]
+    dark_lat_long_list = (crash_final_dark[['lat', 'long', 'crash_id']]).values.tolist()
+    light_list = (lights[['lat', 'long']]).values.tolist()
 
-    print(crash_final_dark)
+    R = 6371  # km
+    crash_dict = dict()
+
+    for x in dark_lat_long_list:
+        count = 0
+        for y in light_list:
+            dLat = radians(y[0] - x[0])
+            dLon = radians(y[1] - x[1])
+            lat1 = radians(x[0])
+            lat2 = radians(y[0])
+            a = sin(dLat / 2) ** 2 + cos(lat1) * cos(lat2) * sin(dLon / 2) ** 2
+            c = 2 * asin(sqrt(a))
+            distance = R * c
+            if distance < 0.03:
+                count += 1
+        crash_dict[int(x[2])] = count
 
 
+    crash_lights = pandas.DataFrame(list(crash_dict.items()), columns=['crash_id', 'number_of_lights'])
+    crash_final = (crash_final.merge(crash_lights, on='crash_id', how='left')).fillna(-1)
+    return crash_final
 
-    return
-
-
+from datetime import datetime
+start_time = datetime.now()
 lights_final(working['crash'], working['rainfall'], working['suburb'], working['streetlight'])
+end_time = datetime.now()
+duration = end_time - start_time
+print(f'running time: {duration}')
+
 
 # estimated_cyclist_number_daily_rainfall(working['cyclist'],working['rainfall'])
 #add_class_suburb((crash_sun_weather(working['crash'], working['rainfall'])), working['suburb'])
