@@ -6,7 +6,7 @@ _An investigation on the uphill battle facing cyclists_
 
 ## System Requirements
 
-In addition to having `python3` installed, please ensure your system meets the module requirements listed below.  
+In addition to a `python3` interpreter, please ensure your system has the following third party modules installed:  
 
 | Module |
 |--------|
