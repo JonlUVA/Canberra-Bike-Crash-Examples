@@ -114,7 +114,7 @@ def add_class_suburb(crash_data, suburb):
     def suburb_iter(lat,long):
         return (suburb.locate(lat, long)).get('suburb')
 
-
+    print('hey')
     #results = Parallel(n_jobs=2)(delayed(suburb_iter)(lat, long) for _ in range(20))
 
     #suburb_list = list(map(suburb_iter, lat_long))
