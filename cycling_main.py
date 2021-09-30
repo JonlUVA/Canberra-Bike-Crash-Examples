@@ -22,7 +22,7 @@ from cycling_check_dependencies import *
 def print_header(header_text, header_width=75, all_caps=True):
     """
     Prints text as a 3 line header of a given width, surrounded by hash
-    symbols.
+    symbols, with a blank line before and after.
 
     Parameters
     ----------
@@ -47,9 +47,11 @@ def print_header(header_text, header_width=75, all_caps=True):
         
     header_line = f'#{header_text:^{header_width-2}}#'    
     
+    print()
     print('#' * header_width)
     print(header_line)
     print('#' * header_width)
+    print()
     
 
 ##############################################################################
@@ -61,9 +63,7 @@ if __name__ == '__main__':
     ##########################################################################
     #                            CHECK DEPENDENCIES                          #
     ##########################################################################
-    print()
     print_header('Checking Dependencies')
-    print()  
     
     root_path = Path.cwd()
     local_module_prefix = 'cycling'
@@ -96,10 +96,7 @@ if __name__ == '__main__':
     ##########################################################################
     #             UPDATE COMPATIBLE SYSTEMS / REQUIREMENTS DOC               #
     ##########################################################################
-    
-    print()
     print_header('Updating Compatible Systems')
-    print()  
        
     compatible_systems_csv = 'compatible_systems/compatible_systems.csv'
     requirements_doc_template = 'compatible_systems/REQUIREMENTS.template'
@@ -115,10 +112,7 @@ if __name__ == '__main__':
     ##########################################################################
     #            CHECK IF DATA ALREADY PROCESSED AND STORED LOCALLY          #
     ##########################################################################
-    
-    print()
     print_header('Checking Local Processed Data Sources')
-    print()  
     
     processed_data_tables = ['cyclists',
                              'crashes'] 
@@ -142,11 +136,8 @@ if __name__ == '__main__':
         ######################################################################
         #         CHECK FOR LOCAL RAW DATA OTHERWISE DOWNLOAD DATA           #
         ######################################################################
-    
-        print()
         print_header('Checking Local Raw Data Sources')
-        print()  
-    
+        
         data_index_path = Path(DATA_FOLDER) / DATA_INDEX
     
         if not check_local_data(data_index_path):
@@ -162,9 +153,7 @@ if __name__ == '__main__':
         ######################################################################
         #                           LOAD RAW DATA                            #
         ######################################################################
-        print()
         print_header('Loading Raw Data')
-        print()  
         
         data = load_data(data_index_path)
         print()
@@ -174,9 +163,7 @@ if __name__ == '__main__':
         ######################################################################
         #                           ANALYSE DATA                             #
         ######################################################################
-        print()
         print_header('Analysing Raw Data')
-        print()  
         
         print('This may take a minute, please be patient ... ', end='')
         integrated_data = integration(data)
@@ -195,9 +182,7 @@ if __name__ == '__main__':
     ##########################################################################
     #                              VISUALISE DATA                            #
     ##########################################################################
-    print()
     print_header('Visualising Data')
-    print()  
     
     pass
     print()
