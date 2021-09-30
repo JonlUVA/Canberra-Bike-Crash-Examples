@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Central project module with 'main' function to download, ingest, analyse, and
-visualise data.
+Central project module with 'main' function to check system compatibility, then
+download, ingest, analyse, and visualise data.
 
 @author:  tarney
 @uid:     u7378856
@@ -19,7 +19,7 @@ from cycling_check_dependencies import *
 #                               HELPER FUNCTIONS                             #
 ##############################################################################
 
-def print_header(header_text, header_width=77, all_caps=True):
+def print_header(header_text, header_width=75, all_caps=True):
     """
     Prints text as a 3 line header of a given width, surrounded by hash
     symbols.
@@ -29,7 +29,7 @@ def print_header(header_text, header_width=77, all_caps=True):
     header_text : str
         Text to display.
     header_width : int, optional
-        Number of characters on each line. The default is 77.
+        Number of characters on each line. The default is 75.
     all_caps : bool, optional
         Convert text to uppercase. The default is True.
 
@@ -57,8 +57,7 @@ def print_header(header_text, header_width=77, all_caps=True):
 ##############################################################################
 
 if __name__ == '__main__':
-    
-    
+
     ##########################################################################
     #                            CHECK DEPENDENCIES                          #
     ##########################################################################
@@ -85,11 +84,13 @@ if __name__ == '__main__':
     ##########################################################################
     #    DEPENDENCIES MET, CAN NOW SAFELY IMPORT ALL ADDITIONAL MODULES      #
     ##########################################################################
+    
     from cycling_globals import *
     from cycling_update_compatible_systems import *
     from cycling_download_data import *
     from cycling_load_data import *
     from cycling_data_integration import *
+    from cycling_helper_functions import *
     
     
     ##########################################################################
@@ -110,49 +111,85 @@ if __name__ == '__main__':
     print()
     print('Please feel free to commit these files to the remote repository.')
     
-
+    
     ##########################################################################
-    #                CHECK LOCAL DATA OTHERWISE DOWNLOAD DATA                #
+    #            CHECK IF DATA ALREADY PROCESSED AND STORED LOCALLY          #
     ##########################################################################
-
+    
     print()
-    print_header('Checking Local Data Sources')
+    print_header('Checking Local Processed Data Sources')
     print()  
-
-    data_index_path = Path(DATA_FOLDER) / DATA_INDEX
-
-    if not check_local_data(data_index_path):
-        print()
-        print_header('Downloading Data')
+    
+    processed_data_tables = ['cyclists',
+                             'crashes'] 
+    data_paths = {data_table: Path(DATA_FOLDER) / (data_table + '.xlsx') 
+                  for data_table in processed_data_tables}
+    
+    if all([file_exists(data_paths[table]) for table in data_paths]):
+        ######################################################################
+        #                        LOAD PROCESSED DATA                         #
+        ######################################################################
+        print('All processed data sources found')
         
-        download_all_data(DATA_SOURCES, DATA_FOLDER, DATA_INDEX)
+        integrated_data = {}
+        
+        for table, path in data_paths.items():
+            integrated_data[table] = read_excel_to_df(path)
     else:
+        print('Processed data sources not found')
+        
+        
+        ######################################################################
+        #         CHECK FOR LOCAL RAW DATA OTHERWISE DOWNLOAD DATA           #
+        ######################################################################
+    
         print()
-        print('All data sources found')
-
+        print_header('Checking Local Raw Data Sources')
+        print()  
     
-    ##########################################################################
-    #                                LOAD DATA                               #
-    ##########################################################################
-    print()
-    print_header('Loading Data')
-    print()  
+        data_index_path = Path(DATA_FOLDER) / DATA_INDEX
     
-    data = load_data(data_index_path)
-    print()
-    print('All data sources loaded')
+        if not check_local_data(data_index_path):
+            print()
+            print_header('Downloading Raw Data')
+            
+            download_all_data(DATA_SOURCES, DATA_FOLDER, DATA_INDEX)
+        else:
+            print()
+            print('All raw data sources found')
     
-    
-    ##########################################################################
-    #                               ANALYSE DATA                             #
-    ##########################################################################
-    print()
-    print_header('Analysing Data')
-    # print()  
-    
-    integrated_data = integration(data)
-    print()
-    print('All data analysed')
+        
+        ######################################################################
+        #                           LOAD RAW DATA                            #
+        ######################################################################
+        print()
+        print_header('Loading Raw Data')
+        print()  
+        
+        data = load_data(data_index_path)
+        print()
+        print('All raw data sources loaded')
+        
+        
+        ######################################################################
+        #                           ANALYSE DATA                             #
+        ######################################################################
+        print()
+        print_header('Analysing Raw Data')
+        print()  
+        
+        print('This may take a minute, please be patient ... ', end='')
+        integrated_data = integration(data)
+        print('complete')
+        print()
+        
+        for table_name, df in integrated_data.items():
+            output_path = Path(DATA_FOLDER) / (table_name + '.xlsx')
+            print(f'  Writing {table_name} data to disk: {output_path}')
+            write_df_to_excel(df, output_path)
+            
+        print()
+        print('All data analysed and written to disk')
     
     
     ##########################################################################
@@ -164,6 +201,6 @@ if __name__ == '__main__':
     
     pass
     print()
-    print('...nothing to see here')
+    print('...nothing to see here (yet)...')
     
     
