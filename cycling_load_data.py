@@ -13,9 +13,8 @@ import pandas as pd
 from pathlib import Path
 from math import radians, cos, sin, asin, sqrt
 import shapefile
-
-from shapely.geometry import shape, Point #, Polygon
-# from datetime import datetime
+from shapely.geometry import shape, Point
+from collections import defaultdict
 
 from cycling_globals import *
 
@@ -324,21 +323,158 @@ class Suburb:
         sf = shapefile.Reader(data_path)
         self.shapes = sf.shapes()
         self.records = sf.records()
+        # self.district_lookup = self.__build_district_lookup()
+        self.__calculate_record_ranges()
+        self.__build_district_lookup()
+        # self.__preprocess_data()
         
-    def locate(self, lat, long):
+    def __calculate_record_ranges(self):
+        num_records = len(self.records)
+        first_suburb = num_records - 1
+        first_district = num_records - 1
+        last_suburb = 0
+        last_district = 0
+        
+        for i in range(num_records):
+            level = self.records[i][4]
+            
+            if level == 'Gazetted Locality':
+                if i < first_suburb:
+                    first_suburb = i
+                elif i > last_suburb:
+                    last_suburb = i
+            elif level == 'District':
+                if i < first_district:
+                    first_district = i
+                elif i > last_district:
+                    last_district = i
+        
+        self.suburb_range = range(first_suburb, last_suburb + 1)
+        self.district_range = range(first_district, last_district + 1)
+        
+        # self.__build_district_lookup()
+      
+        
+    def __build_district_lookup(self):
+        lookup = defaultdict(list)
+        # num_records = len(self.records)
+        
+        for i in self.suburb_range:
+            suburb = self.records[i][3]
+            # index_level = self.records[i][4]
+            
+            # if index_level == 'Gazetted Locality' and not index_name in lookup:
+            suburb_boundary = shape(self.shapes[i])
+        
+            for j in self.district_range:
+                district = self.records[j][3]
+                
+                # if test_level == 'District':
+                district_boundary = shape(self.shapes[j])
+        
+                if suburb_boundary.intersects(district_boundary):
+                    # match_name = self.records[j][3]
+                    lookup[suburb].append(district)
+                    # print(f'{suburb} --> {district}')
+                    # break
+        
+        self.district_lookup = {k: v[0] for k, v in lookup.items() if len(v) == 1}
+        
+    
+    # def __build_district_lookup(self):
+    #     lookup = defaultdict(list)
+    #     num_records = len(self.records)
+        
+    #     for i in self.suburb_range:
+    #         index_name = self.records[i][3]
+    #         index_level = self.records[i][4]
+            
+    #         if index_level == 'Gazetted Locality' and not index_name in lookup:
+    #             suburb_boundary = shape(self.shapes[i])
+            
+    #             for j in self.district_range:
+    #                 test_level = self.records[j][4]
+                    
+    #                 if test_level == 'District':
+    #                     district_boundary = shape(self.shapes[j])
+                
+    #                     if suburb_boundary.intersects(district_boundary):
+    #                         match_name = self.records[j][3]
+    #                         lookup[index_name].append(match_name)
+    #                         # break
+        
+    #     self.district_lookup = {k: v[0] for k, v in lookup.items() if len(v) == 1}
+        
+    
+    def __locate(self, lat, long):
         point = Point(long, lat)
-        res = {}
+        res = {'suburb': '', 'district': ''}
+        # records_found = 0
+        suburb = ''
+        # for i, this_shape in enumerate(self.shapes):
+        #     boundary = shape(this_shape)
         
-        for i, this_shape in enumerate(self.shapes):
-            boundary = shape(this_shape)
+        #     if point.within(boundary):
+        #         name = self.records[i][3]
+        #         level = self.records[i][4]
+        #         res[Suburb.level_map[level]] = name
+        #         records_found += 1
+                
+        #         if records_found == len(Suburb.level_map):
+        #             break
+                
+        # return res
         
-            if point.within(boundary):
-                name = self.records[i][3]
-                level = self.records[i][4]
-                res[Suburb.level_map[level]] = name
+        for i in self.suburb_range:
+            suburb_boundary = shape(self.shapes[i])
+        
+            if point.within(suburb_boundary):
+                suburb = self.records[i][3]
+                res['suburb'] = suburb
+                break
+            
+        if suburb in self.district_lookup:
+            res['district'] = self.district_lookup[suburb]
+            return res
+        
+        for i in self.district_range:
+            district_boundary = shape(self.shapes[i])
+        
+            if point.within(district_boundary):
+                res['district'] = self.records[i][3]
+                return res
                 
         return res
+    
+    def __locate_df(self, df):
+        res = [self.__locate(lat, long) for lat, long in zip(df['lat'], df['long'])]  
+        res_df = pd.DataFrame(res)
+        res_df.fillna('', inplace=True)
+        return df.join(res_df, how='left')
+    
+    def locate(self, *args):
+        
+        if len(args) == 2:
+            lat, long = args
+            
+            if isinstance(lat, float) and isinstance(long, float):
+                return self.__locate(lat, long)
                 
+        elif isinstance(args[0], pd.DataFrame):
+            df = args[0]
+            
+            return self.__locate_df(df)
+        
+    def get_district(self, suburb):
+        suburb = suburb.strip().lower()
+        
+        for i, record in enumerate(self.records):
+        
+            if suburb == self.records[i][3].lower():
+                return self.records[i][4]
+                
+        return ''
+            
      
 def load_data(data_index_path):
     data_index = read_data_directory_csv(data_index_path)
@@ -452,3 +588,8 @@ if __name__ == '__main__':
     distance = data['rainfall']['canberra airport'].distance_from_station(lat, long)
     
     print(f'They are {distance:.2f} km apart')
+    
+    
+    ## SUBURB EFFICIENCY TESTS
+    
+    
