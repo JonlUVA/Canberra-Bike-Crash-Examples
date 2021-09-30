@@ -8,9 +8,7 @@ from datetime import datetime
 import numpy
 from math import sin, cos, sqrt, asin, radians
 
-data_index_path = Path(DATA_FOLDER) / DATA_INDEX
 
-working = load_data(data_index_path)
 
 
 def weather_data_clean(data, weather_station):
@@ -173,16 +171,22 @@ def lights_final(crash, rain, suburb, lights):
 # add_class_suburb((crash_sun_weather(working['crash'], working['rainfall'])), working['suburb'])
 
 def integration(data):
-    data_intergration_dic = dict()
-    data_intergration_dic['estimated_cycle'] = estimated_cyclist_number_daily_rainfall(data['cyclist'], data['rainfall'])
-    data_intergration_dic['crash_data'] = lights_final(data['crash'], data['rainfall'], data['suburb'], data['streetlight'])
+    data_integration_dic = dict()
+    data_integration_dic['estimated_cycle'] = estimated_cyclist_number_daily_rainfall(data['cyclist'], data['rainfall'])
+    data_integration_dic['crash_data'] = lights_final(data['crash'], data['rainfall'], data['suburb'], data['streetlight'])
 
-    return data_intergration_dic
+    return data_integration_dic
 
-from datetime import datetime
-start_time = datetime.now()
 
-print(integration(working))
-end_time = datetime.now()
-duration = end_time - start_time
-print(f'running time: {duration}')
+# T.A. EDIT >> moved your working code in here for integration purposes
+if __name__ == '__main__':
+    data_index_path = Path(DATA_FOLDER) / DATA_INDEX
+    working = load_data(data_index_path)
+    
+    from datetime import datetime
+    start_time = datetime.now()
+    
+    print(integration(working))
+    end_time = datetime.now()
+    duration = end_time - start_time
+    print(f'running time: {duration}')
