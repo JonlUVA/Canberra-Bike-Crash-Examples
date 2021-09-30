@@ -129,14 +129,14 @@ if __name__ == '__main__':
         ######################################################################
         #                        LOAD PROCESSED DATA                         #
         ######################################################################
-        print('All processed data sources found')
+        print('All local data sources found')
         
         integrated_data = {}
         
         for table, path in data_paths.items():
             integrated_data[table] = read_excel_to_df(path)
     else:
-        print('Processed data sources not found')
+        print('Local data sources ... NOT FOUND')
         
         
         ######################################################################
