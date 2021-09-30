@@ -89,6 +89,7 @@ if __name__ == '__main__':
     from cycling_update_compatible_systems import *
     from cycling_download_data import *
     from cycling_load_data import *
+    from cycling_data_integration import *
     
     
     ##########################################################################
@@ -141,12 +142,28 @@ if __name__ == '__main__':
     print()
     print('All data sources loaded')
     
-    ##########################################################################
-    #                         ANALYSE / VISUALISE DATA                       #
-    ##########################################################################
     
-    # Here's a little demo of the data that is available:
-    from cycling_data_demo import *
+    ##########################################################################
+    #                               ANALYSE DATA                             #
+    ##########################################################################
     print()
-    print_header('Data Demo')
-    data_demo(data)
+    print_header('Analysing Data')
+    # print()  
+    
+    integrated_data = integration(data)
+    print()
+    print('All data analysed')
+    
+    
+    ##########################################################################
+    #                              VISUALISE DATA                            #
+    ##########################################################################
+    print()
+    print_header('Visualising Data')
+    print()  
+    
+    pass
+    print()
+    print('...nothing to see here')
+    
+    
