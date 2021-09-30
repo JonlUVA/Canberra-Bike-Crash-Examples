@@ -1,8 +1,12 @@
 # this is a working file where I will export some data for a better view
-import openpyxl
+
 import pandas
 
 from cycling_load_data import *
+from suntime import Sun
+from datetime import datetime
+import numpy
+from math import sin, cos, sqrt, asin, radians
 
 data_index_path = Path(DATA_FOLDER) / DATA_INDEX
 
@@ -40,12 +44,6 @@ def estimated_cyclist_number_daily_rainfall(cyclist_data, weather):
     weather_data_frame = weather_data_clean(weather, 'canberra airport')
     weather_and_cyclist_date = pandas.merge(cyclist_data, weather_data_frame, on='date', how='left')
     return weather_and_cyclist_date
-
-
-from suntime import Sun, SunTimeException
-from datetime import datetime, time
-import numpy
-from math import sin, cos, sqrt, atan2, radians
 
 
 # approximate radius of earth in km
@@ -93,7 +91,7 @@ def crash_sun_weather(crash_data, weather):
     weather_cbra = pandas.merge(weather_cbra, weather_data_clean(weather, 'canberra airport'), on="date", how="left")
     crash_weather_df = pandas.concat([weather_cbra, weather_tug], ignore_index=True)
     crash_weather_df['dark'] = numpy.where((crash_weather_df['sunset'] < crash_weather_df['time']) | (
-                crash_weather_df['sunrise'] > crash_weather_df['time']), 1, 0)
+            crash_weather_df['sunrise'] > crash_weather_df['time']), 1, 0)
     # crash_weather_df.to_excel(r"C:\Users\Admin\OneDrive\Documents\assignment 2 working\crash_look.xlsx")
 
     return crash_weather_df
@@ -105,49 +103,86 @@ def add_class_suburb(crash_data, suburb):
     """
     suburb_list = list()
     lat_long = (crash_data[['lat', 'long']]).values.tolist()
-    #lat = (crash_data[['lat']]).values.tolist()
-    #long = (crash_data[['long']]).values.tolist()
+
+    # lat = (crash_data[['lat']]).values.tolist()
+    # long = (crash_data[['long']]).values.tolist()
 
     def suburb_iter(data):
         return list(suburb.locate(data[0], data[1]).values())
 
-    #from datetime import datetime
-    #start_time = datetime.now()
-    #crash_data = suburb.locate(crash_data)
+    # from datetime import datetime
+    # start_time = datetime.now()
+    # crash_data = suburb.locate(crash_data)
     suburb_list = [item for sublist in (list(map(suburb_iter, lat_long))) for item in sublist]
 
-    #end_time = datetime.now()
-    #duration = end_time - start_time
-    #print(f'running time: {duration}')
+    # end_time = datetime.now()
+    # duration = end_time - start_time
+    # print(f'running time: {duration}')
     # for x in lat_long:
     #    working_suburb_list = (suburb.locate(x[0],x[1])).get('suburb')
     #    print(working_suburb_list)
     #    suburb_list.append(working_suburb_list)
-    #print(suburb_list)
+    # print(suburb_list)
     crash_data['suburb'] = suburb_list[::2]
     crash_data['district'] = suburb_list[1::2]
     crash_data.loc[crash_data['suburb'] == '', 'suburb'] = crash_data['district']
-    #crash_data.to_excel(r"C:\Users\Admin\OneDrive\Documents\assignment 2 working\large2.xlsx")
+    # crash_data.to_excel(r"C:\Users\Admin\OneDrive\Documents\assignment 2 working\large2.xlsx")
 
     return crash_data
 
 
 def lights_final(crash, rain, suburb, lights):
     crash_final = add_class_suburb((crash_sun_weather(crash, rain)), suburb)
-    crash_final_dark = crash_final[crash_final['dark'] == 0]
-    crash_final_light = crash_final[crash_final['dark'] == 0]
-    crash_final.to_excel(r"C:\Users\Admin\OneDrive\Documents\assignment 2 working\crash_working.xlsx")
-    lights.to_excel(r"C:\Users\Admin\OneDrive\Documents\assignment 2 working\light_working.xlsx")
+    crash_final_dark = crash_final[crash_final['dark'] == 1]
+    dark_lat_long_list = (crash_final_dark[['lat', 'long', 'crash_id']]).values.tolist()
+    light_list = (lights[['lat', 'long']]).values.tolist()
 
-    print(crash_final_dark)
+    R = 6371  # km
+    crash_dict = dict()
+
+    for x in dark_lat_long_list:
+        count = 0
+        for y in light_list:
+            dLat = radians(y[0] - x[0])
+            dLon = radians(y[1] - x[1])
+            lat1 = radians(x[0])
+            lat2 = radians(y[0])
+            a = sin(dLat / 2) ** 2 + cos(lat1) * cos(lat2) * sin(dLon / 2) ** 2
+            c = 2 * asin(sqrt(a))
+            distance = R * c
+            if distance < 0.03:
+                count += 1
+        crash_dict[int(x[2])] = count
+
+    crash_lights = pandas.DataFrame(list(crash_dict.items()), columns=['crash_id', 'number_of_lights'])
+    crash_final = (crash_final.merge(crash_lights, on='crash_id', how='left')).fillna(-1)
+    return crash_final
 
 
+# from datetime import datetime
+# start_time = datetime.now()
+#lights_final(working['crash'], working['rainfall'], working['suburb'], working['streetlight'])
 
-    return
 
+# end_time = datetime.now()
+# duration = end_time - start_time
+# print(f'running time: {duration}')
 
-lights_final(working['crash'], working['rainfall'], working['suburb'], working['streetlight'])
 
 # estimated_cyclist_number_daily_rainfall(working['cyclist'],working['rainfall'])
-#add_class_suburb((crash_sun_weather(working['crash'], working['rainfall'])), working['suburb'])
+# add_class_suburb((crash_sun_weather(working['crash'], working['rainfall'])), working['suburb'])
 
+def integration(data):
+    data_intergration_dic = dict()
+    data_intergration_dic['estimated_cycle'] = estimated_cyclist_number_daily_rainfall(data['cyclist'], data['rainfall'])
+    data_intergration_dic['crash_data'] = lights_final(data['crash'], data['rainfall'], data['suburb'], data['streetlight'])
+
+    return data_intergration_dic
+
+from datetime import datetime
+start_time = datetime.now()
+
+print(integration(working))
+end_time = datetime.now()
+duration = end_time - start_time
+print(f'running time: {duration}')
