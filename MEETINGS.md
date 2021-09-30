@@ -1,5 +1,8 @@
-# COMP7230 Group Project
+COMP7230 Group Project
 Winter Semester, 2021
+
+# _Canberra: Changing Gears on Bike Safety_
+_An investigation on the uphill battle facing cyclists_
 
 ## Group Meetings
 
@@ -41,3 +44,4 @@ Winter Semester, 2021
 - Settled on cycling idea for project.
 - Expanded scope to include geospatial integration with place names.
 - Assigned visualations to Hugh.
+- Decided to discontinue MEETINGS.md in favour of the group Discord channel.
