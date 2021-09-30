@@ -600,6 +600,7 @@ if __name__ == '__main__':
     if file_exists(crash_path):
         print(f'Reading: {crash_path}')
         crash_data = read_excel_to_df(crash_path)
+        crash_data[['suburb','district']] = crash_data[['suburb','district']].fillna('')
     else:
         # geolocate each crash by suburb/district
         print('Geolocating each crash site...')
