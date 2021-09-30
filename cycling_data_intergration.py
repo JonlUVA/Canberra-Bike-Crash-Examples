@@ -98,9 +98,6 @@ def crash_sun_weather(crash_data, weather):
 
     return crash_weather_df
 
-#from joblib import Parallel, delayed
-#from joblib import wrap_non_picklable_objects
-#from joblib.externals.loky import set_loky_pickler
 
 def add_class_suburb(crash_data, suburb):
     """"
@@ -108,26 +105,49 @@ def add_class_suburb(crash_data, suburb):
     """
     suburb_list = list()
     lat_long = (crash_data[['lat', 'long']]).values.tolist()
-    lat = (crash_data[['lat']]).values.tolist()
-    long = (crash_data[['long']]).values.tolist()
+    #lat = (crash_data[['lat']]).values.tolist()
+    #long = (crash_data[['long']]).values.tolist()
 
-    def suburb_iter(lat,long):
-        return (suburb.locate(lat, long)).get('suburb')
+    def suburb_iter(data):
+        return list(suburb.locate(data[0], data[1]).values())
 
-    print('hey')
-    #results = Parallel(n_jobs=2)(delayed(suburb_iter)(lat, long) for _ in range(20))
+    #from datetime import datetime
+    #start_time = datetime.now()
+    #crash_data = suburb.locate(crash_data)
+    suburb_list = [item for sublist in (list(map(suburb_iter, lat_long))) for item in sublist]
 
-    #suburb_list = list(map(suburb_iter, lat_long))
-    #suburb_list_2 = [(suburb.locate(lat_long[x::2],lat_long[(x + 1)::2])) for x in range(0, len(lat_long))]
-    #suburb_list = list(map(suburb_iter, lat_long_10))
-
+    #end_time = datetime.now()
+    #duration = end_time - start_time
+    #print(f'running time: {duration}')
     # for x in lat_long:
     #    working_suburb_list = (suburb.locate(x[0],x[1])).get('suburb')
     #    print(working_suburb_list)
     #    suburb_list.append(working_suburb_list)
+    #print(suburb_list)
+    crash_data['suburb'] = suburb_list[::2]
+    crash_data['district'] = suburb_list[1::2]
+    crash_data.loc[crash_data['suburb'] == '', 'suburb'] = crash_data['district']
+    #crash_data.to_excel(r"C:\Users\Admin\OneDrive\Documents\assignment 2 working\large2.xlsx")
+
+    return crash_data
+
+
+def lights_final(crash, rain, suburb, lights):
+    crash_final = add_class_suburb((crash_sun_weather(crash, rain)), suburb)
+    crash_final_dark = crash_final[crash_final['dark'] == 0]
+    crash_final_light = crash_final[crash_final['dark'] == 0]
+    crash_final.to_excel(r"C:\Users\Admin\OneDrive\Documents\assignment 2 working\crash_working.xlsx")
+    lights.to_excel(r"C:\Users\Admin\OneDrive\Documents\assignment 2 working\light_working.xlsx")
+
+    print(crash_final_dark)
+
+
 
     return
 
 
+lights_final(working['crash'], working['rainfall'], working['suburb'], working['streetlight'])
+
 # estimated_cyclist_number_daily_rainfall(working['cyclist'],working['rainfall'])
-add_class_suburb((crash_sun_weather(working['crash'], working['rainfall'])), working['suburb'])
+#add_class_suburb((crash_sun_weather(working['crash'], working['rainfall'])), working['suburb'])
+
