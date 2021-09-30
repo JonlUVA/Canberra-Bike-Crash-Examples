@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-
+Central project module with 'main' function to download, ingest, analyse, and
+visualise data.
 
 @author:  tarney
 @uid:     u7378856
@@ -19,14 +20,35 @@ from cycling_check_dependencies import *
 ##############################################################################
 
 def print_header(header_text, header_width=77, all_caps=True):
+    """
+    Prints text as a 3 line header of a given width, surrounded by hash
+    symbols.
+
+    Parameters
+    ----------
+    header_text : str
+        Text to display.
+    header_width : int, optional
+        Number of characters on each line. The default is 77.
+    all_caps : bool, optional
+        Convert text to uppercase. The default is True.
+
+    Returns
+    -------
+    None.
+
+    """
+    
     if all_caps:
         header_text = header_text.upper()
+    
+    if len(header_text) > header_width - 4:
+        header_text = header_text[:header_width-7] + '...'
         
+    header_line = f'#{header_text:^{header_width-2}}#'    
+    
     print('#' * header_width)
-    
-    header_line = f'#{header_text:^{header_width-2}}#'
     print(header_line)
-    
     print('#' * header_width)
     
 
