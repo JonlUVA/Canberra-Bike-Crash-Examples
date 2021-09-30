@@ -1,4 +1,7 @@
-# COMP7230 Group Project
+COMP7230 Group Project
 Winter Semester, 2021
+
+# _Canberra: Changing Gears on Bike Safety_
+_An investigation on the uphill battle facing cyclists_
 
 ## Project Report
