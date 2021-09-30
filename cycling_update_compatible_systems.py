@@ -4,7 +4,7 @@
 Auxiliary module to:
     
     1. Generate and update a CSV file with the version information of Python 
-    and all third-party modules, as required by the project, currently running 
+    and dependant modules, as required by the project, currently running 
     on the host system.  
     
     2. Convert the CSV file to a markdown formatted file for inclusion in 
@@ -204,7 +204,6 @@ def build_requirements_table(dependencies_file):
         row = [module]
         
         for host in hosts:
-            # print(f'{i + 1}: {host}')
             row.append(module_dict[host][module])
           
         reqs_table += '| ' + ' | '.join(row) + ' |\n'
@@ -237,25 +236,10 @@ def update_compatible_systems_csv(sys_config, compatible_systems_csv):
 
     """
     
-    # print('Building dependencies:')
-    # print(f'  Reading modules file: {modules_file}')
-    
-    # mods = read_modules(modules_file)
-    
-    # if len(mods) == 0:
-    #     print('  No modules found')
-    #     return False
-    
-    # D = get_module_versions(mods)
-    # df = convert_dict_to_df(D)
-    # hostname = get_hostname()
-    
     df = convert_dict_to_df(sys_config)
     hostname = sys_config.get_hostname()
     
     if file_exists(compatible_systems_csv):
-        # print(f'  Reading existing dependencies file: {compatible_systems_csv}')
-        
         old_df = read_dependencies(compatible_systems_csv)
         
         if hostname in old_df.columns:
@@ -288,13 +272,7 @@ def update_requirements_doc(compatible_systems_csv, requirements_doc_template, r
 
     """
     
-    # print('Building requirements documentation:')
-    # print(f'  Reading dependencies file: {compatible_systems_csv}')
-    
     reqs_table = build_requirements_table(compatible_systems_csv)
-    
-    # print(f'  Reading requirements template file: {requirements_doc_template}')
-    
     reqs_template = read_requirements_template(requirements_doc_template)
     reqs_md = reqs_template + '\n' + reqs_table
     
