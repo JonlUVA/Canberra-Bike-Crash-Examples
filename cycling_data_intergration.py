@@ -172,7 +172,7 @@ def lights_final(crash, rain, suburb, lights):
 # estimated_cyclist_number_daily_rainfall(working['cyclist'],working['rainfall'])
 # add_class_suburb((crash_sun_weather(working['crash'], working['rainfall'])), working['suburb'])
 
-def intergration(data):
+def integration(data):
     data_intergration_dic = dict()
     data_intergration_dic['estimated_cycle'] = estimated_cyclist_number_daily_rainfall(data['cyclist'], data['rainfall'])
     data_intergration_dic['crash_data'] = lights_final(data['crash'], data['rainfall'], data['suburb'], data['streetlight'])
@@ -182,7 +182,7 @@ def intergration(data):
 from datetime import datetime
 start_time = datetime.now()
 
-print(intergration(working))
+print(integration(working))
 end_time = datetime.now()
 duration = end_time - start_time
 print(f'running time: {duration}')
