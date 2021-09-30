@@ -170,10 +170,14 @@ def lights_final(crash, rain, suburb, lights):
 # estimated_cyclist_number_daily_rainfall(working['cyclist'],working['rainfall'])
 # add_class_suburb((crash_sun_weather(working['crash'], working['rainfall'])), working['suburb'])
 
+
+# T.A. EDIT >> renamed your dict keys
+# they're used in main to check for local data dump files to improve efficiency
+# on subsequent executions
 def integration(data):
     data_integration_dic = dict()
-    data_integration_dic['estimated_cycle'] = estimated_cyclist_number_daily_rainfall(data['cyclist'], data['rainfall'])
-    data_integration_dic['crash_data'] = lights_final(data['crash'], data['rainfall'], data['suburb'], data['streetlight'])
+    data_integration_dic['cyclists'] = estimated_cyclist_number_daily_rainfall(data['cyclist'], data['rainfall'])
+    data_integration_dic['crashes'] = lights_final(data['crash'], data['rainfall'], data['suburb'], data['streetlight'])
 
     return data_integration_dic
 
