@@ -12,7 +12,13 @@ from math import sin, cos, sqrt, asin, radians
 
 
 def weather_data_clean(data, weather_station):
+    """" this function reads the weather class structure and returns a dataframe.
+    :argument weather class data, name of station
+    :return dataframe with weather station data
+
+    """
     weather_data_frame = data[weather_station].get_data()
+    # changing na to zeros to reduce missing values
     weather_data_frame = weather_data_frame.fillna(0)
     weather_data_frame['date'] = pandas.to_datetime(weather_data_frame['date_time']).dt.date
     return weather_data_frame
@@ -38,13 +44,12 @@ def estimated_cyclist_number_daily_rainfall(cyclist_data, weather):
     :argument  ACT government Bike Barometer - MacArthur Avenue , daily rainfall
     :return a pandas df with the daily sums of cyclists and the daily rainfall.
     """
+
     cyclist_data = estimating_cyclist_number(cyclist_data)
     weather_data_frame = weather_data_clean(weather, 'canberra airport')
+    # left join was chosen as there may be missing values
     weather_and_cyclist_date = pandas.merge(cyclist_data, weather_data_frame, on='date', how='left')
     return weather_and_cyclist_date
-
-
-# approximate radius of earth in km
 
 
 def crash_sun_weather(crash_data, weather):
@@ -55,14 +60,14 @@ def crash_sun_weather(crash_data, weather):
     :argument  ACT government Bike Barometer - MacArthur Avenue , daily rainfall
     :return a pandas df with the daily sums of cyclists and the daily rainfall.
     """
-
+    # creating time_Data to 2 values, time and date
     crash_data['date'] = pandas.to_datetime(crash_data['date_time']).dt.date
     crash_data['time'] = pandas.to_datetime(crash_data['date_time']).dt.time
 
     sunset = list()
     sunrise = list()
     closest_weather_station = list()
-
+    # calculating the distance each crash is from each weather station to determine which one is closest
     for x in crash_data.index:
         sun = Sun(float(crash_data['lat'][x]), float(crash_data['long'][x]))
         sun_ss = datetime.time(sun.get_local_sunset_time(crash_data['date'][x]))
@@ -78,20 +83,20 @@ def crash_sun_weather(crash_data, weather):
         else:
             closest_weather_station.append("tuggeranong")
 
-    # remove timezones from date_time
     crash_data['sunset'] = sunset
     crash_data['sunrise'] = sunrise
     crash_data['closest weather station'] = closest_weather_station
-
+    # creating two dataframes and adding the weather information to the date and crash information
     weather_tug = crash_data[crash_data['closest weather station'] == 'tuggeranong']
     weather_cbra = crash_data[crash_data['closest weather station'] == 'canberra airport']
     weather_tug = pandas.merge(weather_tug, weather_data_clean(weather, 'tuggeranong'), on="date", how="left")
     weather_cbra = pandas.merge(weather_cbra, weather_data_clean(weather, 'canberra airport'), on="date", how="left")
     crash_weather_df = pandas.concat([weather_cbra, weather_tug], ignore_index=True)
+    # creating a binary indicator to whether it is dark or not. this has been
+    # caclulated that is is dark exactly after sunset and only before sunrise.
+    # this was done to reduce the number of street lights we need to calcuated
     crash_weather_df['dark'] = numpy.where((crash_weather_df['sunset'] < crash_weather_df['time']) | (
             crash_weather_df['sunrise'] > crash_weather_df['time']), 1, 0)
-    # crash_weather_df.to_excel(r"C:\Users\Admin\OneDrive\Documents\assignment 2 working\crash_look.xlsx")
-
     return crash_weather_df
 
 
@@ -99,32 +104,13 @@ def add_class_suburb(crash_data, suburb):
     """"
     add the suburbs based on long lat and not what the report says
     """
-    suburb_list = list()
     lat_long = (crash_data[['lat', 'long']]).values.tolist()
-
-    # lat = (crash_data[['lat']]).values.tolist()
-    # long = (crash_data[['long']]).values.tolist()
-
     def suburb_iter(data):
         return list(suburb.locate(data[0], data[1]).values())
-
-    # from datetime import datetime
-    # start_time = datetime.now()
-    # crash_data = suburb.locate(crash_data)
     suburb_list = [item for sublist in (list(map(suburb_iter, lat_long))) for item in sublist]
-
-    # end_time = datetime.now()
-    # duration = end_time - start_time
-    # print(f'running time: {duration}')
-    # for x in lat_long:
-    #    working_suburb_list = (suburb.locate(x[0],x[1])).get('suburb')
-    #    print(working_suburb_list)
-    #    suburb_list.append(working_suburb_list)
-    # print(suburb_list)
     crash_data['suburb'] = suburb_list[::2]
     crash_data['district'] = suburb_list[1::2]
     crash_data.loc[crash_data['suburb'] == '', 'suburb'] = crash_data['district']
-    # crash_data.to_excel(r"C:\Users\Admin\OneDrive\Documents\assignment 2 working\large2.xlsx")
 
     return crash_data
 
