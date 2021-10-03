@@ -106,16 +106,27 @@ def add_class_suburb(crash_data, suburb):
     """
     lat_long = (crash_data[['lat', 'long']]).values.tolist()
     def suburb_iter(data):
+        """"used for getting the suburb by the geolocation as defined in suburb class
+        faster than a traditional loop"""
         return list(suburb.locate(data[0], data[1]).values())
+    # using a map function over a loop as its faster
     suburb_list = [item for sublist in (list(map(suburb_iter, lat_long))) for item in sublist]
     crash_data['suburb'] = suburb_list[::2]
     crash_data['district'] = suburb_list[1::2]
+    # if there is no suburb information take the district
     crash_data.loc[crash_data['suburb'] == '', 'suburb'] = crash_data['district']
 
     return crash_data
 
 
 def lights_final(crash, rain, suburb, lights):
+    """"
+    This function takes the crash, rainfall, suburb, and street light data
+    and returns a final product dataframe which contains all bike crash data with their daily rainfall,
+    which suburb they are in, and if it is dark how many street lights were within 30 meters
+    :argument bike-crash data, rainfall data, suburb class, street light data
+    :return single dataframe containing crash, streetlight, rainfall and suburb class data
+    """
     crash_final = add_class_suburb((crash_sun_weather(crash, rain)), suburb)
     crash_final_dark = crash_final[crash_final['dark'] == 1]
     dark_lat_long_list = (crash_final_dark[['lat', 'long', 'crash_id']]).values.tolist()
@@ -134,7 +145,7 @@ def lights_final(crash, rain, suburb, lights):
             a = sin(dLat / 2) ** 2 + cos(lat1) * cos(lat2) * sin(dLon / 2) ** 2
             c = 2 * asin(sqrt(a))
             distance = R * c
-            if distance < 0.03:
+            if distance < 0.03: # 0.03 = 30 meters
                 count += 1
         crash_dict[int(x[2])] = count
 
@@ -143,24 +154,13 @@ def lights_final(crash, rain, suburb, lights):
     return crash_final
 
 
-# from datetime import datetime
-# start_time = datetime.now()
-#lights_final(working['crash'], working['rainfall'], working['suburb'], working['streetlight'])
 
-
-# end_time = datetime.now()
-# duration = end_time - start_time
-# print(f'running time: {duration}')
-
-
-# estimated_cyclist_number_daily_rainfall(working['cyclist'],working['rainfall'])
-# add_class_suburb((crash_sun_weather(working['crash'], working['rainfall'])), working['suburb'])
-
-
-# T.A. EDIT >> renamed your dict keys
 # they're used in main to check for local data dump files to improve efficiency
 # on subsequent executions
 def integration(data):
+    """" this is the final function, calling this will return a dictionary containing two dataframes,
+    1 the estimated cyclist data and two the bike crash data
+    """
     data_integration_dic = dict()
     data_integration_dic['cyclists'] = estimated_cyclist_number_daily_rainfall(data['cyclist'], data['rainfall'])
     data_integration_dic['crashes'] = lights_final(data['crash'], data['rainfall'], data['suburb'], data['streetlight'])
@@ -168,7 +168,7 @@ def integration(data):
     return data_integration_dic
 
 
-# T.A. EDIT >> moved your working code in here for integration purposes
+# below code is used for testing purposes.
 if __name__ == '__main__':
     data_index_path = Path(DATA_FOLDER) / DATA_INDEX
     working = load_data(data_index_path)
