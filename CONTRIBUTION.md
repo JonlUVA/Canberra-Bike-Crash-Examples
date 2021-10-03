@@ -10,7 +10,9 @@ We declare that work for our project was distributed among the group members,
 and the main contributions were as follows:
 
 * Jonathon Longden (u7333077) --- 33%
-  - Data download and preprocessing scripts
+  - [cycling_data_integration](cycling_data_integration.py)
+    - This program reads the processed data and produces a dictionary which contains dataframes, the first which contains the estimated number of cyclists in Canberra on any given day, as recorded by the ACT bike-barometer, and the daily estimated rainfall as measured by the  Canberra airport weather station.
+    - The second containing the bike-crash information as recorded by the AFP and the reported rainfall of the day from the closest weather station in the region to this particular crash, and if the crash happened after sunset or before sunrise the number of streetlights within a 30m proximity. 
   - Wrote unit tests
 
 * Tim Arney (u7378856) --- 33%
