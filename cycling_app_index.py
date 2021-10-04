@@ -16,7 +16,8 @@ from apps import visual_one
 app.layout = html.Div(
     id='main',
     children=[
-        dcc.Location(id='url', refresh=False),
+        #pathname being used to select first visual
+        dcc.Location(id='url', refresh=False, pathname='/apps/visual_one'),
         html.Div(
             id='side_menu',
             children=[
