@@ -1,0 +1,55 @@
+html, body {
+	font-family: sans-serif;
+	font-size: .8rem
+}
+
+body {
+	margin: 0;
+	padding: 0;
+	background-color: #CED2CC;
+}
+
+h3 {
+	font-size: 1.05rem;
+}
+
+#main {
+	display: grid;
+	grid-template-columns: 20vw 1fr;
+	height: 100vh;
+	width: 100vw;
+}
+
+#side_menu {
+	background-color: #6AB187;
+	padding: 50px 5px;
+}
+
+#side_menu > a {
+	font-size: 1.5rem;
+	color: white;
+	text-decoration: none;
+	display: block;
+	padding: 10px 25px;
+}
+
+#visuals_parent_wrapper {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	grid-gap: 20px;
+	padding: 20px;
+}
+
+#map_visual {
+	display: grid;
+	grid-template-columns: 75px 1fr;
+	grid-gap: 10px;
+	background-color: white;
+}
+
+#wrapper_supplementary_visuals {
+	display: grid;
+	grid-template-columns: 1fr;
+	grid-template-rows: 50px 1fr 1fr;
+	grid-gap: 10px;
+}
