@@ -114,8 +114,8 @@ def add_class_suburb(crash_data, suburb):
     crash_data['suburb'] = suburb_list[::2]
     crash_data['district'] = suburb_list[1::2]
     # if there is no suburb information take the district
-    crash_data.loc[crash_data['suburb'] == '', 'suburb'] = crash_data['district']
-
+    #crash_data.loc[crash_data['suburb'] == '', 'suburb'] = crash_data['district']
+    crash_data.loc[crash_data['suburb'] == '', 'suburb'] = "NA"
     return crash_data
 
 
