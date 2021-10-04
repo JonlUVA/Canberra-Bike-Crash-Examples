@@ -7,8 +7,18 @@ from dash import dcc
 from dash.dependencies import Input, Output
 from cycling_dashboard_app import app
 
+list_colors = [
+    '#003f5c'
+    '#2f4b7c'
+    '#665191'
+    '#a05195'
+    '#d45087'
+    '#f95d6a'
+    '#ff7c43'
+    '#ffa600'
+]
 
-with open('act_map/act_localities.json') as geojson_filename:
+with open('data/geojson/act_localities.json') as geojson_filename:
     geojson_file = json.load(geojson_filename)
 
 geojson_df = pd.DataFrame(geojson_file)
@@ -52,7 +62,7 @@ for row in geojson_shapes:
 
 geo_suburb_shapes = {'type': 'FeatureCollection', 'features': geo_suburb_shapes_temp}
 
-df_raw_data = pd.read_csv('crashes_test.csv')
+df_raw_data = pd.read_csv('data/crashes.csv')
 
 """
 https://aesalazar.com/blog/professional-color-combinations-for-dashboards-or-mobile-bi-applications
@@ -175,12 +185,20 @@ def run_map_vis(selected_year, selected_map_granularity, click_data):
         geojson=var_geojson,
         locations=var_location,
         color="cyclists",
-        color_continuous_scale='YlOrRd',
+        color_continuous_scale=[
+            '#665191',
+            '#a05195',
+            '#d45087',
+            '#f95d6a',
+            '#ff7c43',
+            '#ffa600'
+        ],
         title='map test ' + str(selected_year),
-        mapbox_style="open-street-map",
+        mapbox_style="light",
         zoom=7.5,
         center={'lat': -35.51405, 'lon': 149.07130},
         opacity=0.85,
+        range_color=(6, 100)
     )
 
     fig.update_layout(
