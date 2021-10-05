@@ -12,6 +12,7 @@ from dash.dependencies import Input, Output
 from cycling_dashboard_app import app
 from cycling_dashboard_app import server
 from apps import visual_one
+from apps import visual_two
 
 list_colors = [
     '#003f5c'
@@ -32,8 +33,8 @@ app.layout = html.Div(
         html.Div(
             id='side_menu',
             children=[
-                dcc.Link('visual one', href='/apps/visual_one'),
-                dcc.Link('visual two', href='/apps/visual_two'),
+                dcc.Link('Cyclist Crashes by Suburb and District', href='/apps/visual_one'),
+                dcc.Link('Cyclist Crashed and Weather', href='/apps/visual_two'),
                 dcc.Link('visual three', href='/apps/visual_three'),
                 dcc.Link('visual four', href='/apps/visual_four')
             ]
@@ -52,7 +53,9 @@ app.layout = html.Div(
 )
 def display_dashboard(pathname):
     if pathname == '/apps/visual_one':
-        return visual_one.var_layout
+        return visual_one.var_dashboard
+    elif pathname == '/apps/visual_two':
+        return visual_two.var_dashboard
     else:
         return html.P('Error 404: Page not found...')
         # return visual_two.layout

@@ -70,7 +70,7 @@ https://aesalazar.com/blog/professional-color-combinations-for-dashboards-or-mob
 """
 
 
-var_layout = html.Div([
+var_dashboard = html.Div([
     html.H1(children='Dashboard'),
     html.Div(id='total_number_of_crashes'),
     html.Div(
@@ -194,7 +194,7 @@ def run_map_vis(selected_year, selected_map_granularity, click_data):
             '#ffa600'
         ],
         title='map test ' + str(selected_year),
-        mapbox_style="light",
+        #mapbox_style="light",
         zoom=7.5,
         center={'lat': -35.51405, 'lon': 149.07130},
         opacity=0.85,
