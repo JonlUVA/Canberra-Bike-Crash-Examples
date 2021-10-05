@@ -198,7 +198,7 @@ def run_map_vis(selected_year, selected_map_granularity, click_data):
         #mapbox_style='carto-positron',
         zoom=7.5,
         center={'lat': -35.51405, 'lon': 149.07130},
-        opacity=0.85,
+        opacity=0.5,
         range_color=(6, 100)
     )
 
@@ -218,24 +218,30 @@ def run_map_vis(selected_year, selected_map_granularity, click_data):
     Output(component_id='test_mapping', component_property='figure'),
     [
         #Input(component_id='crash_map', component_property='clickData'),
+        Input(component_id='selected_map_granularity', component_property='value'),
         Input(component_id='location_filter', component_property='value')
     ]
 )
-def run_crashes_overtime_visual(location_filter_value):
+def run_crashes_overtime_visual(selected_map_granularity, location_filter_value):
+    if selected_map_granularity == 'Suburbs':
+        var_column = 'suburb'
+    elif selected_map_granularity == 'Districts':
+        var_column = 'district'
+
     if location_filter_value != 'All':
         selected_location = location_filter_value#click_data.get('points')[0].get('location')
         vis_df = df_raw_data
-        vis_df = vis_df[['district', 'cyclists', 'date']]
+        vis_df = vis_df[[var_column, 'cyclists', 'date']]
         vis_df['year'] = pd.DatetimeIndex(vis_df['date']).year
         vis_df = vis_df.drop(columns=['date'])
-        vis_df = vis_df.loc[vis_df['district'] == selected_location]
-        vis_df = vis_df.groupby(['year', 'district'], as_index=False).agg({'cyclists': sum})
+        vis_df = vis_df.loc[vis_df[var_column] == selected_location]
+        vis_df = vis_df.groupby(['year', var_column], as_index=False).agg({'cyclists': sum})
         fig = px.line(vis_df, x='year', y='cyclists', title='hello wolrd')
     else:
         vis_df = df_raw_data
-        vis_df = vis_df[['district', 'cyclists', 'date']]
+        vis_df = vis_df[[var_column, 'cyclists', 'date']]
         vis_df['year'] = pd.DatetimeIndex(vis_df['date']).year
-        vis_df = vis_df.drop(columns=['date', 'district'])
+        vis_df = vis_df.drop(columns=['date', var_column])
         vis_df = vis_df.groupby(['year'], as_index=False).agg({'cyclists': sum})
         fig = px.line(vis_df, x='year', y='cyclists', title='hello wolrd')
 
@@ -246,13 +252,26 @@ def run_crashes_overtime_visual(location_filter_value):
 
 
 
+
 @app.callback(
-    Output(component_id='location_filter', component_property='value'),
-    Input(component_id='crash_map', component_property='clickData')
+    [
+        Output(component_id='location_filter', component_property='options'),
+        Output(component_id='location_filter', component_property='value')
+    ],
+    [
+        Input(component_id='selected_map_granularity', component_property='value'),
+        Input(component_id='crash_map', component_property='clickData')
+    ]
 )
-def update_location_filter_dropdown(click_data):
+def update_location_filter_dropdown(selected_map_granularity, click_data):
+    if selected_map_granularity == 'Suburbs':
+        selected_options = [{'label': i, 'value': i} for i in geo_suburb_names]
+    elif selected_map_granularity == 'Districts':
+        selected_options = [{'label': i, 'value': i} for i in geo_district_name_filters]
+
     if click_data != None:
         selected_location = click_data.get('points')[0].get('location')
     else:
         selected_location = 'All'
-    return selected_location
+
+    return selected_options, selected_location
