@@ -15,7 +15,7 @@ import numpy as np
 """
 
 df_raw_data = pd.read_csv('data/crashes.csv')
-df_crashes_by_rainfall = df_raw_data[['cyclists', 'rainfall_amount_(millimetres)']]
+df_crashes_by_rainfall = df_raw_data[['cyclists', 'rainfall_amount_(millimetres)', 'severity']]
 
 #https://www.statology.org/interquartile-range-python/#:~:text=It%20is%20calculated%20as%20the%20difference%20between%20the,of%20how%20to%20use%20this%20function%20in%20practice.
 df_rainfall = df_crashes_by_rainfall[df_crashes_by_rainfall['rainfall_amount_(millimetres)'] != 0]
@@ -92,5 +92,7 @@ def cycling_crashed_by_rainfall(rainfall_categories):
 
     fig_df = df_crashes_by_rainfall
     fig_df = fig_df[fig_df['rainfall_category'].isin(rainfall_categories)]
-    fig = px.bar(fig_df, x='rainfall_category', y='cyclists')
+    fig_df = fig_df.groupby(['rainfall_category', 'severity'], as_index=False).agg({'cyclists': sum})
+    fig = px.bar(fig_df, x='rainfall_category', y='cyclists', color='severity')
+
     return fig

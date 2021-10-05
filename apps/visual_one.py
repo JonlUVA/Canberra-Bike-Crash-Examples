@@ -194,7 +194,8 @@ def run_map_vis(selected_year, selected_map_granularity, click_data):
             '#ffa600'
         ],
         title='map test ' + str(selected_year),
-        #mapbox_style="light",
+        mapbox_style='carto-darkmatter',
+        #mapbox_style='carto-positron',
         zoom=7.5,
         center={'lat': -35.51405, 'lon': 149.07130},
         opacity=0.85,
