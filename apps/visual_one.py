@@ -18,7 +18,7 @@ list_colors = [
     '#ffa600'
 ]
 
-with open('data/geojson/act_localities.json') as geojson_filename:
+with open('temp_geojson/act_localities.json') as geojson_filename:
     geojson_file = json.load(geojson_filename)
 
 geojson_df = pd.DataFrame(geojson_file)
@@ -213,6 +213,17 @@ def run_map_vis(selected_year, selected_map_granularity, click_data):
 
     return fig, var_total_crash_count
 
+"""
+def crashes_and_severity_by_year(data_set, location_type):
+    vis_df = data_set[[location_type, 'cyclists', 'date']]
+    vis_df = vis_df.groupby(['year', 'severity'], as_index=False).agg({'cyclists': sum})
+    fig = px.bar(
+        vis_df, x='year', y='cyclists', color='severity', title='hello wolrd', barmode='group', log_y=True
+    )
+    return fig
+
+"""
+
 
 @app.callback(
     [
@@ -228,8 +239,10 @@ def run_map_vis(selected_year, selected_map_granularity, click_data):
 def run_crashes_overtime_visual(selected_map_granularity, location_filter_value):
     if selected_map_granularity == 'Suburbs':
         var_column = 'suburb'
+        location_type = 'suburb'
     elif selected_map_granularity == 'Districts':
         var_column = 'district'
+        location_type = 'district'
 
     if location_filter_value != 'All':
         selected_location = location_filter_value#click_data.get('points')[0].get('location')
@@ -249,11 +262,16 @@ def run_crashes_overtime_visual(selected_map_granularity, location_filter_value)
         fig = px.line(vis_df, x='year', y='cyclists', title='hello wolrd')
 
     vis_df = df_raw_data
-    vis_df = vis_df[[var_column, 'cyclists', 'date', 'severity']]
+    vis_df = vis_df[[location_type, 'cyclists', 'date', 'severity']]
     vis_df['year'] = pd.DatetimeIndex(vis_df['date']).year
     vis_df = vis_df.drop(columns=['date', var_column])
     vis_df = vis_df.groupby(['year', 'severity'], as_index=False).agg({'cyclists': sum})
-    fig_2 = px.bar(vis_df, x='year', y='cyclists', color='severity', title='hello wolrd', barmode='group', log_y=True)
+    fig_2 = px.bar(
+        vis_df, x='year', y='cyclists', color='severity', title='hello wolrd', barmode='group', log_y=True
+    )
+    #fig_crashes_and_severity = crashes_and_severity_by_year(vis_df, location_type)
+
+
 
     fig.update_layout(
         font_size=6
