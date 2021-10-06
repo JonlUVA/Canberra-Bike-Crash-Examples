@@ -35,8 +35,21 @@ def estimating_cyclist_number(cyclist_data):
 
     return cyclist_data_sum_by_date
 
+def sum_of_daily_crashes(crash_data):
+    """This function takes the ACT cyclist Crash data and returns a dataframe with the date (dd/mm/yyyy) and the sum
+    of crashes
+    :argument ACT cyclist Crash Data
+    :return pandas df with sum of daily bike crash
+    """
+    crash_data['date'] = crash_data['date_time'].dt.date
+    value_counts = crash_data['date'].value_counts(dropna=True, sort=True)
+    value_counts = pd.DataFrame(value_counts)
+    value_counts = value_counts.reset_index()
+    value_counts.columns = ['date', 'daily_crash_count']
+    return value_counts
 
-def estimated_cyclist_number_daily_rainfall(cyclist_data, weather):
+
+def estimated_cyclist_number_daily_rainfall_crash_number(cyclist_data, weather, crash_data):
     """this function takes the cyclist data, and the weather data
     this functions uses the Canberra Airport weather station over the Tuggernong station as the canberra airport station
     is only 8.6km while the tuggernong stations is 18.1km
@@ -47,9 +60,13 @@ def estimated_cyclist_number_daily_rainfall(cyclist_data, weather):
 
     cyclist_data = estimating_cyclist_number(cyclist_data)
     weather_data_frame = weather_data_clean(weather, 'canberra airport')
+    crash_sums = sum_of_daily_crashes(crash_data)
     # left join was chosen as there may be missing values
     weather_and_cyclist_date = pandas.merge(cyclist_data, weather_data_frame, on='date', how='left')
-    return weather_and_cyclist_date
+    weather_and_cyclist_date_crash = pandas.merge(weather_and_cyclist_date, crash_sums, on='date', how='left')
+    weather_and_cyclist_date_crash['daily_crash_count'] = weather_and_cyclist_date_crash['daily_crash_count'].fillna(0)
+    weather_and_cyclist_date_crash.to_excel(r"C:\Users\Admin\OneDrive\Documents\assignment 2 working\crash.xlsx")
+    return weather_and_cyclist_date_crash
 
 
 def crash_sun_weather(crash_data, weather):
@@ -162,7 +179,7 @@ def integration(data):
     1 the estimated cyclist data and two the bike crash data
     """
     data_integration_dic = dict()
-    data_integration_dic['cyclists'] = estimated_cyclist_number_daily_rainfall(data['cyclist'], data['rainfall'])
+    data_integration_dic['cyclists'] = estimated_cyclist_number_daily_rainfall_crash_number(data['cyclist'], data['rainfall'], data['crash'])
     data_integration_dic['crashes'] = lights_final(data['crash'], data['rainfall'], data['suburb'], data['streetlight'])
 
     return data_integration_dic
