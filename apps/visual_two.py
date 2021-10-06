@@ -60,35 +60,38 @@ def rainfall_distribution_over_period():
     return fig
 
 
-var_dashboard = html.Div([
-    html.Div([
-       dcc.Checklist(
-           id='rainfall_filter_list',
-           options=[
-                {'label': 'None', 'value': 'none'},
-                {'label': 'Light', 'value': 'light'},
-                {'label': 'Moderate', 'value': 'moderate'},
-                {'label': 'Heavy', 'value': 'heavy'},
-                {'label': 'Violent', 'value': 'violent'}
-           ],
-           value=['none', 'light', 'moderate', 'heavy', 'violent'],
-           labelStyle={'display': 'block'}
-       )
-    ]),
-    html.Div([
-        dcc.Graph(id='crashes_by_rainfall')
-    ]),
-    html.Div([
-        dcc.Graph(figure=rainfall_distribution_over_period(), id='boxplot_rain_distribution')
-    ])
-])
+var_dashboard = html.Div(
+    [
+        html.Div([
+           dcc.Checklist(
+               id='rainfall_filter_list',
+               options=[
+                    {'label': 'None', 'value': 'none'},
+                    {'label': 'Light', 'value': 'light'},
+                    {'label': 'Moderate', 'value': 'moderate'},
+                    {'label': 'Heavy', 'value': 'heavy'},
+                    {'label': 'Violent', 'value': 'violent'}
+               ],
+               value=['none', 'light', 'moderate', 'heavy', 'violent'],
+               labelStyle={'display': 'inline-block'}
+           )
+        ], className='col-2'),
+        html.Div([
+            dcc.Graph(id='crash_severity_by_rainfall')
+        ]),
+        html.Div([
+           dcc.Graph(id='crashes_by_rainfall')
+        ])
+    ],
+    className='vis_wrapper_2x1'
+)
 
 
 @app.callback(
-    Output(component_id='crashes_by_rainfall', component_property='figure'),
+    Output(component_id='crash_severity_by_rainfall', component_property='figure'),
     Input(component_id='rainfall_filter_list', component_property='value')
 )
-def cycling_crashed_by_rainfall(rainfall_categories):
+def cycling_crash_severity_by_rainfall(rainfall_categories):
 
     fig_df = df_crashes_by_rainfall
     fig_df = fig_df[fig_df['rainfall_category'].isin(rainfall_categories)]
@@ -96,3 +99,17 @@ def cycling_crashed_by_rainfall(rainfall_categories):
     fig = px.bar(fig_df, x='rainfall_category', y='cyclists', color='severity')
 
     return fig
+
+
+@app.callback(
+    Output(component_id='crashes_by_rainfall', component_property='figure'),
+    Input(component_id='rainfall_filter_list', component_property='value')
+)
+def cycling_crashed_by_rainfall(rainfall_categories):
+    fig_df = df_crashes_by_rainfall
+    #fig_df = fig_df.drop(['severity'])
+    fig_df = fig_df[fig_df['rainfall_category'].isin(rainfall_categories)]
+    fig_df = fig_df.groupby(['rainfall_category'], as_index=False).agg({'cyclists': sum})
+    fig = px.pie(fig_df, values='cyclists', names='rainfall_category')
+    return fig
+

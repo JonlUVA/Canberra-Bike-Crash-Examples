@@ -215,7 +215,10 @@ def run_map_vis(selected_year, selected_map_granularity, click_data):
 
 
 @app.callback(
-    Output(component_id='test_mapping', component_property='figure'),
+    [
+        Output(component_id='test_mapping', component_property='figure'),
+        Output(component_id='test_mapping_1', component_property='figure')
+    ],
     [
         #Input(component_id='crash_map', component_property='clickData'),
         Input(component_id='selected_map_granularity', component_property='value'),
@@ -245,10 +248,17 @@ def run_crashes_overtime_visual(selected_map_granularity, location_filter_value)
         vis_df = vis_df.groupby(['year'], as_index=False).agg({'cyclists': sum})
         fig = px.line(vis_df, x='year', y='cyclists', title='hello wolrd')
 
+    vis_df = df_raw_data
+    vis_df = vis_df[[var_column, 'cyclists', 'date', 'severity']]
+    vis_df['year'] = pd.DatetimeIndex(vis_df['date']).year
+    vis_df = vis_df.drop(columns=['date', var_column])
+    vis_df = vis_df.groupby(['year', 'severity'], as_index=False).agg({'cyclists': sum})
+    fig_2 = px.bar(vis_df, x='year', y='cyclists', color='severity', title='hello wolrd', barmode='group', log_y=True)
+
     fig.update_layout(
         font_size=6
     )
-    return fig
+    return fig, fig_2
 
 
 
