@@ -40,12 +40,41 @@ def file_exists(file):
 
 
 def read_csv_to_df(file):
+    """
+    Loads a CSV file into a pandas DataFrame.
+
+    Parameters
+    ----------
+    file : str or path
+        Path/name of file to load.
+
+    Returns
+    -------
+    pandas.DataFrame
+        The loaded data.
+    """
+    
     file_path = Path(file)
     return pd.read_csv(file, header=0, index_col=0)
     
     
-    
 def write_df_to_csv(df, file):
+    """
+    Writes a pandas DataFrame to a CSV file.
+
+    Parameters
+    ----------
+    df : pandas.DataFrame
+        Data to write.
+    file : str or path
+        Output file.
+
+    Returns
+    -------
+    None.
+
+    """
+    
     file_path = Path(file)
     df.to_csv(file_path, header=True, index=True)
     
