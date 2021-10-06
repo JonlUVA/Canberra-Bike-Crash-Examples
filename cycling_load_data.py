@@ -39,6 +39,7 @@ from math import radians, cos, sin, asin, sqrt
 import shapefile
 from shapely.geometry import shape, Point
 from collections import defaultdict
+import json
 
 from cycling_globals import *
 
@@ -185,6 +186,21 @@ def read_csv_into_df(csv_file, date_time_cols=None, lat_long_cols=None):
     df.columns = columns
     
     return df
+
+
+def read_json_into_df(json_file):
+    
+    file_path = Path(json_file)
+    
+    if file_path.is_file():
+        file_in = open(file_path, 'r')
+        json_data = json.load(file_in)
+        json_df = pd.DataFrame.from_dict(json_data['features'])
+    else:
+        json_df = pd.DataFrame()
+        
+    return json_df
+        
 
 
 def parse_field_params(field_params):
@@ -847,6 +863,9 @@ def load_data(data_index_path):
         # if the data source is CSV file then load to DataFrame
         if data_format.lower() == 'csv':
             data_content = read_csv_into_df(data_path, date_time_cols=date_time, lat_long_cols=lat_long)
+        
+        elif data_format.lower() == 'json':
+            data_content = read_json_into_df(data_path)
         # if the data source is a Shapefile then load a Suburb object
         elif data_format.lower() == 'shp':
             data_content = Suburb(data_path)     
