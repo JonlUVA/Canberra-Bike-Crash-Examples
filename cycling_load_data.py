@@ -189,6 +189,20 @@ def read_csv_into_df(csv_file, date_time_cols=None, lat_long_cols=None):
 
 
 def read_json_into_df(json_file):
+    """
+    Reads the 'features' information from a GeoJSON file into a Pandas DataFrame.
+
+    Parameters
+    ----------
+    json_file : str or Path
+        File to read.
+
+    Returns
+    -------
+    json_df : pandas.DataFrame
+        A data table of the geographic features.
+
+    """
     
     file_path = Path(json_file)
     
@@ -201,7 +215,6 @@ def read_json_into_df(json_file):
         
     return json_df
         
-
 
 def parse_field_params(field_params):
     """
