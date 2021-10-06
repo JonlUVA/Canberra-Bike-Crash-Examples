@@ -65,9 +65,7 @@ def estimated_cyclist_number_daily_rainfall_crash_number(cyclist_data, weather, 
     weather_and_cyclist_date = pandas.merge(cyclist_data, weather_data_frame, on='date', how='left')
     weather_and_cyclist_date_crash = pandas.merge(weather_and_cyclist_date, crash_sums, on='date', how='left')
     weather_and_cyclist_date_crash['daily_crash_count'] = weather_and_cyclist_date_crash['daily_crash_count'].fillna(0)
-    weather_and_cyclist_date_crash.to_excel(r"C:\Users\Admin\OneDrive\Documents\assignment 2 working\crash.xlsx")
     return weather_and_cyclist_date_crash
-
 
 def crash_sun_weather(crash_data, weather):
     """this function takes the cyclist data, and the weather data
