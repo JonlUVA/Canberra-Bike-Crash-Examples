@@ -10,8 +10,10 @@ In addition to a `python3` interpreter, please ensure your system has the follow
 
 | Module |
 |--------|
+| dash |
 | numpy |
 | pandas |
+| plotly |
 | requests |
 | shapefile |
 | shapely |
