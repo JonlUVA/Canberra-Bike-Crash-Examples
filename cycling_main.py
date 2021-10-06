@@ -112,11 +112,11 @@ if __name__ == '__main__':
     ##########################################################################
     #            CHECK IF DATA ALREADY PROCESSED AND STORED LOCALLY          #
     ##########################################################################
-    print_header('Checking Local Processed Data Sources')
+    print_header('Checking For Analysed Data')
     
     processed_data_tables = ['cyclists',
                              'crashes'] 
-    data_paths = {data_table: Path(DATA_FOLDER) / (data_table + '.xlsx') 
+    data_paths = {data_table: Path(DATA_FOLDER) / (data_table + '.csv') 
                   for data_table in processed_data_tables}
     
     if all([file_exists(data_paths[table]) for table in data_paths]):
@@ -128,7 +128,7 @@ if __name__ == '__main__':
         integrated_data = {}
         
         for table, path in data_paths.items():
-            integrated_data[table] = read_excel_to_df(path)
+            integrated_data[table] = read_csv_to_df(path)
     else:
         print('Local data sources ... NOT FOUND')
         
@@ -171,9 +171,9 @@ if __name__ == '__main__':
         print()
         
         for table_name, df in integrated_data.items():
-            output_path = Path(DATA_FOLDER) / (table_name + '.xlsx')
+            output_path = Path(DATA_FOLDER) / (table_name + '.csv')
             print(f'  Writing {table_name} data to disk: {output_path}')
-            write_df_to_excel(df, output_path)
+            write_df_to_csv(df, output_path)
             
         print()
         print('All data analysed and written to disk')
