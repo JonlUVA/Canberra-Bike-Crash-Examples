@@ -31,7 +31,7 @@ class Dependencies:
     """
     
     def __init__(self, root_path, ignore_module_prefix='', include_subs=False,
-                 self_ignore=True):
+                 self_ignore=True, subs_to_ignore=None):
         """
         Creates a Dependencies object by scanning a project directory for code
         files, checking any module dependencies, and check if system has
@@ -68,6 +68,12 @@ class Dependencies:
         self._include_subs = include_subs
         self._self_ignore = self_ignore
         
+        # turn list of subdirectories to ignore into Path objects
+        if subs_to_ignore is None:
+            self._subs_to_ignore = subs_to_ignore
+        else:
+            self._subs_to_ignore = [Path.cwd() / sub for sub in subs_to_ignore]
+        
         # compile list of source code files
         self._list_python_files()
         
@@ -90,6 +96,7 @@ class Dependencies:
             Dependency check results to pass to print statement.
 
         """
+        
         text = f'Host: {self._hostname}\n'
         
         # build table of installed modules
@@ -151,6 +158,7 @@ class Dependencies:
         None.
 
         """
+        
         if self._include_subs:
             file_list = list(self._path.glob('**/*.py'))
         else:
@@ -161,6 +169,22 @@ class Dependencies:
         if self._self_ignore and self_path in file_list:
             file_list.remove(self_path)
             
+        temp_file_list = file_list.copy()
+        
+        for file in temp_file_list:
+            for sub in self._subs_to_ignore:
+                # skip directory if doesn't actually exist
+                if not sub.is_dir():
+                    continue
+                
+                # PosixPath will throw exception if paths aren't relative
+                try:
+                    file.relative_to(sub)
+                    file_list.remove(file)
+                    break
+                except ValueError:
+                    pass
+                
         self._file_list = file_list
     
     
@@ -173,6 +197,7 @@ class Dependencies:
         None.
 
         """
+        
         modules = set()
         modules.add('python')   # also want to check python version
         
@@ -196,6 +221,11 @@ class Dependencies:
                         # 'import' or 'from'
                         if 'from' in words:
                             module_index = words.index('from') + 1
+                            
+                            # double check it isn't a local module nested in
+                            # a subdirectory
+                            if words[module_index + 2].startswith(self._ignore_prefix):
+                                continue
                         else:
                             module_index = words.index('import') + 1
                         
@@ -312,6 +342,7 @@ class Dependencies:
             Missing modules.
 
         """
+        
         return list(self._modules_missing)
     
     
@@ -339,6 +370,7 @@ class Dependencies:
             List of '.py' files.
 
         """
+        
         return self._file_list
 
     
@@ -370,7 +402,7 @@ if __name__ == '__main__':
     
     root_path = Path.cwd()
     local_module_prefix = 'cycling'
-    dependencies = Dependencies(root_path, ignore_module_prefix=local_module_prefix)
+    dependencies = Dependencies(root_path, ignore_module_prefix=local_module_prefix, include_subs=True, subs_to_ignore=['scratch'])
     
     print('Source code files examined')
     print('--------------------------')

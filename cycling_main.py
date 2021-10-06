@@ -67,7 +67,8 @@ if __name__ == '__main__':
     
     root_path = Path.cwd()
     local_module_prefix = 'cycling'
-    sys_config = Dependencies(root_path, ignore_module_prefix=local_module_prefix)
+    sys_config = Dependencies(root_path, ignore_module_prefix=local_module_prefix,
+                              include_subs=True, subs_to_ignore=['scratch'])
 
     if sys_config.check():
         print(sys_config)
