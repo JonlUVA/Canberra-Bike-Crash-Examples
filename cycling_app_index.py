@@ -11,8 +11,8 @@ from dash.dependencies import Input, Output
 
 from cycling_dashboard_app import app
 from cycling_dashboard_app import server
-from apps import visual_one
-from apps import visual_two
+from apps import cycling_visual_one
+from apps import cycling_visual_two
 
 list_colors = [
     '#003f5c'
@@ -53,9 +53,9 @@ app.layout = html.Div(
 )
 def display_dashboard(pathname):
     if pathname == '/apps/visual_one':
-        return visual_one.var_dashboard
+        return cycling_visual_one.var_dashboard
     elif pathname == '/apps/visual_two':
-        return visual_two.var_dashboard
+        return cycling_visual_two.var_dashboard
     else:
         return html.P('Error 404: Page not found...')
         # return visual_two.layout
