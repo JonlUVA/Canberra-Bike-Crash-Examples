@@ -10,24 +10,23 @@ With tested system configurations:
 
 | Module | (1) | (2) | (3) |
 |--------|--------|--------|--------|
-| apps | unknown | unknown | unknown |
 | collections | unknown | unknown | unknown |
 | csv | 1.0 | 1.0 | unknown |
-| dash | 2.0.0 | unknown | unknown |
+| dash | 2.0.0 | 2.0.0 | unknown |
 | datetime | unknown | unknown | unknown |
 | io | unknown | unknown | unknown |
-| json | 2.0.9 | unknown | unknown |
+| json | 2.0.9 | 2.0.9 | unknown |
 | math | unknown | unknown | unknown |
-| numpy | 1.20.3 | 1.20.2 | unknown |
+| numpy | 1.20.2 | 1.20.3 | unknown |
 | os | unknown | unknown | unknown |
-| pandas | 1.3.2 | 1.2.4 | 1.3.2 |
+| pandas | 1.2.4 | 1.3.2 | 1.3.2 |
 | pathlib | unknown | unknown | unknown |
-| plotly | 5.3.1 | unknown | unknown |
-| python | 3.9.6 | 3.8.8 | 3.9.6 |
+| plotly | 5.3.1 | 5.3.1 | unknown |
+| python | 3.8.8 | 3.9.6 | 3.9.6 |
 | re | 2.2.1 | 2.2.1 | unknown |
-| requests | 2.26.0 | 2.25.1 | 2.26.0 |
+| requests | 2.25.1 | 2.26.0 | 2.26.0 |
 | shapefile | 2.1.3 | 2.1.3 | unknown |
-| shapely | 1.7.0 | 1.7.1 | unknown |
+| shapely | 1.7.1 | 1.7.0 | unknown |
 | shutil | unknown | unknown | unknown |
 | suntime | unknown | unknown | unknown |
 | sys | unknown | unknown | unknown |
