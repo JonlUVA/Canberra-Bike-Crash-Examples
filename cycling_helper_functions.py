@@ -39,6 +39,17 @@ def file_exists(file):
     return file_path.is_file()
 
 
+def read_csv_to_df(file):
+    file_path = Path(file)
+    return pd.read_csv(file, header=0, index_col=0)
+    
+    
+    
+def write_df_to_csv(df, file):
+    file_path = Path(file)
+    df.to_csv(file_path, header=True, index=True)
+    
+
 def read_excel_to_df(file):
     """
     Loads an Excel sheet into a pandas DataFrame.
