@@ -542,6 +542,7 @@ def download_all_data(sources_csv, download_folder, output_index_csv):
     write_data_index_csv(output_index_csv, data_sources)
     add_to_git_ignore(download_folder)    
   
+    
 ##############################################################################
 #                                    MAIN                                    #
 ##############################################################################
