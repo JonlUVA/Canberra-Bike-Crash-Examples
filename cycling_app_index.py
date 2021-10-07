@@ -14,6 +14,7 @@ from cycling_dashboard_app import server
 from apps import cycling_visual_one
 from apps import cycling_visual_two
 from apps import cycling_visual_three
+from apps import cycling_visual_four
 
 list_colors = [
     '#003f5c'
@@ -58,7 +59,9 @@ def display_dashboard(pathname):
     elif pathname == '/apps/visual_two':
         return cycling_visual_two.var_dashboard
     elif pathname == '/apps/visual_three':
-        return cycling_visual_three
+        return cycling_visual_three.var_dashboard
+    elif pathname == '/apps/visual_four':
+        return cycling_visual_four.var_dashboard
     else:
         return html.P('Error 404: Page not found...')
         # return visual_two.layout
