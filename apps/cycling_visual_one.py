@@ -18,58 +18,49 @@ list_colors = [
     '#ffa600'
 ]
 
-with open('temp_geojson/act_localities.json') as geojson_filename:
+with open('data/geo/features.json') as geojson_filename:
     geojson_file = json.load(geojson_filename)
-
-geojson_df = pd.DataFrame(geojson_file)
-
-geojson_shapes = geojson_df['features']
-
-#   DISTRICT MAP
-geo_district_shapes_temp = list()
-geo_district_names = list()
-
-for row in geojson_shapes:
-    row_properties = row.get('properties')
-    if row_properties.get('LOC_CLASS') == 'District':
-        geo_district_shapes_temp.append({
-            'type': 'Feature',
-            'geometry': row.get('geometry'),
-            'id': row.get('properties').get('LOC_NAME')
-        })
-        geo_district_names.append(row.get('properties').get('LOC_NAME'))
-
-geo_district_shapes = {'type': 'FeatureCollection', 'features': geo_district_shapes_temp}
-
-geo_district_name_filters = geo_district_names
-geo_district_name_filters.insert(0, 'All')
-
-print(geo_district_name_filters)
-
-#   SUBURB MAP
-geo_suburb_shapes_temp = list()
-geo_suburb_names = list()
-
-for row in geojson_shapes:
-    row_properties = row.get('properties')
-    if row_properties.get('LOC_CLASS') == 'Gazetted Locality':
-        geo_suburb_shapes_temp.append({
-            'type': 'Feature',
-            'geometry': row.get('geometry'),
-            'id': row.get('properties').get('LOC_NAME')
-        })
-        geo_suburb_names.append(row.get('properties').get('LOC_NAME'))
-
-geo_suburb_shapes = {'type': 'FeatureCollection', 'features': geo_suburb_shapes_temp}
-
-df_raw_data = pd.read_csv('data/crashes.csv')
+    geojson_df = pd.DataFrame(geojson_file['features'])
+    geojson_df = geojson_df[['geometry', 'properties']]
+    ######################################################################
+    #                       CREATING DISTRICT MAP                        #
+    ######################################################################
+    geo_district_shapes_temp = list()
+    geo_district_names = list()
+    for index, row in geojson_df.iterrows():
+        if row['properties'].get('act_loca_5') == 'D':
+            geo_district_shapes_temp.append({
+                'type': 'Feature',
+                'geometry': row['geometry'],
+                'id': row['properties'].get('act_loca_2').title()
+            })
+            geo_district_names.append(row['properties'].get('act_loca_2').title())
+    geo_district_shapes = {'type': 'FeatureCollection', 'features': geo_district_shapes_temp}
+    geo_district_name_filters = geo_district_names
+    geo_district_name_filters.insert(0, 'All')
+    ######################################################################
+    #                        CREATING SUBURB MAP                         #
+    ######################################################################
+    geo_suburb_shapes_temp = list()
+    geo_suburb_names = list()
+    for index, row in geojson_df.iterrows():
+        row_properties = row.get('properties')
+        if row_properties.get('act_loca_5') == 'G':
+            geo_suburb_shapes_temp.append({
+                'type': 'Feature',
+                'geometry': row.get('geometry'),
+                'id': row.get('properties').get('act_loca_2').title()
+            })
+            geo_suburb_names.append(row.get('properties').get('act_loca_2').title())
+    geo_suburb_shapes = {'type': 'FeatureCollection', 'features': geo_suburb_shapes_temp}
+    geo_suburb_names.insert(0, 'All')
+    df_raw_data = pd.read_csv('data/crashes.csv')
+    geojson_filename.close()
 
 """
 https://aesalazar.com/blog/professional-color-combinations-for-dashboards-or-mobile-bi-applications
  #B3C100, #CED2CC, #23282D, #4CB5F5, #1F3F49, #D32D41, #6AB187
 """
-
-
 var_dashboard = html.Div([
     html.H1(children='Dashboard'),
     html.Div(id='total_number_of_crashes'),
@@ -108,9 +99,12 @@ var_dashboard = html.Div([
                                 id='selected_year',
                                 min=2012,
                                 max=2021,
-                                value=2012,
-                                marks={str(year): str(year) for year in
-                                       [2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020]},
+                                value=2020,
+                                marks={
+                                    2012: '2012', 2013: '2013', 2014: '2014',
+                                    2015: '2015', 2016: '2016', 2017: '2017', 2018: '2018',
+                                    2019: '2019', 2020: '2020', 2021: 'All'
+                                },
                                 step=None
                             )
                         ],
@@ -126,8 +120,8 @@ var_dashboard = html.Div([
                         multi=False,
                         value='All'
                     ),
-                    dcc.Graph(id='test_mapping'),
-                    dcc.Graph(id='test_mapping_1')
+                    dcc.Graph(id='location_crash_count_by_year'),
+                    dcc.Graph(id='location_crash_severity_by_year')
                 ]
             )
         ],
@@ -213,22 +207,65 @@ def run_map_vis(selected_year, selected_map_granularity, click_data):
 
     return fig, var_total_crash_count
 
-"""
-def crashes_and_severity_by_year(data_set, location_type):
-    vis_df = data_set[[location_type, 'cyclists', 'date']]
-    vis_df = vis_df.groupby(['year', 'severity'], as_index=False).agg({'cyclists': sum})
-    fig = px.bar(
-        vis_df, x='year', y='cyclists', color='severity', title='hello wolrd', barmode='group', log_y=True
+
+#########################################
+#          GENERATING VISUALS           #
+#########################################
+
+
+def update_fig_layout(fig):
+    #   FUNCTION USED TO MAKE VISUALS LOOK SIMILAR IN STYLING
+    fig = fig
+    fig.update_layout(
+        margin=dict(
+            b=10,
+            l=5,
+            r=2,
+            t=50,
+        ),
+        font_size=10,
+        title_font_size=14,
+        legend_font_size=12
+
     )
     return fig
 
-"""
+
+def crashes_count_by_location_and_year(data_set, location):
+    vis_df = data_set.drop(columns=['severity'])
+    vis_df = vis_df.groupby(['year'], as_index=False).agg({'cyclists': sum})
+
+    fig = px.line(
+        vis_df,
+        x='year',
+        y='cyclists',
+        title=location + '\'s Cyclist Crashes by Year',
+        labels={
+            'year': 'Year',
+            'cyclists': 'Cyclists'
+        }
+    )
+
+    fig = update_fig_layout(fig)
+
+    return fig
+
+
+def crash_severity_by_location_and_year(data_set, location):
+    vis_df = data_set.groupby(['year', 'severity'], as_index=False).agg({'cyclists': sum})
+    fig = px.bar(
+        vis_df, x='year', y='cyclists', color='severity', title='hello wolrd', barmode='group', log_y=True
+    )
+
+    fig = update_fig_layout(fig)
+
+    return fig
 
 
 @app.callback(
     [
-        Output(component_id='test_mapping', component_property='figure'),
-        Output(component_id='test_mapping_1', component_property='figure')
+        Output(component_id='location_crash_count_by_year', component_property='figure'),
+        Output(component_id='location_crash_severity_by_year', component_property='figure')
     ],
     [
         #Input(component_id='crash_map', component_property='clickData'),
@@ -236,49 +273,43 @@ def crashes_and_severity_by_year(data_set, location_type):
         Input(component_id='location_filter', component_property='value')
     ]
 )
-def run_crashes_overtime_visual(selected_map_granularity, location_filter_value):
+def location_crash_count_visuals(selected_map_granularity, location_filter_value):
+
+    #   DETERMINING WHAT DATA TO PULL
     if selected_map_granularity == 'Suburbs':
-        var_column = 'suburb'
         location_type = 'suburb'
     elif selected_map_granularity == 'Districts':
-        var_column = 'district'
         location_type = 'district'
 
-    if location_filter_value != 'All':
-        selected_location = location_filter_value#click_data.get('points')[0].get('location')
-        vis_df = df_raw_data
-        vis_df = vis_df[[var_column, 'cyclists', 'date']]
-        vis_df['year'] = pd.DatetimeIndex(vis_df['date']).year
-        vis_df = vis_df.drop(columns=['date'])
-        vis_df = vis_df.loc[vis_df[var_column] == selected_location]
-        vis_df = vis_df.groupby(['year', var_column], as_index=False).agg({'cyclists': sum})
-        fig = px.line(vis_df, x='year', y='cyclists', title='hello wolrd')
-    else:
-        vis_df = df_raw_data
-        vis_df = vis_df[[var_column, 'cyclists', 'date']]
-        vis_df['year'] = pd.DatetimeIndex(vis_df['date']).year
-        vis_df = vis_df.drop(columns=['date', var_column])
-        vis_df = vis_df.groupby(['year'], as_index=False).agg({'cyclists': sum})
-        fig = px.line(vis_df, x='year', y='cyclists', title='hello wolrd')
+    #############################
+    #   GETTING REQUIRED DATA   #
+    #############################
 
     vis_df = df_raw_data
-    vis_df = vis_df[[location_type, 'cyclists', 'date', 'severity']]
+    #   SELECTING COLUMNS
+    vis_df = vis_df[[location_type, 'cyclists', 'severity', 'date']]
+    #   ADDING YEAR COLUMN
     vis_df['year'] = pd.DatetimeIndex(vis_df['date']).year
-    vis_df = vis_df.drop(columns=['date', var_column])
-    vis_df = vis_df.groupby(['year', 'severity'], as_index=False).agg({'cyclists': sum})
-    fig_2 = px.bar(
-        vis_df, x='year', y='cyclists', color='severity', title='hello wolrd', barmode='group', log_y=True
-    )
-    #fig_crashes_and_severity = crashes_and_severity_by_year(vis_df, location_type)
+    #   DROPPING DATE COLUMN
+    vis_df = vis_df.drop(columns=['date'])
+    #   FILTERING LOCATION
+    if location_filter_value != 'All':
+        vis_df = vis_df.loc[vis_df[location_type] == location_filter_value]
+    else:
+        pass
+    vis_df = vis_df.drop(columns=[location_type])
 
+    #   MAKING THE TITLES OF VISUAL SHOW CANBERRA INSTEAD OF ALL
+    if location_filter_value == 'All':
+        location = 'ACT'
+    else:
+        location = location_filter_value
 
+    #   CREATING THE VISUALS
+    fig_crash_count = crashes_count_by_location_and_year(vis_df, location)
+    fig_crash_severity = crash_severity_by_location_and_year(vis_df, location)
 
-    fig.update_layout(
-        font_size=6
-    )
-    return fig, fig_2
-
-
+    return fig_crash_count, fig_crash_severity
 
 
 @app.callback(
