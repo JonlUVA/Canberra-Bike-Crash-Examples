@@ -3,6 +3,9 @@ from dash import dcc
 from dash.dependencies import Input, Output
 import pandas as pd
 import plotly.express as px
+import plotly.graph_objects as go
+
+
 from cycling_dashboard_app import app
 import numpy as np
 
@@ -44,11 +47,20 @@ def crashes_by_time_of_day(tod_nearest_minute):
         vis_df['time'] = \
             pd.to_datetime(vis_df["time"]).round(str(tod_nearest_minute) + 'T').dt.time
 
+    vis_df = vis_df.groupby(['time', 'cyclists'],as_index=False).agg({'cyclists': sum})
+
+    #fig = px.Figure()
+
     fig = px.scatter(
         vis_df,
         x='time',
-        y='cyclists'
+        y='cyclists',
     )
+
+    #reg = pd.ols(y=vis_df['cyclists'], x=vis_df['time'])
+    print(reg.summary)
+
+    #fig.add_trace(go.Scatter(x=vis_df['time'], y=vis_df['cyclists'], trendline='ols'))
 
     return fig
 
