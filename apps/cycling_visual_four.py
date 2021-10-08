@@ -47,20 +47,28 @@ def crashes_by_time_of_day(tod_nearest_minute):
         vis_df['time'] = \
             pd.to_datetime(vis_df["time"]).round(str(tod_nearest_minute) + 'T').dt.time
 
-    vis_df = vis_df.groupby(['time', 'cyclists'],as_index=False).agg({'cyclists': sum})
+    vis_df = vis_df.groupby(['time', 'cyclists'], as_index=False).agg({'cyclists': sum})
 
     #fig = px.Figure()
 
-    fig = px.scatter(
-        vis_df,
-        x='time',
-        y='cyclists',
-    )
+    fig = go.Figure()
+
+    fig.add_trace(go.Scatter(
+        x=vis_df['time'],
+        y=vis_df['cyclists']
+    ))
 
     #reg = pd.ols(y=vis_df['cyclists'], x=vis_df['time'])
-    print(reg.summary)
+    # generate a regression line with px
 
-    #fig.add_trace(go.Scatter(x=vis_df['time'], y=vis_df['cyclists'], trendline='ols'))
+    vis_df['time_str'] = pd.to_datetime(['time'], format='%H:%M:%S %p')
+
+    help_fig = px.scatter(vis_df, x=vis_df['time_str'], y=vis_df['cyclists'], trendline="ols")
+    # extract points as plain x and y
+    x_trend = help_fig["data"][1]['x']
+    y_trend = help_fig["data"][1]['y']
+
+    #fig.add_trace(go.Scatter(x=x_trend, y=y_trend))
 
     return fig
 
