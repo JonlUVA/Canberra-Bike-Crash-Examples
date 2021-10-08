@@ -189,7 +189,6 @@ def run_map_vis(selected_year, selected_map_granularity, click_data):
         ],
         title='map test ' + str(selected_year),
         mapbox_style='carto-darkmatter',
-        #mapbox_style='carto-positron',
         zoom=7.5,
         center={'lat': -35.51405, 'lon': 149.07130},
         opacity=0.5,
@@ -202,7 +201,8 @@ def run_map_vis(selected_year, selected_map_granularity, click_data):
             l=0,
             r=0,
             t=0
-        )
+        ),
+        paper_bgcolor='rgba(0,0,0,0)'
     )
 
     return fig, var_total_crash_count
@@ -226,7 +226,6 @@ def update_fig_layout(fig):
         font_size=10,
         title_font_size=14,
         legend_font_size=12
-
     )
     return fig
 

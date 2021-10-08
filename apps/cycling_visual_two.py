@@ -7,38 +7,60 @@ from cycling_dashboard_app import app
 import numpy as np
 
 ######################################################################
-#                        GETTING THE DATASET                         #
+#                       GETTING THE DATASETS                         #
 ######################################################################
-
-# DATA IN
-df_raw_data = pd.read_csv('data/crashes.csv')
-# SELECTING REQUIRED COLUMNS
-df_crashes_by_rainfall = df_raw_data[['cyclists', 'rainfall_amount_(millimetres)', 'severity']]
-#https://www.statology.org/interquartile-range-python/#:~:text=It%20is%20calculated%20as%20the%20difference%20between%20the,of%20how%20to%20use%20this%20function%20in%20practice.
-
-# GETTING THE RAIN FALL CATEGORIES
-# FILTERING FOR THE RAINFALL DATA
-df_rainfall = df_crashes_by_rainfall[df_crashes_by_rainfall['rainfall_amount_(millimetres)'] != 0]
-# DETERMINING THE INTER QUARTILE RANGE
-q75, q25 = np.percentile(df_rainfall['rainfall_amount_(millimetres)'], [75, 25])
-# CALCULATING THE MEDIA
-median = np.median(df_rainfall['rainfall_amount_(millimetres)'])
-# DEFINING THE GROUPING
-# https://towardsdatascience.com/efficient-implementation-of-conditional-logic-on-pandas-dataframes-4afa61eb7fce
+df_crash_count_data = pd.read_csv('data/crashes.csv')
+df_crash_count_data = df_crash_count_data[
+    ['cyclists', 'rainfall_amount_(millimetres)', 'severity']]
+temp_df_rainfall = df_crash_count_data[df_crash_count_data['rainfall_amount_(millimetres)'] != 0]
+temp_df_rainfall = temp_df_rainfall[temp_df_rainfall['rainfall_amount_(millimetres)'] != 0]
+q75, q25 = np.percentile(temp_df_rainfall['rainfall_amount_(millimetres)'], [75, 25])
+median = np.median(temp_df_rainfall['rainfall_amount_(millimetres)'])
 rainfall_category_conditions = {
-    'none': (df_crashes_by_rainfall['rainfall_amount_(millimetres)'] <= 0),
-    'light': (df_crashes_by_rainfall['rainfall_amount_(millimetres)'] <= q25) &
-    (df_crashes_by_rainfall['rainfall_amount_(millimetres)'] > 0),
-    'moderate': (df_crashes_by_rainfall['rainfall_amount_(millimetres)'] > q25) &
-    (df_crashes_by_rainfall['rainfall_amount_(millimetres)'] <= median),
-    'heavy': (df_crashes_by_rainfall['rainfall_amount_(millimetres)'] > median) &
-    (df_crashes_by_rainfall['rainfall_amount_(millimetres)'] <= q75),
-    'violent': (df_crashes_by_rainfall['rainfall_amount_(millimetres)'] > q75)
+    'none': (df_crash_count_data['rainfall_amount_(millimetres)'] <= 0),
+    'light': (df_crash_count_data['rainfall_amount_(millimetres)'] <= q25) &
+             (df_crash_count_data['rainfall_amount_(millimetres)'] > 0),
+    'moderate': (df_crash_count_data['rainfall_amount_(millimetres)'] > q25) &
+                (df_crash_count_data['rainfall_amount_(millimetres)'] <= median),
+    'heavy': (df_crash_count_data['rainfall_amount_(millimetres)'] > median) &
+             (df_crash_count_data['rainfall_amount_(millimetres)'] <= q75),
+    'violent': (df_crash_count_data['rainfall_amount_(millimetres)'] > q75)
+}
+df_crash_count_data_copy = df_crash_count_data.copy()
+# ADDING A NEW COLUMN TO THE DATAFRAME
+df_crash_count_data_copy['rainfall_category'] = np.select(
+    rainfall_category_conditions.values(),
+    rainfall_category_conditions.keys(),
+    default='none'
+)
+
+df_crash_rate_data = pd.read_csv('data/cyclists.csv')
+df_crash_rate_data = df_crash_rate_data[
+    ['macarthur_ave_display', 'rainfall_amount_(millimetres)', 'daily_crash_count']]
+df_crash_rate_data['crash_rate'] = \
+    df_crash_rate_data['daily_crash_count']/df_crash_rate_data['macarthur_ave_display'] * 100
+df_crash_rate_data['crash_rate'].replace(np.inf, 0, inplace=True)
+temp_df_rainfall = df_crash_rate_data[df_crash_rate_data['rainfall_amount_(millimetres)'] != 0]
+# FILTERING FOR THE RAINFALL DATA
+temp_df_rainfall = temp_df_rainfall[temp_df_rainfall['rainfall_amount_(millimetres)'] != 0]
+# DETERMINING THE INTER QUARTILE RANGE
+q75, q25 = np.percentile(temp_df_rainfall['rainfall_amount_(millimetres)'], [75, 25])
+# CALCULATING THE MEDIA
+median = np.median(temp_df_rainfall['rainfall_amount_(millimetres)'])
+rainfall_category_conditions = {
+    'none': (df_crash_rate_data['rainfall_amount_(millimetres)'] <= 0),
+    'light': (df_crash_rate_data['rainfall_amount_(millimetres)'] <= q25) &
+             (df_crash_rate_data['rainfall_amount_(millimetres)'] > 0),
+    'moderate': (df_crash_rate_data['rainfall_amount_(millimetres)'] > q25) &
+                (df_crash_rate_data['rainfall_amount_(millimetres)'] <= median),
+    'heavy': (df_crash_rate_data['rainfall_amount_(millimetres)'] > median) &
+             (df_crash_rate_data['rainfall_amount_(millimetres)'] <= q75),
+    'violent': (df_crash_rate_data['rainfall_amount_(millimetres)'] > q75)
 }
 
-copy_of_df_crashes_by_rainfall_category = df_crashes_by_rainfall.copy()
+df_crash_rate_data_copy = df_crash_rate_data.copy()
 # ADDING A NEW COLUMN TO THE DATAFRAME
-copy_of_df_crashes_by_rainfall_category.loc[:, 'rainfall_category'] = np.select(
+df_crash_rate_data_copy['rainfall_category'] = np.select(
     rainfall_category_conditions.values(),
     rainfall_category_conditions.keys(),
     default='none'
@@ -50,6 +72,34 @@ copy_of_df_crashes_by_rainfall_category.loc[:, 'rainfall_category'] = np.select(
 ######################################################################
 var_dashboard = html.Div(
     [
+        dcc.RadioItems(
+            id='selected_crash_calc',
+            options=[
+                {
+                    'value': 1,
+                    'label': 'Crash Rate %'
+                },
+                {
+                    'value': 0,
+                    'label': 'Crash Count'
+                }
+            ],
+            value=1
+        ),
+        dcc.RadioItems(
+            id='selected_chart_type',
+            options=[
+                {
+                    'value': 1,
+                    'label': 'Pie Chart'
+                },
+                {
+                    'value': 0,
+                    'label': 'Bar Chart'
+                }
+            ],
+            value=1
+        ),
         html.Div([
            dcc.Checklist(
                id='rainfall_filter_list',
@@ -98,31 +148,63 @@ def cycling_crash_severity_by_rainfall(data_set):
     return fig
 
 
-def cycling_crashes_by_rainfall(data_set):
+def cycling_crashes_by_rainfall(data_set, crash_calc, crash_calc_agg, chart_type):
     vis_df = data_set
-    vis_df = vis_df.groupby(['rainfall_category'], as_index=False).agg({'cyclists': sum})
-    fig = px.pie(
-        vis_df,
-        values='cyclists',
-        names='rainfall_category'
-    )
+    if crash_calc_agg == 'mean':
+        vis_df = vis_df.groupby(['rainfall_category'], as_index=False).agg({crash_calc: np.mean})
+    elif crash_calc == 'sum':
+        vis_df = vis_df.groupby(['rainfall_category'], as_index=False).agg({crash_calc: sum})
+
+    if chart_type == 1:
+        fig = px.pie(
+            vis_df,
+            values=crash_calc,
+            names='rainfall_category'
+        )
+    else:
+        fig = px.bar(
+            vis_df,
+            y=crash_calc,
+            x='rainfall_category'
+        )
+
     return fig
 
 
 @app.callback(
     [
         Output(component_id='crashes_by_rainfall', component_property='figure'),
-        Output(component_id='crash_severity_by_rainfall', component_property='figure')
+        Output(component_id='crash_severity_by_rainfall', component_property='figure'),
+        Output(component_id='selected_chart_type', component_property='style'),
+        Output(component_id='selected_chart_type', component_property='value')
     ],
-    Input(component_id='rainfall_filter_list', component_property='value')
+    [
+        Input(component_id='selected_crash_calc', component_property='value'),
+        Input(component_id='selected_chart_type', component_property='value'),
+        Input(component_id='rainfall_filter_list', component_property='value')
+    ]
 )
-def rainfall_crash_count_visuals(rainfall_categories):
-    data_set = copy_of_df_crashes_by_rainfall_category
-    # Filtering DataFrame to only include rows in the rainfall categories (user input)
-    data_set = data_set[data_set['rainfall_category'].isin(rainfall_categories)]
+def rainfall_crash_count_visuals(crash_calc, chart_type, rainfall_categories):
 
-    fig_rainfall_crashes = cycling_crashes_by_rainfall(data_set)
+    crash_count_data_set = df_crash_count_data_copy
+    crash_count_data_set = crash_count_data_set[crash_count_data_set['rainfall_category'].isin(rainfall_categories)]
+    if crash_calc == 0:
+        crash_calc = 'cyclists'
+        crash_calc_agg = 'sum'
+        crash_calc_data_set = crash_count_data_set
+        select_chart_style = {'display': 'none'}
+        select_chart_value = 1
+    else:
+        crash_calc = 'crash_rate'
+        crash_calc_agg = 'mean'
+        crash_calc_data_set = df_crash_rate_data_copy
+        crash_calc_data_set = crash_calc_data_set[crash_calc_data_set['rainfall_category'].isin(rainfall_categories)]
+        select_chart_style = {'display': 'block'}
+        select_chart_value = chart_type
 
-    fig_rainfall_crash_severity = cycling_crash_severity_by_rainfall(data_set)
+    fig_rainfall_crashes = cycling_crashes_by_rainfall(
+        crash_calc_data_set, crash_calc, crash_calc_agg, select_chart_value)
 
-    return fig_rainfall_crashes, fig_rainfall_crash_severity
+    fig_rainfall_crash_severity = cycling_crash_severity_by_rainfall(crash_count_data_set)
+
+    return fig_rainfall_crashes, fig_rainfall_crash_severity, select_chart_style, select_chart_value
