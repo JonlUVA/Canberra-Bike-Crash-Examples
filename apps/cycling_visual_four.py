@@ -76,12 +76,7 @@ def crashes_by_time_of_day_and_location(data_set, time_filter_vals):
 
     vis_df = vis_df.between_time(start_time, finish_time)
 
-    print(vis_df.head())
-
     vis_df = vis_df.groupby(['suburb', 'lat', 'long'], as_index=False).agg({'cyclists': sum})
-    #print(type(vis_df.head))
-    #vis_df['long'] = str(vis_df['long'])
-    #vis_df['lat'] = str(vis_df['lat'])
 
     fig = px.scatter_mapbox(
         vis_df,
