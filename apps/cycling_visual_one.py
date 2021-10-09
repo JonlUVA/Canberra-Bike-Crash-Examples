@@ -267,7 +267,18 @@ def crashes_count_by_location_and_year(data_set, location):
 def crash_severity_by_location_and_year(data_set, location):
     vis_df = data_set.groupby(['year', 'severity'], as_index=False).agg({'cyclists': sum})
     fig = px.bar(
-        vis_df, x='year', y='cyclists', color='severity', title='hello wolrd', barmode='group', log_y=True
+        vis_df,
+        x='year',
+        y='cyclists',
+        color='severity',
+        title=location + '\'s Cyclist Crashes by Year and Severity',
+        labels={
+            'year': 'Year',
+            'cyclists': 'Cyclists',
+            'severity': 'Severity'
+        },
+        barmode='group',
+        log_y=True
     )
 
     fig = vis_global_func.update_fig_layout(fig)
@@ -307,7 +318,7 @@ def location_crash_count_visuals(selected_map_granularity, location_filter_value
     vis_df_year = vis_df_year.drop(columns=['date'])
     #   FILTERING LOCATION
     if location_filter_value != 'All':
-        vis_df_year = vis_df_year.loc[vis_df[location_type] == location_filter_value]
+        vis_df_year = vis_df_year.loc[vis_df_year[location_type] == location_filter_value]
     else:
         pass
     vis_df_year = vis_df_year.drop(columns=[location_type])
