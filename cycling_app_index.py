@@ -61,6 +61,8 @@ app.layout = html.Div(
 def display_dashboard(pathname):
     if pathname == '/apps/visual_one':
         return cycling_visual_one.var_dashboard
+    elif pathname == '/apps/visual_two':
+        return cycling_visual_two.var_dashboard
     elif pathname == '/close':
         func = request.environ.get('werkzeug.server.shutdown')
         func()
