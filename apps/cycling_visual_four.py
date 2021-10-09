@@ -128,6 +128,9 @@ def crashes_by_day_of_week(data_set):
 
     fig = update_fig_layout(fig)
 
+    fig.update_xaxes(categoryorder='array', categoryarray=['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday',
+                                                           'Friday', 'Saturday'])
+
     return fig
 
 
@@ -142,7 +145,7 @@ def crashes_by_time_of_day(data_set, tod_nearest_minute):
         vis_df,
         x='time',
         y='cyclists',
-        title='Crashes by Time' ,
+        title='Crashes by Time',
         labels={
             'cyclists': 'Cyclists',
             'time': 'Time',

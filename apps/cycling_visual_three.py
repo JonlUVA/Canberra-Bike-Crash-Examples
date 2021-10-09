@@ -22,22 +22,8 @@ var_dashboard = html.Div(
             className='span_horizontal_2'
         ),
         html.Div([
-            html.Div([
-                html.H3(children='Group by Nearest Minute:'),
-                dcc.RadioItems(
-                    id='select_sunset_nearest_minute',
-                    options=[
-                        {'label': '1 Minute', 'value': 1},
-                        {'label': '5 Minute', 'value': 5},
-                        {'label': '10 Minute', 'value': 10},
-                        {'label': '15 Minute', 'value': 15}
-                    ],
-                    value=5,
-                    labelStyle={'display': 'block'}
-                )
-            ]),
             dcc.Graph(id='crashes_by_sunset_time')
-        ], className='visual visual_3_wrapper'),
+        ], className='visual'),
         html.Div([
             html.Div([
                 html.H3(children='Show Severity:'),
@@ -60,35 +46,43 @@ var_dashboard = html.Div(
 )
 
 
-def crashes_by_sunset(data_set, sunset_nearest_minute):
-    if sunset_nearest_minute == 0:
-        pass
-    else:
-        data_set['sunset'] = pd.to_datetime(data_set["sunset"]).round(str(sunset_nearest_minute) + 'T').dt.time
+def crashes_by_month(data_set):
+    vis_df = data_set.copy()
+    vis_df = vis_df[vis_df['dark'] == 1]
+    vis_df['month'] = pd.to_datetime(vis_df['date']).dt.month_name()
+    #vis_df['sunset_min'] = vis_df['sunset'] - pd.Timedelta(hours=1)
+    #vis_df['sunset_max'] = vis_df['sunset'] + pd.Timedelta(hours=1)
+    #vis_df = vis_df[(vis_df['time'] >= vis_df['sunset_min']) & (vis_df['time'] <= vis_df['sunset_max'])]
 
-    vis_df = data_set.groupby(['sunset', 'cyclists'], as_index=False).agg({'cyclists': sum})
+    vis_df = vis_df.groupby(['month'], as_index=False).agg({'cyclists': sum})
 
-    fig = px.line(
+    fig = px.bar(
         vis_df,
-        x='sunset',
+        x='month',
         y='cyclists',
-        title='Sunset Time and Night Time Crashes',
+        title='Night Crashes by Month',
         labels={
             'cyclists': 'Cyclists',
             'severity': 'Severity',
             'number_of_lights': 'Number of Lights',
-            'sunset': 'Sunset'
+            'month': 'Month'
         }
     )
 
     fig = update_fig_layout(fig)
 
+    fig.update_xaxes(categoryorder='array', categoryarray=['January', 'February', 'March', 'April', 'May', 'June',
+                                                           'July', 'August', 'September', 'October', 'November', 'December'])
+
     return fig
 
 
 def crashes_by_street_lights(data_set, show_severity):
+    vis_df = data_set.copy()
+    vis_df = vis_df[vis_df['dark'] == 1]
+
     if show_severity == 0:
-        vis_df = data_set.groupby(['number_of_lights'], as_index=False).agg({'cyclists': sum})
+        vis_df = vis_df.groupby(['number_of_lights'], as_index=False).agg({'cyclists': sum})
         fig = px.bar(
             vis_df,
             x='number_of_lights',
@@ -102,7 +96,7 @@ def crashes_by_street_lights(data_set, show_severity):
             }
         )
     else:
-        vis_df = data_set.groupby(['number_of_lights', 'severity'], as_index=False).agg({'cyclists': sum})
+        vis_df = vis_df.groupby(['number_of_lights', 'severity'], as_index=False).agg({'cyclists': sum})
         fig = px.bar(
             vis_df,
             x='number_of_lights',
@@ -128,15 +122,13 @@ def crashes_by_street_lights(data_set, show_severity):
         Output(component_id='crashes_by_street_lights', component_property='figure')
     ],
     [
-        Input(component_id='select_sunset_nearest_minute', component_property='value'),
         Input(component_id='bool_show_severity', component_property='value')
     ]
 )
-def crashes_by_lighting_visuals(sunset_nearest_minute, show_severity):
-    vis_df = df_crash_data[['number_of_lights', 'sunset', 'cyclists', 'dark', 'severity']]
-    vis_df = vis_df[vis_df['dark'] == 1]
+def crashes_by_lighting_visuals(show_severity):
+    vis_df = df_crash_data[['number_of_lights', 'sunset', 'date', 'time', 'cyclists', 'dark', 'severity']]
 
-    fig_crashes_by_sunset = crashes_by_sunset(vis_df, sunset_nearest_minute)
+    fig_crashes_by_month = crashes_by_month(vis_df)
     fig_crashes_by_street_lighting = crashes_by_street_lights(vis_df, show_severity)
 
-    return fig_crashes_by_sunset, fig_crashes_by_street_lighting
+    return fig_crashes_by_month, fig_crashes_by_street_lighting
