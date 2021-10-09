@@ -9,6 +9,7 @@ import numpy as np
 ######################################################################
 #                       GETTING THE DATASETS                         #
 ######################################################################
+
 df_crash_count_data = pd.read_csv('data/crashes.csv')
 df_crash_count_data = df_crash_count_data[
     ['cyclists', 'rainfall_amount_(millimetres)', 'severity']]

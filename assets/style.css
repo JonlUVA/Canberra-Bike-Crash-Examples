@@ -72,3 +72,15 @@ h3 {
 .col-2 {
     grid-column: span 2;
 }
+
+
+/*
+*[data-dash-is-loading="true"]{
+    visibility: hidden;
+}
+*[data-dash-is-loading="true"]::after{
+    content: "Loading...";
+    color: magenta;
+    visibility: visible;
+}
+*/

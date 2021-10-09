@@ -8,10 +8,12 @@ download, ingest, analyse, and visualise data.
 @uid:     u7378856
 @created: Sat Sep 18 16:24:21 2021
 """
-
+import os
 import sys
+import time
 from pathlib import Path
-
+import tempfile
+import csv
 from cycling_check_dependencies import *
 
 
@@ -81,7 +83,6 @@ if __name__ == '__main__':
         print('Once installed, please re-run the program.')
         sys.exit()
     
-    
     ##########################################################################
     #    DEPENDENCIES MET, CAN NOW SAFELY IMPORT ALL ADDITIONAL MODULES      #
     ##########################################################################
@@ -92,7 +93,7 @@ if __name__ == '__main__':
     from cycling_load_data import *
     from cycling_data_integration import *
     from cycling_helper_functions import *
-    
+
     
     ##########################################################################
     #             UPDATE COMPATIBLE SYSTEMS / REQUIREMENTS DOC               #
@@ -184,9 +185,34 @@ if __name__ == '__main__':
     #                              VISUALISE DATA                            #
     ##########################################################################
     print_header('Visualising Data')
-    
-    pass
+
+    # CREATING TEMPORARY CSVs FOR VISUALS
+    print('Generating temporary files')
     print()
-    print('...nothing to see here (yet)...')
+
+    #   JUST MAKING SURE THERE IS NOTHING THERE
+    for file in os.listdir('apps/temp_data'):
+        os.remove('apps/temp_data/' + file)
+
+    temp_crashes = tempfile.NamedTemporaryFile(
+            prefix='temp_crashes_', suffix='.csv', dir='apps/temp_data', delete=False)
+
+    integrated_data.get('crashes').to_csv(Path(temp_crashes.name), header=True, index=True)
+
+    temp_cyclists = tempfile.NamedTemporaryFile(
+        prefix='temp_cyclists_', suffix='.csv', dir='apps/temp_data', delete=False)
+
+    integrated_data.get('cyclists').to_csv(Path(temp_cyclists.name), header=True, index=True)
+
+    print('Starting dashboard...')
+    print()
+    os.system('cycling_app_index.py')
+    #   DELETING TEMP FILES
+    print('Deleting temporary files')
+    print()
+    temp_crashes.close()
+    os.unlink(temp_crashes.name)
+    print()
+    print('END :)')
     
     

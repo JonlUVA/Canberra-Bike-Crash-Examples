@@ -10,10 +10,12 @@ With tested system configurations:
 
 | Module | (1) | (2) | (3) |
 |--------|--------|--------|--------|
+| apps | unknown | unknown | unknown |
 | collections | unknown | unknown | unknown |
 | csv | 1.0 | 1.0 | 1.0 |
 | dash | 2.0.0 | 2.0.0 | 2.0.0 |
 | datetime | unknown | unknown | unknown |
+| flask | 2.0.1 | unknown | unknown |
 | io | unknown | unknown | unknown |
 | json | 2.0.9 | 2.0.9 | 2.0.9 |
 | math | unknown | unknown | unknown |
@@ -30,4 +32,6 @@ With tested system configurations:
 | shutil | unknown | unknown | unknown |
 | suntime | unknown | unknown | unknown |
 | sys | unknown | unknown | unknown |
+| tempfile | unknown | unknown | unknown |
+| time | unknown | unknown | unknown |
 | zipfile | unknown | unknown | unknown |
