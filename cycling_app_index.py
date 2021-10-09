@@ -41,8 +41,8 @@ app.layout = html.Div(
             children=[
                 dcc.Link('Cyclist Crashes by Suburb and District', href='/apps/visual_one'),
                 dcc.Link('Cyclist Crashed and Weather', href='/apps/visual_two'),
-                dcc.Link('visual three', href='/apps/visual_three'),
-                dcc.Link('visual four', href='/apps/visual_four'),
+                dcc.Link('Cyclist Crashes by Lighting', href='/apps/visual_three'),
+                dcc.Link('Cyclist Crashed by Time and Day', href='/apps/visual_four'),
                 dcc.Link('Close', href='/close')
             ]
         ),
