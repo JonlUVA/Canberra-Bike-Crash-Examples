@@ -1,75 +1,161 @@
+import plotly.express as px
+
 from dash import html
 from dash import dcc
 from dash.dependencies import Input, Output
+
 import pandas as pd
-import plotly.express as px
-import plotly.graph_objects as go
-
-
-from cycling_dashboard_app import app
 import numpy as np
 
-df_raw_data = pd.read_csv('data/crashes.csv')
+from cycling_dashboard_app import app
+from apps.cycling_visual_global_functions import *
+
+df_crashes = get_data_for_vis(0)
 
 
 var_dashboard = html.Div(
     [
         html.Div([
+            dcc.Graph(id='crashes_by_time_of_day_and_location'),
+        ]),
+        html.Div([
             dcc.Graph(id='crashes_by_time_of_day'),
+        ]),
+        html.Div([
+            dcc.Graph(id='crashes_by_day_of_week'),
         ]),
         dcc.RadioItems(
             id='select_crash_time_nearest_minute',
             options=[
-                {'label': 'All', 'value': 0},
-                {'label': '1 minute', 'value': 1},
-                {'label': '5 minute', 'value': 5},
-                {'label': '10 minute', 'value': 10},
-                {'label': '15 minute', 'value': 15}
+                {'label': '15 Minutes', 'value': 15},
+                {'label': '30 Minutes', 'value': 30},
+                {'label': '1 Hours', 'value': 60},
+                {'label': '2 Hours', 'value': 120},
+                {'label': '4 Hours', 'value': 240}
             ],
-            value=5
+            value=60
+        ),
+        dcc.Checklist(
+            id='selected_day_of_week',
+            options=[
+                {'label': 'Sunday', 'value': 6},
+                {'label': 'Monday', 'value': 0},
+                {'label': 'Tuesday', 'value': 1},
+                {'label': 'Wednesday', 'value': 2},
+                {'label': 'Thursday', 'value': 3},
+                {'label': 'Friday', 'value': 4},
+                {'label': 'Saturday', 'value': 5}
+            ],
+            value=[0, 1, 2, 3, 4, 5, 6]
+        ),
+        dcc.RangeSlider(
+            id='selected_time_of_day',
+            min=0,
+            max=23,
+            value=[0, 23],
+            marks={
+                0: '12:00am',
+                8: '9:00am',
+                11: '12:00pm',
+                16: '5:00pm',
+                23: '11:59pm'
+            }
         )
     ],
     className='vis_wrapper_2x1'
 )
 
 
-@app.callback(
-    Output(component_id='crashes_by_time_of_day', component_property='figure'),
-    Input(component_id='select_crash_time_nearest_minute', component_property='value')
-)
-def crashes_by_time_of_day(tod_nearest_minute):
+def crashes_by_time_of_day_and_location(data_set, time_filter_vals):
+    vis_df = data_set.copy()
 
-    vis_df = df_raw_data[['time', 'cyclists']]
+    vis_df = vis_df.set_axis(pd.to_datetime(vis_df['time']), axis='index')
 
-    if tod_nearest_minute == 0:
-        pass
-    else:
-        vis_df['time'] = \
-            pd.to_datetime(vis_df["time"]).round(str(tod_nearest_minute) + 'T').dt.time
+    start_time = str(time_filter_vals[0]).zfill(2) + ':00'
+    finish_time = str(time_filter_vals[1]).zfill(2) + ':59'
 
-    vis_df = vis_df.groupby(['time', 'cyclists'], as_index=False).agg({'cyclists': sum})
+    vis_df = vis_df.between_time(start_time, finish_time)
 
-    #fig = px.Figure()
+    print(vis_df.head())
 
-    fig = go.Figure()
+    vis_df = vis_df.groupby(['suburb', 'lat', 'long'], as_index=False).agg({'cyclists': sum})
+    #print(type(vis_df.head))
+    #vis_df['long'] = str(vis_df['long'])
+    #vis_df['lat'] = str(vis_df['lat'])
 
-    fig.add_trace(go.Scatter(
-        x=vis_df['time'],
-        y=vis_df['cyclists']
-    ))
+    fig = px.scatter_mapbox(
+        vis_df,
+        lon='long',
+        lat='lat',
+        mapbox_style='carto-darkmatter',
+        zoom=9.25,
+        center={'lat': -35.3222, 'lon': 149.1287}
+    )
 
-    #reg = pd.ols(y=vis_df['cyclists'], x=vis_df['time'])
-    # generate a regression line with px
-
-    vis_df['time_str'] = pd.to_datetime(['time'], format='%H:%M:%S %p')
-
-    help_fig = px.scatter(vis_df, x=vis_df['time_str'], y=vis_df['cyclists'], trendline="ols")
-    # extract points as plain x and y
-    x_trend = help_fig["data"][1]['x']
-    y_trend = help_fig["data"][1]['y']
-
-    #fig.add_trace(go.Scatter(x=x_trend, y=y_trend))
+    fig = update_fig_layout(fig)
 
     return fig
+
+
+def crashes_by_day_of_week(data_set):
+    vis_df = data_set.copy()
+
+    vis_df = vis_df.groupby(['day_of_week'], as_index=False).agg({'cyclists': sum})
+
+    fig = px.bar(
+        vis_df,
+        x='day_of_week',
+        y='cyclists'
+    )
+
+    fig = update_fig_layout(fig)
+
+    return fig
+
+
+def crashes_by_time_of_day(data_set, tod_nearest_minute):
+    vis_df = data_set.copy()
+
+    vis_df['time'] = pd.to_datetime(vis_df['time']).round(str(tod_nearest_minute) + 'T').dt.time
+
+    vis_df = vis_df.groupby(['time'], as_index=False).agg({'cyclists': sum})
+
+    fig = px.bar(
+        vis_df,
+        x='time',
+        y='cyclists'
+    )
+
+    fig = update_fig_layout(fig)
+
+    return fig
+
+
+@app.callback(
+    [
+        Output(component_id='crashes_by_time_of_day_and_location', component_property='figure'),
+        Output(component_id='crashes_by_day_of_week', component_property='figure'),
+        Output(component_id='crashes_by_time_of_day', component_property='figure'),
+    ],
+    [
+        Input(component_id='select_crash_time_nearest_minute', component_property='value'),
+        Input(component_id='selected_day_of_week', component_property='value'),
+        Input(component_id='selected_time_of_day', component_property='value')
+    ]
+)
+def crashes_by_time_visual(tod_nearest_minute, selected_dow, selected_tod):
+    vis_df = df_crashes[['district', 'suburb', 'date', 'time', 'cyclists', 'lat', 'long']].copy()
+
+    vis_df['day_of_week'] = pd.to_datetime(vis_df['date']).dt.dayofweek
+
+    vis_df = vis_df[vis_df['day_of_week'].isin(selected_dow)]
+
+    fig_crashes_by_hour = crashes_by_time_of_day(vis_df, tod_nearest_minute)
+
+    fig_crashes_by_day_of_week = crashes_by_day_of_week(vis_df)
+
+    fig_crashes_by_time_and_location = crashes_by_time_of_day_and_location(vis_df, selected_tod)
+
+    return fig_crashes_by_time_and_location, fig_crashes_by_hour, fig_crashes_by_day_of_week
 
 
