@@ -28,7 +28,7 @@ var_dashboard = html.Div(
                 ],
                 value=5
             )
-        ]),
+        ], className='visual'),
         html.Div([
             dcc.Graph(id='crashes_by_street_lights'),
             dcc.RadioItems(
@@ -39,9 +39,9 @@ var_dashboard = html.Div(
                 ],
                 value=0
             )
-        ])
+        ], className='visual')
     ],
-    className='vis_wrapper_2x1'
+    className='wrapper_2x1'
 )
 
 

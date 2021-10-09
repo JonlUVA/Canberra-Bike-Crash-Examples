@@ -5,19 +5,10 @@ import csv
 from dash import html
 from dash import dcc
 from dash.dependencies import Input, Output
-import apps.cycling_visual_global_functions as vis_global_func
+from apps.cycling_visual_global_functions import *
 from cycling_dashboard_app import app
 
-list_colors = [
-    '#003f5c',
-    '#2f4b7c',
-    '#665191',
-    '#a05195',
-    '#d45087',
-    '#f95d6a',
-    '#ff7c43',
-    '#ffa600'
-]
+colors_list = get_colors()
 
 with open('data/geo/features.json') as geojson_filename:
     geojson_file = json.load(geojson_filename)
@@ -61,7 +52,7 @@ geojson_filename.close()
 #                        RETRIEVING TEMP DATA                        #
 ######################################################################
 
-crashes_df = vis_global_func.get_data_for_vis(0)
+crashes_df = get_data_for_vis(0)
 
 """
 https://aesalazar.com/blog/professional-color-combinations-for-dashboards-or-mobile-bi-applications
@@ -72,73 +63,98 @@ https://aesalazar.com/blog/professional-color-combinations-for-dashboards-or-mob
 #                          SETTING UP HTML                           #
 ######################################################################
 
-var_dashboard = html.Div([
-    html.H1(children='Dashboard'),
-    html.Div(id='total_number_of_crashes'),
-    html.Div(
-        id='visuals_parent_wrapper',
-        children=[
-            html.Div(
-                id='map_visual',
-                children=[
-                    html.Div(
-                        children=[
-                            html.H3(
-                                children='Select a Granularity'
-                            ),
-                            dcc.RadioItems(
-                                id='selected_map_granularity',
-                                options=[
-                                    {
-                                        'value': 'Suburbs',
-                                        'label': 'Suburbs'
-                                    },
-                                    {
-                                        'value': 'Districts',
-                                        'label': 'Districts'
-                                    }
-                                ],
-                                value='Districts',
-                                labelStyle={'display': 'block'},
-                            )
-                        ]
-                    ),
-                    html.Div(
-                        children=[
-                            dcc.Graph(id='crash_map'),
-                            dcc.Slider(
-                                id='selected_year',
-                                min=2012,
-                                max=2021,
-                                value=2021,
-                                marks={
-                                    2012: '2012', 2013: '2013', 2014: '2014',
-                                    2015: '2015', 2016: '2016', 2017: '2017',
-                                    2018: '2018', 2019: '2019', 2020: '2020',
-                                    2021: 'All'
+var_dashboard = html.Div(
+    [
+        html.Div(
+            [
+                html.H1(children='Dashboard'),
+                html.Div(id='total_number_of_crashes'),
+            ],
+            className='span_horizontal_2'
+        ),
+        html.Div(
+            id='vis_one_map_visual',
+            className='visual',
+            children=[
+                html.Div(
+                    [
+                        html.H3(
+                            children='Select a Granularity'
+                        ),
+                        dcc.RadioItems(
+                            id='selected_map_granularity',
+                            options=[
+                                {
+                                    'value': 'Suburbs',
+                                    'label': 'Suburbs'
                                 },
-                                step=None
-                            )
-                        ],
-                    )
-                ],
-            ),
-            html.Div(
-                id='wrapper_supplementary_visuals',
-                children=[
-                    dcc.Dropdown(
-                        id='location_filter',
-                        options=[{'label': i, 'value': i} for i in geo_district_name_filters],
-                        multi=False,
-                        value='All'
-                    ),
-                    dcc.Graph(id='location_crash_count_by_year'),
-                    dcc.Graph(id='location_crash_severity_by_year')
-                ]
-            )
-        ],
-    )
-])
+                                {
+                                    'value': 'Districts',
+                                    'label': 'Districts'
+                                }
+                            ],
+                            value='Districts',
+                            labelStyle={'display': 'block'},
+                        )
+                    ]
+                ),
+                html.Div(
+                    [
+                        dcc.Graph(id='crash_map', className='visual'),
+                        dcc.Slider(
+                            id='selected_year',
+                            min=2012,
+                            max=2021,
+                            value=2021,
+                            marks={
+                                2012: '2012', 2013: '2013', 2014: '2014',
+                                2015: '2015', 2016: '2016', 2017: '2017',
+                                2018: '2018', 2019: '2019', 2020: '2020',
+                                2021: 'All'
+                            },
+                            step=None
+                        )
+                    ],
+                )
+            ]
+        ),
+        html.Div(
+            id='vis_one_supplementary_visuals',
+            children=[
+                html.Div(
+                    [
+                        dcc.Dropdown(
+                            id='location_filter',
+                            options=[{'label': i, 'value': i} for i in geo_district_name_filters],
+                            multi=False,
+                            value='All'
+                        )
+                    ],
+                    className='visual'
+                ),
+                html.Div(
+                    [
+                        html.Div(
+                            [
+                                dcc.Graph(id='location_crash_count_by_year')
+                            ],
+                            className='visual'
+                        ),
+                        html.Div(
+                            [
+                                dcc.Graph(id='location_crash_severity_by_year')
+                            ],
+                            className='visual'
+                        )
+                    ],
+                    className='wrapper_1x2'
+                )
+            ]
+        )
+    ],
+    className='wrapper_2x1'
+)
+
 
 #########################################
 #          GENERATING VISUALS           #
@@ -259,7 +275,9 @@ def crashes_count_by_location_and_year(data_set, location):
         }
     )
 
-    fig = vis_global_func.update_fig_layout(fig)
+    fig = update_fig_layout(fig)
+
+    fig = fig.update_layout(height=300)
 
     return fig
 
@@ -278,10 +296,13 @@ def crash_severity_by_location_and_year(data_set, location):
             'severity': 'Severity'
         },
         barmode='group',
-        log_y=True
+        log_y=True,
+        color_discrete_sequence=colors_list
     )
 
-    fig = vis_global_func.update_fig_layout(fig)
+    fig = update_fig_layout(fig)
+
+    fig = fig.update_layout(height=300)
 
     return fig
 

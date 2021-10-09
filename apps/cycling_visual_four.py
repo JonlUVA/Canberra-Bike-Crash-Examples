@@ -16,53 +16,55 @@ df_crashes = get_data_for_vis(0)
 var_dashboard = html.Div(
     [
         html.Div([
-            dcc.Graph(id='crashes_by_time_of_day_and_location'),
-        ]),
-        html.Div([
-            dcc.Graph(id='crashes_by_time_of_day'),
-        ]),
+            html.Div([
+                dcc.Graph(id='crashes_by_time_of_day_and_location'),
+                dcc.RangeSlider(
+                    id='selected_time_of_day',
+                    min=0,
+                    max=23,
+                    value=[0, 23],
+                    marks={
+                        0: '12:00am',
+                        8: '9:00am',
+                        11: '12:00pm',
+                        16: '5:00pm',
+                        23: '11:59pm'
+                    }
+                )
+            ], className='visual'),
+            html.Div([
+                dcc.Graph(id='crashes_by_time_of_day')
+            ], className='visual'),
+            dcc.Checklist(
+                id='selected_day_of_week',
+                options=[
+                    {'label': 'Sunday', 'value': 6},
+                    {'label': 'Monday', 'value': 0},
+                    {'label': 'Tuesday', 'value': 1},
+                    {'label': 'Wednesday', 'value': 2},
+                    {'label': 'Thursday', 'value': 3},
+                    {'label': 'Friday', 'value': 4},
+                    {'label': 'Saturday', 'value': 5}
+                ],
+                value=[0, 1, 2, 3, 4, 5, 6]
+            ),
+        ], className='wrapper_2x1'),
         html.Div([
             dcc.Graph(id='crashes_by_day_of_week'),
-        ]),
-        dcc.RadioItems(
-            id='select_crash_time_nearest_minute',
-            options=[
-                {'label': '15 Minutes', 'value': 15},
-                {'label': '30 Minutes', 'value': 30},
-                {'label': '1 Hours', 'value': 60},
-                {'label': '2 Hours', 'value': 120},
-                {'label': '4 Hours', 'value': 240}
-            ],
-            value=60
-        ),
-        dcc.Checklist(
-            id='selected_day_of_week',
-            options=[
-                {'label': 'Sunday', 'value': 6},
-                {'label': 'Monday', 'value': 0},
-                {'label': 'Tuesday', 'value': 1},
-                {'label': 'Wednesday', 'value': 2},
-                {'label': 'Thursday', 'value': 3},
-                {'label': 'Friday', 'value': 4},
-                {'label': 'Saturday', 'value': 5}
-            ],
-            value=[0, 1, 2, 3, 4, 5, 6]
-        ),
-        dcc.RangeSlider(
-            id='selected_time_of_day',
-            min=0,
-            max=23,
-            value=[0, 23],
-            marks={
-                0: '12:00am',
-                8: '9:00am',
-                11: '12:00pm',
-                16: '5:00pm',
-                23: '11:59pm'
-            }
-        )
+            dcc.RadioItems(
+                id='select_crash_time_nearest_minute',
+                options=[
+                    {'label': '15 Minutes', 'value': 15},
+                    {'label': '30 Minutes', 'value': 30},
+                    {'label': '1 Hours', 'value': 60},
+                    {'label': '2 Hours', 'value': 120},
+                    {'label': '4 Hours', 'value': 240}
+                ],
+                value=60
+            ),
+        ], className='visual'),
     ],
-    className='vis_wrapper_2x1'
+    className='wrapper_1x2'
 )
 
 

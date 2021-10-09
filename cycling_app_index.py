@@ -19,18 +19,6 @@ from apps import cycling_visual_three
 from apps import cycling_visual_four
 
 
-
-list_colors = [
-    '#003f5c'
-    '#2f4b7c'
-    '#665191'
-    '#a05195'
-    '#d45087'
-    '#f95d6a'
-    '#ff7c43'
-    '#ffa600'
-]
-
 app.layout = html.Div(
     id='main',
     children=[

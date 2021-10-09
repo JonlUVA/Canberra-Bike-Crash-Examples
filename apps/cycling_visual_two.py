@@ -101,56 +101,73 @@ df_crash_rate_data['rainfall_category'] = np.select(
 ######################################################################
 var_dashboard = html.Div(
     [
-        dcc.RadioItems(
-            id='selected_crash_calc',
-            options=[
-                {
-                    'value': 1,
-                    'label': 'Crash Rate %'
-                },
-                {
-                    'value': 0,
-                    'label': 'Crash Count'
-                }
+        html.Div(
+            [
+                dcc.Checklist(
+                   id='rainfall_filter_list',
+                   options=[
+                        {'label': 'None', 'value': 'none'},
+                        {'label': 'Light', 'value': 'light'},
+                        {'label': 'Moderate', 'value': 'moderate'},
+                        {'label': 'Heavy', 'value': 'heavy'},
+                        {'label': 'Violent', 'value': 'violent'}
+                   ],
+                   value=['none', 'light', 'moderate', 'heavy', 'violent'],
+                   labelStyle={'display': 'inline-block'}
+                )
             ],
-            value=1
+            className='span_horizontal_2'
         ),
-        dcc.RadioItems(
-            id='selected_chart_type',
-            options=[
-                {
-                    'value': 1,
-                    'label': 'Pie Chart'
-                },
-                {
-                    'value': 0,
-                    'label': 'Bar Chart'
-                }
+        html.Div(
+            id='rainfall_crash_count_and_rate',
+            children=[
+                html.Div(
+                    [
+                        dcc.RadioItems(
+                            id='selected_crash_calc',
+                            options=[
+                                {
+                                    'value': 1,
+                                    'label': 'Crash Rate %'
+                                },
+                                {
+                                    'value': 0,
+                                    'label': 'Crash Count'
+                                }
+                            ],
+                            value=1,
+                            labelStyle={'display': 'block'}
+                        ),
+                        dcc.RadioItems(
+                            id='selected_chart_type',
+                            options=[
+                                {
+                                    'value': 1,
+                                    'label': 'Pie Chart'
+                                },
+                                {
+                                    'value': 0,
+                                    'label': 'Bar Chart'
+                                }
+                            ],
+                            value=1,
+                            labelStyle={'display': 'block'}
+                        )
+                    ],
+                    className='pt-50'
+                ),
+                dcc.Graph(id='crashes_by_rainfall')
             ],
-            value=1
+            className='visual'
         ),
-        html.Div([
-           dcc.Checklist(
-               id='rainfall_filter_list',
-               options=[
-                    {'label': 'None', 'value': 'none'},
-                    {'label': 'Light', 'value': 'light'},
-                    {'label': 'Moderate', 'value': 'moderate'},
-                    {'label': 'Heavy', 'value': 'heavy'},
-                    {'label': 'Violent', 'value': 'violent'}
-               ],
-               value=['none', 'light', 'moderate', 'heavy', 'violent'],
-               labelStyle={'display': 'inline-block'}
-           )
-        ], className='col-2'),
-        html.Div([
-            dcc.Graph(id='crash_severity_by_rainfall')
-        ]),
-        html.Div([
-           dcc.Graph(id='crashes_by_rainfall')
-        ])
+        html.Div(
+            [
+                dcc.Graph(id='crash_severity_by_rainfall')
+            ],
+            className='visual'
+        )
     ],
-    className='vis_wrapper_2x1'
+    className='wrapper_2x1'
 )
 
 #########################################
@@ -174,6 +191,9 @@ def cycling_crash_severity_by_rainfall(data_set):
         y='cyclists',
         color='severity'
     )
+
+    fig = update_fig_layout(fig)
+
     return fig
 
 
@@ -196,6 +216,8 @@ def cycling_crashes_by_rainfall(data_set, crash_calc, crash_calc_agg, chart_type
             y=crash_calc,
             x='rainfall_category'
         )
+
+    fig = update_fig_layout(fig)
 
     return fig
 
