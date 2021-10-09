@@ -16,10 +16,6 @@ body {
 	background-color: #0E141B;
 }
 
-h3 {
-	font-size: 1.05rem;
-}
-
 #main {
 	display: grid;
 	grid-template-columns: 20vw 1fr;
@@ -61,6 +57,20 @@ h2 {
     margin: 0;
 }
 
+h3{
+    font-Size: 1.25rem;
+    color: #73787D;
+    font-weight: 400;
+    margin: 0 0 10px 0;
+}
+
+h4 {
+    font-Size: 1rem;
+    color: #73787D;
+    font-weight: 400;
+    margin: 0 0 5px 0;
+}
+
 .wrapper_2x1 {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -85,24 +95,55 @@ h2 {
 
 #vis_one_map_visual {
 	display: grid;
-	grid-template-columns: 75px 1fr;
+	grid-template-columns: 100px 1fr;
 	grid-gap: 25px;
 }
 
 #vis_one_supplementary_visuals {
     display: grid;
-    grid-template-rows: 84px 1fr;
+    grid-template-rows: 104px 1fr;
     grid-gap: 25px;
 }
 
 #rainfall_crash_count_and_rate {
     display: grid;
-    grid-template-columns: 125px 1fr;
-    grid-gap:25px;
+    grid-template-columns: 175px 1fr;
+    grid-gap: 25px;
 }
 
-.pt-50 {
-    padding-top: 50px;
+.visual_3_wrapper {
+    display: grid;
+    grid-template-columns: 175px 1fr;
+    height:600px;
+    grid-gap: 25px;
+}
+
+#select_sunset_nearest_minute input[type="radio"],
+#bool_show_severity input[type="radio"],
+#selected_chart_type input[type="radio"],
+#selected_crash_calc input[type="radio"],
+#selected_map_granularity input[type="radio"] {
+    height: 1.25rem;
+}
+
+#select_sunset_nearest_minute label,
+#bool_show_severity label,
+#selected_chart_type label,
+#selected_crash_calc label,
+#selected_map_granularity label {
+    font-size: 1.25rem;
+}
+
+#rainfall_filter_list {
+    font-size: 1.35rem;
+}
+
+#rainfall_filter_list label {
+    margin-right: 25px;
+}
+
+.mt-10 {
+    margin-top: 10px;
 }
 
 /*

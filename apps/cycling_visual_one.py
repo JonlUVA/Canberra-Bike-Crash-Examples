@@ -67,7 +67,7 @@ var_dashboard = html.Div(
     [
         html.Div(
             [
-                html.H1(children='Dashboard'),
+                html.H1(children='Cyclist Crashes by District and Suburb'),
                 html.Div(id='total_number_of_crashes'),
             ],
             className='span_horizontal_2'
@@ -79,7 +79,7 @@ var_dashboard = html.Div(
                 html.Div(
                     [
                         html.H3(
-                            children='Select a Granularity'
+                            children='Granularity'
                         ),
                         dcc.RadioItems(
                             id='selected_map_granularity',
@@ -123,6 +123,9 @@ var_dashboard = html.Div(
             children=[
                 html.Div(
                     [
+                        html.H4(
+                            children='Filter By:'
+                        ),
                         dcc.Dropdown(
                             id='location_filter',
                             options=[{'label': i, 'value': i} for i in geo_district_name_filters],
@@ -167,11 +170,10 @@ var_dashboard = html.Div(
     ],
     [
         Input(component_id='selected_year', component_property='value'),
-        Input(component_id='selected_map_granularity', component_property='value'),
-        Input(component_id='crash_map', component_property='clickData')
+        Input(component_id='selected_map_granularity', component_property='value')
     ]
 )
-def map_crashes_by_suburb_and_date(selected_year, selected_map_granularity, click_data):
+def map_crashes_by_suburb_and_date(selected_year, selected_map_granularity):
     #https://www.justintodata.com/python-interactive-dashboard-with-plotly-dash-tutorial/
     #https://python.plainenglish.io/how-to-create-a-interative-map-using-plotly-express-geojson-to-brazil-in-python-fb5527ae38fc
     #https://towardsdatascience.com/choropleth-maps-in-practice-with-plotly-and-python-672a5eef3a19
@@ -181,10 +183,6 @@ def map_crashes_by_suburb_and_date(selected_year, selected_map_granularity, clic
     :param click_data: map data returned from when user clicks on map visual
     :return: map visual and sum of all crashes in act for given time period
     """
-
-    #   GETTING THE LOCATION FROM MAP CLICK DATA
-    if click_data != None:
-        print(click_data.get('points')[0].get('location'))
 
     #   SETTING VARIABLES FOR MAP VISUAL
     if selected_map_granularity == 'Districts':
@@ -226,6 +224,11 @@ def map_crashes_by_suburb_and_date(selected_year, selected_map_granularity, clic
                  + str(sum(selected_year_crash_data_df['cyclists']))
     )]
 
+    if selected_year == 2021:
+        var_title = 'Cyclist Crashes by ' + var_location.title()
+    else:
+        var_title = 'Cyclist Crashes by ' + var_location.title() + ' for ' + str(selected_year)
+
     fig = px.choropleth_mapbox(
         selected_year_crash_data_df,
         geojson=var_geojson,
@@ -239,23 +242,22 @@ def map_crashes_by_suburb_and_date(selected_year, selected_map_granularity, clic
             '#ff7c43',
             '#ffa600'
         ],
-        title='map test ' + str(selected_year),
+        title=var_title,
         mapbox_style='carto-darkmatter',
         zoom=var_zoom,
         center=var_center,
         opacity=0.5,
-        range_color=(0, max_colour)
+        range_color=(0, max_colour),
+        labels={
+            'cyclists': 'Cyclists',
+            'district': 'District',
+            'suburb': 'Suburb'
+        }
     )
 
-    fig.update_layout(
-        margin=dict(
-            b=0,
-            l=0,
-            r=0,
-            t=0
-        ),
-        paper_bgcolor='rgba(0,0,0,0)'
-    )
+    fig = update_fig_layout(fig)
+
+    fig.update_layout(height=600)
 
     return fig, var_total_crash_count
 

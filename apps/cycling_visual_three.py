@@ -15,31 +15,46 @@ df_crash_data = df_crashes.copy()
 
 var_dashboard = html.Div(
     [
+        html.Div(
+            [
+                html.H1(children='Cyclist Crashes During Low Light')
+            ],
+            className='span_horizontal_2'
+        ),
         html.Div([
-            dcc.Graph(id='crashes_by_sunset_time'),
-            dcc.RadioItems(
-                id='select_sunset_nearest_minute',
-                options=[
-                    {'label': 'All', 'value': 0},
-                    {'label': '1 minute', 'value': 1},
-                    {'label': '5 minute', 'value': 5},
-                    {'label': '10 minute', 'value': 10},
-                    {'label': '15 minute', 'value': 15}
-                ],
-                value=5
-            )
-        ], className='visual'),
+            html.Div([
+                html.H3(children='Group by Nearest Minute:'),
+                dcc.RadioItems(
+                    id='select_sunset_nearest_minute',
+                    options=[
+                        {'label': '1 Minute', 'value': 1},
+                        {'label': '5 Minute', 'value': 5},
+                        {'label': '10 Minute', 'value': 10},
+                        {'label': '15 Minute', 'value': 15}
+                    ],
+                    value=5,
+                    labelStyle={'display': 'block'}
+                )
+            ]),
+            dcc.Graph(id='crashes_by_sunset_time')
+        ], className='visual visual_3_wrapper'),
         html.Div([
+            html.Div([
+                html.H3(children='Show Severity:'),
+                dcc.RadioItems(
+                    id='bool_show_severity',
+                    options=[
+                        {'label': 'Crashes', 'value': 0},
+                        {'label': 'Severity', 'value': 1}
+                    ],
+                    value=0,
+                    labelStyle={'display': 'block'}
+                )
+
+            ]),
             dcc.Graph(id='crashes_by_street_lights'),
-            dcc.RadioItems(
-                id='bool_show_severity',
-                options=[
-                    {'label': 'Crashes', 'value': 0},
-                    {'label': 'Severity', 'value': 1}
-                ],
-                value=0
-            )
-        ], className='visual')
+
+        ], className='visual visual_3_wrapper')
     ],
     className='wrapper_2x1'
 )
@@ -56,7 +71,13 @@ def crashes_by_sunset(data_set, sunset_nearest_minute):
     fig = px.line(
         vis_df,
         x='sunset',
-        y='cyclists'
+        y='cyclists',
+        labels={
+            'cyclists': 'Cyclists',
+            'severity': 'Severity',
+            'number_of_lights': 'Number of Lights',
+            'sunset': 'Sunset'
+        }
     )
 
     fig = update_fig_layout(fig)
@@ -70,7 +91,13 @@ def crashes_by_street_lights(data_set, show_severity):
         fig = px.bar(
             vis_df,
             x='number_of_lights',
-            y='cyclists'
+            y='cyclists',
+            labels={
+                'cyclists': 'Cyclists',
+                'severity': 'Severity',
+                'number_of_lights': 'Number of Lights',
+                'sunset': 'Sunset'
+            }
         )
     else:
         vis_df = data_set.groupby(['number_of_lights', 'severity'], as_index=False).agg({'cyclists': sum})
@@ -78,7 +105,13 @@ def crashes_by_street_lights(data_set, show_severity):
             vis_df,
             x='number_of_lights',
             y='cyclists',
-            color='severity'
+            color='severity',
+            labels={
+                'cyclists': 'Cyclists',
+                'severity': 'Severity',
+                'number_of_lights': 'Number of Lights',
+                'sunset': 'Sunset'
+            }
         )
 
     fig = update_fig_layout(fig)

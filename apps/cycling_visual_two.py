@@ -10,6 +10,8 @@ import plotly.express as px
 from cycling_dashboard_app import app
 from apps.cycling_visual_global_functions import *
 
+colors_list = get_colors()
+
 ######################################################################
 #                       GETTING THE DATASETS                         #
 ######################################################################
@@ -103,6 +105,13 @@ var_dashboard = html.Div(
     [
         html.Div(
             [
+                html.H1(children='Cyclist Crashes and Crash Rate by Rainfall')
+            ],
+            className='span_horizontal_2'
+        ),
+        html.Div(
+            [
+                html.H3(children='Filter by Rainfall:'),
                 dcc.Checklist(
                    id='rainfall_filter_list',
                    options=[
@@ -116,13 +125,14 @@ var_dashboard = html.Div(
                    labelStyle={'display': 'inline-block'}
                 )
             ],
-            className='span_horizontal_2'
+            className='span_horizontal_2 visual'
         ),
         html.Div(
             id='rainfall_crash_count_and_rate',
             children=[
                 html.Div(
                     [
+                        html.H3(children='Choose Calculation:'),
                         dcc.RadioItems(
                             id='selected_crash_calc',
                             options=[
@@ -138,6 +148,7 @@ var_dashboard = html.Div(
                             value=1,
                             labelStyle={'display': 'block'}
                         ),
+                        html.H3(children='Choose Visualisation:', className='mt-10'),
                         dcc.RadioItems(
                             id='selected_chart_type',
                             options=[
@@ -150,7 +161,7 @@ var_dashboard = html.Div(
                                     'label': 'Bar Chart'
                                 }
                             ],
-                            value=1,
+                            value=0,
                             labelStyle={'display': 'block'}
                         )
                     ],
@@ -189,7 +200,19 @@ def cycling_crash_severity_by_rainfall(data_set):
         vis_df,
         x='rainfall_category',
         y='cyclists',
-        color='severity'
+        color='severity',
+        color_discrete_sequence=colors_list,
+        labels={
+            'cyclists': 'Cyclists',
+            'crash_rate': 'Crash Rate (%)',
+            'rainfall_category': 'Rainfall Type',
+            'light': 'Light',
+            'moderate': 'Moderate',
+            'heavy': 'Heavy',
+            'violent': 'Violent',
+            'none': 'None',
+            'severity': 'Severity'
+        }
     )
 
     fig = update_fig_layout(fig)
@@ -208,13 +231,35 @@ def cycling_crashes_by_rainfall(data_set, crash_calc, crash_calc_agg, chart_type
         fig = px.pie(
             vis_df,
             values=crash_calc,
-            names='rainfall_category'
+            names='rainfall_category',
+            color_discrete_sequence=colors_list,
+            labels={
+                'cyclists': 'Cyclists',
+                'crash_rate': 'Crash Rate (%)',
+                'rainfall_category': 'Rainfall Type',
+                'light': 'Light',
+                'moderate': 'Moderate',
+                'heavy': 'Heavy',
+                'violent': 'Violent',
+                'none': 'None'
+            }
         )
     else:
         fig = px.bar(
             vis_df,
             y=crash_calc,
-            x='rainfall_category'
+            x='rainfall_category',
+            color_discrete_sequence=colors_list,
+            labels={
+                'cyclists': 'Cyclists',
+                'crash_rate': 'Crash Rate (%)',
+                'rainfall_category': 'Rainfall Type',
+                'light': 'Light',
+                'moderate': 'Moderate',
+                'heavy': 'Heavy',
+                'violent': 'Violent',
+                'none': 'None'
+            }
         )
 
     fig = update_fig_layout(fig)

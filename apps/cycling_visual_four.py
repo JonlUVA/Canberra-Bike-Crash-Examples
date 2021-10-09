@@ -38,15 +38,15 @@ var_dashboard = html.Div(
             dcc.Checklist(
                 id='selected_day_of_week',
                 options=[
-                    {'label': 'Sunday', 'value': 6},
-                    {'label': 'Monday', 'value': 0},
-                    {'label': 'Tuesday', 'value': 1},
-                    {'label': 'Wednesday', 'value': 2},
-                    {'label': 'Thursday', 'value': 3},
-                    {'label': 'Friday', 'value': 4},
-                    {'label': 'Saturday', 'value': 5}
+                    {'label': 'Sunday', 'value': 'Sunday'},
+                    {'label': 'Monday', 'value': 'Monday'},
+                    {'label': 'Tuesday', 'value': 'Tuesday'},
+                    {'label': 'Wednesday', 'value': 'Wednesday'},
+                    {'label': 'Thursday', 'value': 'Thursday'},
+                    {'label': 'Friday', 'value': 'Friday'},
+                    {'label': 'Saturday', 'value': 'Saturday'}
                 ],
-                value=[0, 1, 2, 3, 4, 5, 6]
+                value=['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
             ),
         ], className='wrapper_2x1'),
         html.Div([
@@ -143,7 +143,7 @@ def crashes_by_time_of_day(data_set, tod_nearest_minute):
 def crashes_by_time_visual(tod_nearest_minute, selected_dow, selected_tod):
     vis_df = df_crashes[['district', 'suburb', 'date', 'time', 'cyclists', 'lat', 'long']].copy()
 
-    vis_df['day_of_week'] = pd.to_datetime(vis_df['date']).dt.dayofweek
+    vis_df['day_of_week'] = pd.to_datetime(vis_df['date']).dt.day_name()
 
     vis_df = vis_df[vis_df['day_of_week'].isin(selected_dow)]
 

@@ -64,7 +64,7 @@ def update_fig_layout(fig):
         ),
         font_color='#73787D',
         font_size=10,
-        title_font_size=14,
+        title_font_size=18,
         legend_font_size=12,
         paper_bgcolor='rgba(0,0,0,0)',
         plot_bgcolor='rgba(0,0,0,0)'
