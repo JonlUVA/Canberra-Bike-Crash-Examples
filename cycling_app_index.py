@@ -63,6 +63,8 @@ def display_dashboard(pathname):
         return cycling_visual_one.var_dashboard
     elif pathname == '/apps/visual_two':
         return cycling_visual_two.var_dashboard
+    elif pathname == '/apps/visual_three':
+        return cycling_visual_three.var_dashboard
     elif pathname == '/close':
         func = request.environ.get('werkzeug.server.shutdown')
         func()
@@ -72,8 +74,7 @@ def display_dashboard(pathname):
     '''
         elif pathname == '/apps/visual_two':
         return cycling_visual_two.var_dashboard
-    elif pathname == '/apps/visual_three':
-        return cycling_visual_three.var_dashboard
+    
     elif pathname == '/apps/visual_four':
         return cycling_visual_four.var_dashboard
     '''

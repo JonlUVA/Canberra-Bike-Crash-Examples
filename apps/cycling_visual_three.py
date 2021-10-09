@@ -1,12 +1,17 @@
+import pandas as pd
+import numpy as np
+
+import plotly.express as px
+
 from dash import html
 from dash import dcc
 from dash.dependencies import Input, Output
-import pandas as pd
-import plotly.express as px
-from cycling_dashboard_app import app
-import numpy as np
 
-df_raw_data = pd.read_csv('data/crashes.csv')
+from cycling_dashboard_app import app
+from apps.cycling_visual_global_functions import *
+
+df_crashes = get_data_for_vis(0)
+df_crash_data = df_crashes.copy()
 
 var_dashboard = html.Div(
     [
@@ -40,57 +45,62 @@ var_dashboard = html.Div(
 )
 
 
-@app.callback(
-    Output(component_id='crashes_by_sunset_time', component_property='figure'),
-    Input(component_id='select_sunset_nearest_minute', component_property='value')
-)
-def crashes_by_sunset(sunset_nearest_minute):
-
-    test_visual_data = df_raw_data[['sunset', 'cyclists']]
-
+def crashes_by_sunset(data_set, sunset_nearest_minute):
     if sunset_nearest_minute == 0:
         pass
     else:
-        test_visual_data['sunset'] = \
-            pd.to_datetime(test_visual_data["sunset"]).round(str(sunset_nearest_minute) + 'T').dt.time
+        data_set['sunset'] = pd.to_datetime(data_set["sunset"]).round(str(sunset_nearest_minute) + 'T').dt.time
 
-    test_visual_data = test_visual_data.groupby(['sunset', 'cyclists'],
-                                                as_index=False).agg({'cyclists': sum})
+    vis_df = data_set.groupby(['sunset', 'cyclists'], as_index=False).agg({'cyclists': sum})
+
     fig = px.line(
-        test_visual_data,
+        vis_df,
         x='sunset',
         y='cyclists'
     )
 
+    fig = update_fig_layout(fig)
+
     return fig
 
 
-@app.callback(
-    Output(component_id='crashes_by_street_lights', component_property='figure'),
-    Input(component_id='bool_show_severity', component_property='value')
-)
-def crashes_by_street_lights(show_severity):
-
-    test_visual_data = df_raw_data[['number_of_lights', 'cyclists', 'dark', 'severity']]
-
-    test_visual_data = test_visual_data[test_visual_data['dark'] == 1]
-
+def crashes_by_street_lights(data_set, show_severity):
     if show_severity == 0:
-        test_visual_data = \
-            test_visual_data.groupby(['number_of_lights'], as_index=False).agg({'cyclists': sum})
+        vis_df = data_set.groupby(['number_of_lights'], as_index=False).agg({'cyclists': sum})
         fig = px.bar(
-            test_visual_data,
+            vis_df,
             x='number_of_lights',
             y='cyclists'
         )
     else:
-        test_visual_data = \
-            test_visual_data.groupby(['number_of_lights', 'severity'], as_index=False).agg({'cyclists': sum})
+        vis_df = data_set.groupby(['number_of_lights', 'severity'], as_index=False).agg({'cyclists': sum})
         fig = px.bar(
-            test_visual_data,
+            vis_df,
             x='number_of_lights',
             y='cyclists',
             color='severity'
         )
 
+    fig = update_fig_layout(fig)
+
     return fig
+
+
+@app.callback(
+    [
+        Output(component_id='crashes_by_sunset_time', component_property='figure'),
+        Output(component_id='crashes_by_street_lights', component_property='figure')
+    ],
+    [
+        Input(component_id='select_sunset_nearest_minute', component_property='value'),
+        Input(component_id='bool_show_severity', component_property='value')
+    ]
+)
+def crashes_by_lighting_visuals(sunset_nearest_minute, show_severity):
+    vis_df = df_crash_data[['number_of_lights', 'sunset', 'cyclists', 'dark', 'severity']]
+    vis_df = vis_df[vis_df['dark'] == 1]
+
+    fig_crashes_by_sunset = crashes_by_sunset(vis_df, sunset_nearest_minute)
+    fig_crashes_by_street_lighting = crashes_by_street_lights(vis_df, show_severity)
+
+    return fig_crashes_by_sunset, fig_crashes_by_street_lighting
