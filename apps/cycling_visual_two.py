@@ -202,6 +202,7 @@ def cycling_crash_severity_by_rainfall(data_set):
         y='cyclists',
         color='severity',
         color_discrete_sequence=colors_list,
+        title='Crash Severity by Rainfall',
         labels={
             'cyclists': 'Cyclists',
             'crash_rate': 'Crash Rate (%)',
@@ -233,6 +234,7 @@ def cycling_crashes_by_rainfall(data_set, crash_calc, crash_calc_agg, chart_type
             values=crash_calc,
             names='rainfall_category',
             color_discrete_sequence=colors_list,
+            title='Crash Rate (%) by Rainfall',
             labels={
                 'cyclists': 'Cyclists',
                 'crash_rate': 'Crash Rate (%)',
@@ -250,6 +252,7 @@ def cycling_crashes_by_rainfall(data_set, crash_calc, crash_calc_agg, chart_type
             y=crash_calc,
             x='rainfall_category',
             color_discrete_sequence=colors_list,
+            title='Crash Rate (%) by Rainfall',
             labels={
                 'cyclists': 'Cyclists',
                 'crash_rate': 'Crash Rate (%)',

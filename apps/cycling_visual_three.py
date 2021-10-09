@@ -72,6 +72,7 @@ def crashes_by_sunset(data_set, sunset_nearest_minute):
         vis_df,
         x='sunset',
         y='cyclists',
+        title='Sunset Time and Night Time Crashes',
         labels={
             'cyclists': 'Cyclists',
             'severity': 'Severity',
@@ -92,6 +93,7 @@ def crashes_by_street_lights(data_set, show_severity):
             vis_df,
             x='number_of_lights',
             y='cyclists',
+            title='Crashes by Street Light Count',
             labels={
                 'cyclists': 'Cyclists',
                 'severity': 'Severity',
@@ -106,6 +108,7 @@ def crashes_by_street_lights(data_set, show_severity):
             x='number_of_lights',
             y='cyclists',
             color='severity',
+            title='Crash Severity by Street Light Count',
             labels={
                 'cyclists': 'Cyclists',
                 'severity': 'Severity',

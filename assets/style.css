@@ -83,6 +83,12 @@ h4 {
     grid-gap: 25px;
 }
 
+.wrapper_1x3 {
+    display: grid;
+    grid-template-rows: 100px 1fr 1fr;
+    grid-gap: 25px;
+}
+
 .span_horizontal_2 {
     grid-column: span 2;
 }
@@ -118,6 +124,7 @@ h4 {
     grid-gap: 25px;
 }
 
+#select_crash_time_nearest_minute input[type="radio"],
 #select_sunset_nearest_minute input[type="radio"],
 #bool_show_severity input[type="radio"],
 #selected_chart_type input[type="radio"],
@@ -126,6 +133,7 @@ h4 {
     height: 1.25rem;
 }
 
+#select_crash_time_nearest_minute label,
 #select_sunset_nearest_minute label,
 #bool_show_severity label,
 #selected_chart_type label,
@@ -134,10 +142,12 @@ h4 {
     font-size: 1.25rem;
 }
 
+#selected_day_of_week,
 #rainfall_filter_list {
     font-size: 1.35rem;
 }
 
+#selected_day_of_week label,
 #rainfall_filter_list label {
     margin-right: 25px;
 }

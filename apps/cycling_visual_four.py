@@ -15,9 +15,30 @@ df_crashes = get_data_for_vis(0)
 
 var_dashboard = html.Div(
     [
+        html.Div(
+            [
+                html.H1(children='Cyclist Crashes by Location and Time of Day'),
+                dcc.Checklist(
+                    id='selected_day_of_week',
+                    options=[
+                        {'label': 'Sunday', 'value': 'Sunday'},
+                        {'label': 'Monday', 'value': 'Monday'},
+                        {'label': 'Tuesday', 'value': 'Tuesday'},
+                        {'label': 'Wednesday', 'value': 'Wednesday'},
+                        {'label': 'Thursday', 'value': 'Thursday'},
+                        {'label': 'Friday', 'value': 'Friday'},
+                        {'label': 'Saturday', 'value': 'Saturday'}
+                    ],
+                    value=['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+                )
+            ]
+        ),
+
+        #   VISUAL ONE AND TWO
         html.Div([
             html.Div([
                 dcc.Graph(id='crashes_by_time_of_day_and_location'),
+                html.H3(children='Filter by Time of Day:'),
                 dcc.RangeSlider(
                     id='selected_time_of_day',
                     min=0,
@@ -35,36 +56,29 @@ var_dashboard = html.Div(
             html.Div([
                 dcc.Graph(id='crashes_by_time_of_day')
             ], className='visual'),
-            dcc.Checklist(
-                id='selected_day_of_week',
-                options=[
-                    {'label': 'Sunday', 'value': 'Sunday'},
-                    {'label': 'Monday', 'value': 'Monday'},
-                    {'label': 'Tuesday', 'value': 'Tuesday'},
-                    {'label': 'Wednesday', 'value': 'Wednesday'},
-                    {'label': 'Thursday', 'value': 'Thursday'},
-                    {'label': 'Friday', 'value': 'Friday'},
-                    {'label': 'Saturday', 'value': 'Saturday'}
-                ],
-                value=['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
-            ),
         ], className='wrapper_2x1'),
+
+        #   VISUAL 3
         html.Div([
-            dcc.Graph(id='crashes_by_day_of_week'),
-            dcc.RadioItems(
-                id='select_crash_time_nearest_minute',
-                options=[
-                    {'label': '15 Minutes', 'value': 15},
-                    {'label': '30 Minutes', 'value': 30},
-                    {'label': '1 Hours', 'value': 60},
-                    {'label': '2 Hours', 'value': 120},
-                    {'label': '4 Hours', 'value': 240}
-                ],
-                value=60
-            ),
-        ], className='visual'),
+            html.Div([
+                html.H3(children='Group In:'),
+                dcc.RadioItems(
+                    id='select_crash_time_nearest_minute',
+                    options=[
+                        {'label': '15 Minutes', 'value': 15},
+                        {'label': '30 Minutes', 'value': 30},
+                        {'label': '1 Hours', 'value': 60},
+                        {'label': '2 Hours', 'value': 120},
+                        {'label': '4 Hours', 'value': 240}
+                    ],
+                    value=60,
+                    labelStyle={'display': 'block'}
+                )
+            ]),
+            dcc.Graph(id='crashes_by_day_of_week')
+        ], className='visual visual_3_wrapper'),
     ],
-    className='wrapper_1x2'
+    className='wrapper_1x3'
 )
 
 
@@ -84,6 +98,7 @@ def crashes_by_time_of_day_and_location(data_set, time_filter_vals):
         vis_df,
         lon='long',
         lat='lat',
+        title='Crashes between ' + start_time + ' and ' + finish_time,
         mapbox_style='carto-darkmatter',
         zoom=9.25,
         center={'lat': -35.3222, 'lon': 149.1287}
@@ -102,7 +117,13 @@ def crashes_by_day_of_week(data_set):
     fig = px.bar(
         vis_df,
         x='day_of_week',
-        y='cyclists'
+        y='cyclists',
+        title='Crashes by Day of the Week',
+        labels={
+            'cyclists': 'Cyclists',
+            'time': 'Time',
+            'day_of_week': 'Day'
+        }
     )
 
     fig = update_fig_layout(fig)
@@ -120,7 +141,13 @@ def crashes_by_time_of_day(data_set, tod_nearest_minute):
     fig = px.bar(
         vis_df,
         x='time',
-        y='cyclists'
+        y='cyclists',
+        title='Crashes by Time' ,
+        labels={
+            'cyclists': 'Cyclists',
+            'time': 'Time',
+            'day_of_week': 'Day'
+        }
     )
 
     fig = update_fig_layout(fig)
