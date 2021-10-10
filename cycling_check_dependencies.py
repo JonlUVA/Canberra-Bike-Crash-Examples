@@ -30,6 +30,8 @@ class Dependencies:
     assess host system.
     """
     
+    __alt_module_names = {'shapefile': 'pyshp'}
+    
     def __init__(self, root_path, ignore_module_prefix='', include_subs=False,
                  self_ignore=True, subs_to_ignore=None):
         """
@@ -141,7 +143,10 @@ class Dependencies:
             
             # add each row
             for module in self._modules_missing:
-                text += f'{module}\n'
+                if module in Dependencies.__alt_module_names:
+                    text += f'{Dependencies.__alt_module_names[module]}\n'
+                else:
+                    text += f'{module}\n'
         else:
             text += '\n'
             text += 'No required modules missing.'
@@ -347,7 +352,16 @@ class Dependencies:
 
         """
         
-        return list(self._modules_missing)
+        missing_modules = []
+        
+        # use alternate name if install package name differs from import package name
+        for module in self._modules_missing:
+            if module in Dependencies.__alt_module_names:
+                missing_modules.append(Dependencies.__alt_module_names[module])
+            else:
+                missing_modules.append(module)
+        
+        return missing_modules
     
     
     def get_system_config(self):
