@@ -32,8 +32,8 @@ and the main contributions were as follows:
   - [cycling_app_index](cycling_app_index.py): To act as index for multi-page dashboard application.
   - [cycling_visual_global_functions](apps/cycling_visual_global_functions.py): To provide a set of global function the visuals could call from.
   - [cycling_visual_one](apps/cycling_visual_one.py): To provide visualisations of cycling crashes by locations (suburbs and districts).
-  - [cycling_visual_one](apps/cycling_visual_two.py): To provide visualisations of cycling crashes and cycling crash rate by rainfall.
-  - [cycling_visual_one](apps/cycling_visual_three.py): To provide visualisations of cycling crashes which occur during hours of low light.
-  - [cycling_visual_one](apps/cycling_visual_four.py): To provide visualisation of cycling crashes by time, day of the week, and location 
+  - [cycling_visual_two](apps/cycling_visual_two.py): To provide visualisations of cycling crashes and cycling crash rate by rainfall.
+  - [cycling_visual_three](apps/cycling_visual_three.py): To provide visualisations of cycling crashes which occur during hours of low light.
+  - [cycling_visual_four](apps/cycling_visual_four.py): To provide visualisation of cycling crashes by time, day of the week, and location 
   - [style.css](assets/style.css): To provide styling to visualisations. 
   - Added extensive detail to the [NOTES.md](NOTES.md).
