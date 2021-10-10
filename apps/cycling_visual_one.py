@@ -101,7 +101,7 @@ var_dashboard = html.Div(
                     [
                         dcc.Graph(
                             id='crash_map',
-                            style={'height': '60vh'}
+                            style={'height': '70vh'}
                         ),
                         dcc.Slider(
                             id='selected_year',
@@ -141,13 +141,13 @@ var_dashboard = html.Div(
                     [
                         html.Div(
                             [
-                                dcc.Graph(id='location_crash_count_by_year', style={'height': '20vh'})
+                                dcc.Graph(id='location_crash_count_by_year', style={'height': '30vh'})
                             ],
                             className='visual'
                         ),
                         html.Div(
                             [
-                                dcc.Graph(id='location_crash_severity_by_year', style={'height': '20vh'})
+                                dcc.Graph(id='location_crash_severity_by_year', style={'height': '30vh'})
                             ],
                             className='visual'
                         )

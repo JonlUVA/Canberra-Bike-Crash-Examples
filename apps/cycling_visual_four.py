@@ -44,7 +44,7 @@ var_dashboard = html.Div(
         #   VISUAL ONE AND TWO
         html.Div([
             html.Div([
-                dcc.Graph(id='crashes_by_time_of_day_and_location', style={'height': '30vh', 'width': '30vw'}),
+                dcc.Graph(id='crashes_by_time_of_day_and_location', style={'height': '30vh', 'width': '40vw'}),
                 html.H3(children='Filter by Time of Day:'),
                 dcc.RangeSlider(
                     id='selected_time_of_day',
@@ -61,7 +61,7 @@ var_dashboard = html.Div(
                 )
             ], className='visual'),
             html.Div([
-                dcc.Graph(id='crashes_by_time_of_day', style={'height': '100%', 'width': '100%'})
+                dcc.Graph(id='crashes_by_time_of_day')
             ], className='visual'),
         ], className='wrapper_2x1'),
 
