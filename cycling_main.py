@@ -54,10 +54,6 @@ def print_header(header_text, header_width=75, all_caps=True):
     print(header_line)
     print('#' * header_width)
     print()
-    
-
-def main_run_app(temp_app):
-    temp_app.run_server(debug=False, dev_tools_silence_routes_logging=True, use_reloader=True)
 
 
 ##############################################################################
@@ -195,7 +191,7 @@ if __name__ == '__main__':
 
     from cycling_app_index import *
 
-    main_run_app(app)
+    app.run_server(debug=False, dev_tools_silence_routes_logging=True, use_reloader=True, dev_tools_hot_reload=False)
     
     print()
     print('END :)')
