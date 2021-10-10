@@ -226,17 +226,17 @@ def map_crashes_by_suburb_and_date(selected_year, selected_map_granularity):
     sum(selected_year_crash_data_df['cyclists'])
     max_colour = max(selected_year_crash_data_df['cyclists'])
 
-    var_total_crash_count = [html.H2(
-        children='Total number of crashes for '
-                 + str(selected_year)
-                 + ': '
-                 + str(sum(selected_year_crash_data_df['cyclists']))
-    )]
-
     if selected_year == 2021:
         var_title = 'Cyclist Crashes by ' + var_location.title()
+        var_crash_count_title = 'Total Number of Crashes: ' + str(sum(selected_year_crash_data_df['cyclists']))
     else:
         var_title = 'Cyclist Crashes by ' + var_location.title() + ' for ' + str(selected_year)
+        var_crash_count_title = 'Total Number of Crashes for ' + str(selected_year) + ': ' \
+                                + str(sum(selected_year_crash_data_df['cyclists']))
+
+    var_total_crash_count = [html.H2(
+        children=var_crash_count_title
+    )]
 
     fig = px.choropleth_mapbox(
         selected_year_crash_data_df,
