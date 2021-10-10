@@ -13,7 +13,7 @@ import sys
 from pathlib import Path
 from cycling_check_dependencies import *
 
-DEBUG_MODE = False
+COMPATIBILITY_MODE = False
 
 ##############################################################################
 #                               HELPER FUNCTIONS                             #
@@ -192,10 +192,10 @@ if __name__ == '__main__':
     if len(sys.argv) > 1:
         arg = sys.argv[1].strip().lower()
         
-        if arg.startswith('-d'):
-            DEBUG_MODE=True
+        if arg.startswith('-c'):
+            COMPATIBILITY_MODE=True
 
-    run_vis(debug=DEBUG_MODE)
+    run_vis(compatibility_mode=COMPATIBILITY_MODE)
     
     print()
     print('END :)')

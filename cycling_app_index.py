@@ -6,6 +6,7 @@ from dash import html
 from dash import dcc
 from dash.dependencies import Input, Output, State
 from flask import request
+import sys
 
 #   Importing the app
 from cycling_dashboard_app import app, server
@@ -80,8 +81,11 @@ def display_dashboard(pathname):
         return html.P('Error 404: Page not found...')
 
 
-def run_vis(debug=False):
-    app.run_server(dev_tools_silence_routes_logging=True, use_reloader=debug)
-    
+def run_vis(compatibility_mode=False):
+    try:
+        app.run_server(dev_tools_silence_routes_logging=True, use_reloader=compatibility_mode)
+    except OSError:
+        print('Unfortunately your O/S is currently occupying our HTTP port, please try again shortly.')
+        sys.exit(1)
 #if __name__ == '__main__':
 #    app.run_server(debug=True, dev_tools_ui=False)
