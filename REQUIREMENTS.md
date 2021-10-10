@@ -32,6 +32,4 @@ With tested system configurations:
 | shutil | unknown | unknown | unknown |
 | suntime | unknown | unknown | unknown |
 | sys | unknown | unknown | unknown |
-| tempfile | unknown | unknown | unknown |
-| time | unknown | unknown | unknown |
 | zipfile | unknown | unknown | unknown |
