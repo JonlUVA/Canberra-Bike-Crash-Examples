@@ -25,7 +25,7 @@ and the main contributions were as follows:
   - [cycling_main](cycling_main.py): A central module to integrate and execute all aspects of the project.
   - Maintained [MEETINGS.md](MEETINGS.md) until it was deprecated in favour of a group Discord channel.
   - Maintained gitlab repository.
-  - Prepared [NOTES.md](NOTES.md).
+  - Prepared [README.md](README.md).
 
 * Hugh Porter (u7398670) --- 33% 
   - [cycling_dashboard_app](cycling_dashboard_app.py): To Create an application which could be used to make visualisation interactive.
@@ -36,4 +36,4 @@ and the main contributions were as follows:
   - [cycling_visual_three](apps/cycling_visual_three.py): To provide visualisations of cycling crashes which occur during hours of low light.
   - [cycling_visual_four](apps/cycling_visual_four.py): To provide visualisation of cycling crashes by time, day of the week, and location 
   - [style.css](assets/style.css): To provide styling to visualisations. 
-  - Added extensive detail to the [NOTES.md](NOTES.md).
+  - Added extensive detail to the [README.md](README.md).
