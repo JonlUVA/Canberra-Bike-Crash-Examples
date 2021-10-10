@@ -54,10 +54,6 @@ geojson_filename.close()
 
 crashes_df = get_data_for_vis(0)
 
-"""
-https://aesalazar.com/blog/professional-color-combinations-for-dashboards-or-mobile-bi-applications
- #B3C100, #CED2CC, #23282D, #4CB5F5, #1F3F49, #D32D41, #6AB187
-"""
 
 ######################################################################
 #                          SETTING UP HTML                           #
@@ -180,9 +176,6 @@ var_dashboard = html.Div(
     ]
 )
 def map_crashes_by_suburb_and_date(selected_year, selected_map_granularity):
-    #https://www.justintodata.com/python-interactive-dashboard-with-plotly-dash-tutorial/
-    #https://python.plainenglish.io/how-to-create-a-interative-map-using-plotly-express-geojson-to-brazil-in-python-fb5527ae38fc
-    #https://towardsdatascience.com/choropleth-maps-in-practice-with-plotly-and-python-672a5eef3a19
     """
     :param selected_year: year selected by a user via slider component
     :param selected_map_granularity: map granularity selected by user via radio buttons
@@ -326,6 +319,11 @@ def crash_severity_by_location_and_year(data_set, location):
     ]
 )
 def location_crash_count_visuals(selected_map_granularity, location_filter_value):
+    """
+    :param selected_map_granularity: Does the map show districts or suburbs?
+    :param location_filter_value: Filter visuals by specific suburb or district, blank = all
+    :return: Crash Count Visual, Crash Severity Count Visual
+    """
 
     #   DETERMINING WHAT DATA TO PULL
     if selected_map_granularity == 'Suburbs':
@@ -365,6 +363,7 @@ def location_crash_count_visuals(selected_map_granularity, location_filter_value
     return fig_crash_count, fig_crash_severity
 
 
+#   Updating the drop down if a user selects location with the map visual
 @app.callback(
     [
         Output(component_id='location_filter', component_property='options'),
