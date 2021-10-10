@@ -13,6 +13,7 @@ import sys
 from pathlib import Path
 from cycling_check_dependencies import *
 
+DEBUG_MODE = False
 
 ##############################################################################
 #                               HELPER FUNCTIONS                             #
@@ -192,17 +193,9 @@ if __name__ == '__main__':
         arg = sys.argv[1].strip().lower()
         
         if arg.startswith('-d'):
-            debug=True
-        else:
-            debug=False
-    else:
-        arg = input('Would you like to run in debug mode (y/n): ')
-        if arg.lower().startswith('y'):
-            debug=True
-        else:
-            debug=False
+            DEBUG_MODE=True
 
-    run_vis(debug=debug)
+    run_vis(debug=DEBUG_MODE)
     
     print()
     print('END :)')
