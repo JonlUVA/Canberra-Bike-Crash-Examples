@@ -11,11 +11,11 @@ __**ATTENTION:**__ This must be run using __**Python 3.9**__
 The script may run on pre-Python 3.9 interpreters but there have been issue with data loading
 into the visualisation on the dashboard. If you experience any issues there is the potential that
 they may be remedied with a system upgrade. However, it may be quicker to run the application/visualisations
-in __debug__ mode. This can be accomplished by:
+in __compatibiity__ mode. This can be accomplished by:
 
-1. Running ```$ python3 cycling_main.py -d``` in your preferred commandline
+1. Running ```$ python3 cycling_main.py -c``` in your preferred commandline
 2. Changing line 16 in cycling_main.py from:
-`DEBUG_MODE = False` to `DEBUG_MODE = True`
+`COMPATIBILITY_MODE = False` to `COMPATIBILITY_MODE = True`
 
 
 In addition to a `python3` interpreter, please ensure your system has the following third party modules installed:  
