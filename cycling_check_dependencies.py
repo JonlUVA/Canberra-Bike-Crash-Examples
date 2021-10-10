@@ -217,6 +217,10 @@ class Dependencies:
                         if words.index('import') > 2:
                             continue
                         
+                        # skip the line if it includes the prefix to ignore
+                        if line.find(self._ignore_prefix) >= 0:
+                            continue
+                        
                         # figure out if the module name should come after an 
                         # 'import' or 'from'
                         if 'from' in words:
