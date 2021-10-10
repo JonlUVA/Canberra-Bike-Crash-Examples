@@ -27,10 +27,11 @@ app.layout = html.Div(
         html.Div(
             id='side_menu',
             children=[
-                dcc.Link('Cyclist Crashes by Suburb and District', href='/apps/visual_one'),
-                dcc.Link('Cyclist Crashed and Weather', href='/apps/visual_two'),
-                dcc.Link('Cyclist Crashes by Lighting', href='/apps/visual_three'),
-                dcc.Link('Cyclist Crashed by Time and Day', href='/apps/visual_four'),
+                html.H1(children='Select a Dashboard:'),
+                dcc.Link('Location', href='/apps/visual_one'),
+                dcc.Link('Weather', href='/apps/visual_two'),
+                dcc.Link('Lighting', href='/apps/visual_three'),
+                dcc.Link('Time and Day', href='/apps/visual_four'),
                 dcc.Link('Close', href='/close')
             ]
         ),
@@ -64,5 +65,5 @@ def display_dashboard(pathname):
 
 
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    app.run_server(debug=True, dev_tools_ui=False)
     #, dev_tools_ui=False

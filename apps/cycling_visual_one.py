@@ -76,31 +76,37 @@ var_dashboard = html.Div(
             id='vis_one_map_visual',
             className='visual',
             children=[
+                html.Div([
+                    html.Div(
+                        [
+                            html.H3(
+                                children='Granularity'
+                            ),
+                            dcc.RadioItems(
+                                id='selected_map_granularity',
+                                options=[
+                                    {
+                                        'value': 'Suburbs',
+                                        'label': 'Suburbs'
+                                    },
+                                    {
+                                        'value': 'Districts',
+                                        'label': 'Districts'
+                                    }
+                                ],
+                                value='Districts',
+                                labelStyle={'display': 'block'},
+                            )
+                        ],
+                        style={'align-items': 'middle'}
+                    )
+                ], className='center_items'),
                 html.Div(
                     [
-                        html.H3(
-                            children='Granularity'
+                        dcc.Graph(
+                            id='crash_map',
+                            style={'height': '70vh'}
                         ),
-                        dcc.RadioItems(
-                            id='selected_map_granularity',
-                            options=[
-                                {
-                                    'value': 'Suburbs',
-                                    'label': 'Suburbs'
-                                },
-                                {
-                                    'value': 'Districts',
-                                    'label': 'Districts'
-                                }
-                            ],
-                            value='Districts',
-                            labelStyle={'display': 'block'},
-                        )
-                    ]
-                ),
-                html.Div(
-                    [
-                        dcc.Graph(id='crash_map', className='visual'),
                         dcc.Slider(
                             id='selected_year',
                             min=2012,
@@ -112,9 +118,9 @@ var_dashboard = html.Div(
                                 2018: '2018', 2019: '2019', 2020: '2020',
                                 2021: 'All'
                             },
-                            step=None
+                            step=None,
                         )
-                    ],
+                    ]
                 )
             ]
         ),
@@ -139,13 +145,13 @@ var_dashboard = html.Div(
                     [
                         html.Div(
                             [
-                                dcc.Graph(id='location_crash_count_by_year')
+                                dcc.Graph(id='location_crash_count_by_year', style={'height': '30vh'})
                             ],
                             className='visual'
                         ),
                         html.Div(
                             [
-                                dcc.Graph(id='location_crash_severity_by_year')
+                                dcc.Graph(id='location_crash_severity_by_year', style={'height': '30vh'})
                             ],
                             className='visual'
                         )
@@ -257,7 +263,7 @@ def map_crashes_by_suburb_and_date(selected_year, selected_map_granularity):
 
     fig = update_fig_layout(fig)
 
-    fig.update_layout(height=600)
+    #fig.update_layout(autosize=True)
 
     return fig, var_total_crash_count
 
@@ -279,7 +285,7 @@ def crashes_count_by_location_and_year(data_set, location):
 
     fig = update_fig_layout(fig)
 
-    fig = fig.update_layout(height=300)
+    #fig = fig.update_layout(autosize=False)
 
     return fig
 
@@ -304,7 +310,7 @@ def crash_severity_by_location_and_year(data_set, location):
 
     fig = update_fig_layout(fig)
 
-    fig = fig.update_layout(height=300)
+    #fig = fig.update_layout(height=300)
 
     return fig
 

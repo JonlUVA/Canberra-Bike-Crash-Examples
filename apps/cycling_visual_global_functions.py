@@ -67,7 +67,8 @@ def update_fig_layout(fig):
         title_font_size=18,
         legend_font_size=12,
         paper_bgcolor='rgba(0,0,0,0)',
-        plot_bgcolor='rgba(0,0,0,0)'
+        plot_bgcolor='rgba(0,0,0,0)',
+        #autosize=False
     )
 
     fig.update_yaxes(showgrid=True, gridwidth=1, gridcolor='rgba(115,120,125,.2)')
