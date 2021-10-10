@@ -186,32 +186,13 @@ if __name__ == '__main__':
     ##########################################################################
     print_header('Visualising Data')
 
-    # CREATING TEMPORARY CSVs FOR VISUALS
-    print('Generating temporary files')
-    print()
-
-    #   JUST MAKING SURE THERE IS NOTHING THERE
-    for file in os.listdir('apps/temp_data'):
-        os.remove('apps/temp_data/' + file)
-
-    temp_crashes = tempfile.NamedTemporaryFile(
-            prefix='temp_crashes_', suffix='.csv', dir='apps/temp_data', delete=False)
-
-    integrated_data.get('crashes').to_csv(Path(temp_crashes.name), header=True, index=True)
-
-    temp_cyclists = tempfile.NamedTemporaryFile(
-        prefix='temp_cyclists_', suffix='.csv', dir='apps/temp_data', delete=False)
-
-    integrated_data.get('cyclists').to_csv(Path(temp_cyclists.name), header=True, index=True)
-
     print('Starting dashboard...')
     print()
-    os.system('cycling_app_index.py')
-    #   DELETING TEMP FILES
-    print('Deleting temporary files')
-    print()
-    temp_crashes.close()
-    os.unlink(temp_crashes.name)
+
+    from cycling_app_index import *
+
+    app.run_server(debug=False, dev_tools_ui=False)
+
     print()
     print('END :)')
     

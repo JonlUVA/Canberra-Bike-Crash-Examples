@@ -72,5 +72,5 @@ def display_dashboard(pathname):
         return html.P('Error 404: Page not found...')
 
 
-if __name__ == '__main__':
-    app.run_server(debug=True, dev_tools_ui=False)
+#if __name__ == '__main__':
+#    app.run_server(debug=True, dev_tools_ui=False)
