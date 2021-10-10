@@ -1,5 +1,5 @@
-COMP7230 Group Project
-Winter Semester, 2021
+    COMP7230 Group Project
+    Winter Semester, 2021
 
 # _Canberra: Changing Gears on Bike Safety_
 _An investigation on the uphill battle facing cyclists_
@@ -9,7 +9,7 @@ _An investigation on the uphill battle facing cyclists_
 ### Python Interpreter ###
 __**ATTENTION:**__ This must be run using __**Python 3.9**__
 
-The script may run on pre-Python 3.9 interpreters but you may experience issues with data loading into the visualisation on the dashboard. A __compatibility mode__ option is provided that may facilitate the correct rendering of the visualisation dashboard without a system upgrade.  This may be achieved by:
+The program may run on pre-Python 3.9 interpreters but you may experience issues with data loading into the visualisation on the dashboard. A __compatibility mode__ option is provided that may facilitate the correct rendering of the visualisation dashboard without a system upgrade.  This may be achieved by:
 
 1. Running ```$ python3 cycling_main.py -c``` with the `-c` switch from your preferred command line
 2. Setting `cycling_main.py:16` to:
