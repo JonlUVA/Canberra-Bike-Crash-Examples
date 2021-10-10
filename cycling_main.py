@@ -191,7 +191,7 @@ if __name__ == '__main__':
 
     from cycling_app_index import *
 
-    app.run_server(debug=True, dev_tools_silence_routes_logging=True, use_reloader=False)
+    run_vis(reload=False)
     
     print()
     print('END :)')
