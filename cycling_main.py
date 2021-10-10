@@ -8,12 +8,9 @@ download, ingest, analyse, and visualise data.
 @uid:     u7378856
 @created: Sat Sep 18 16:24:21 2021
 """
-import os
+
 import sys
-import time
 from pathlib import Path
-import tempfile
-import csv
 from cycling_check_dependencies import *
 
 
