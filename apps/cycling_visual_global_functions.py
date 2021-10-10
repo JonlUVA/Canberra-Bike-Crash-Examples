@@ -11,13 +11,6 @@ def get_data_for_vis(return_both):
     :param return_both: Are both cyclist and crashes data required for the vis 0 = no, 1 = yes
     :return: the dataset(s) required
     """
-    """
-        for i in os.listdir('apps/temp_data'):
-        if i.startswith('temp_crashes_'):
-            crashes_raw_data = pd.read_csv('apps/temp_data/'+i)
-        elif i.startswith('temp_cyclists_'):
-            cyclist_raw_data = pd.read_csv('apps/temp_data/'+i)
-    """
     crashes_raw_data = pd.read_csv('data/crashes.csv')
     cyclist_raw_data = pd.read_csv('data/cyclists.csv')
 
