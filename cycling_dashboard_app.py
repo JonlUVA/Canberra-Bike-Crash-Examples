@@ -1,5 +1,8 @@
 """
-    This file is just setting up the app
+@author:  Hugh Porter
+@uid:     u7398670
+
+This file is just setting up the app
 """
 
 import dash

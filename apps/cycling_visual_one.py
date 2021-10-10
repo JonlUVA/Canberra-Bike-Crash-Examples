@@ -1,3 +1,7 @@
+"""
+@author:  Hugh Porter
+@uid:     u7398670
+"""
 import json
 import plotly.express as px
 import pandas as pd

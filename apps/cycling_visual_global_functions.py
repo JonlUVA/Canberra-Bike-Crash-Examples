@@ -1,3 +1,8 @@
+"""
+@author:  Hugh Porter
+@uid:     u7398670
+"""
+
 import os
 import pandas as pd
 

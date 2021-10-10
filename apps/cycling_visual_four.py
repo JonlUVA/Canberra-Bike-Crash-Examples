@@ -1,3 +1,8 @@
+"""
+@author:  Hugh Porter
+@uid:     u7398670
+"""
+
 import plotly.express as px
 
 from dash import html
