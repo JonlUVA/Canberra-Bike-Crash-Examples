@@ -56,6 +56,8 @@ On all pages of the application you will see a navigation menu of the left hand 
 
 In the above screenshot all the items highlighted in red will direct you to a new dashboard, while the item highlighted in purple will stop the server ending the cycling_main run.
 
+> Note: It is recommended that you click close when you are finished with the dashboard, otherwise the server will continue to run until you close the terminal.
+
 ### Dashboard One: Location
 
 Visual one is an overiew of crashes by location, time, and severity.
