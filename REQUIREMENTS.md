@@ -10,7 +10,6 @@ With tested system configurations:
 
 | Module | (1) | (2) | (3) |
 |--------|--------|--------|--------|
-| apps | unknown | unknown | unknown |
 | collections | unknown | unknown | unknown |
 | csv | 1.0 | 1.0 | 1.0 |
 | dash | 2.0.0 | 2.0.0 | 2.0.0 |
