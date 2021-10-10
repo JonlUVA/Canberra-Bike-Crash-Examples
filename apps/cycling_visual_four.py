@@ -10,9 +10,15 @@ import numpy as np
 from cycling_dashboard_app import app
 from apps.cycling_visual_global_functions import *
 
+#   Getting Custom Colors
 colors_list = get_colors()
 
+#   Getting Required Data
 df_crashes = get_data_for_vis(0)
+
+######################################################################
+#                          SETTING UP HTML                           #
+######################################################################
 
 var_dashboard = html.Div(
     [
@@ -83,16 +89,23 @@ var_dashboard = html.Div(
 )
 
 
+#########################################
+#          GENERATING VISUALS           #
+#########################################
+
+
 def crashes_by_time_of_day_and_location(data_set, time_filter_vals):
+    """
+    :param time_filter_vals: gets user selected times 0 - 23
+    :return: map scatter plot with crashes between user selected times
+    """
     vis_df = data_set.copy()
-
     vis_df = vis_df.set_axis(pd.to_datetime(vis_df['time']), axis='index')
-
+    #   Making the user input time strings
     start_time = str(time_filter_vals[0]).zfill(2) + ':00'
     finish_time = str(time_filter_vals[1]).zfill(2) + ':59'
-
+    #   Getting rows where time is between user selected inputs
     vis_df = vis_df.between_time(start_time, finish_time)
-
     vis_df = vis_df.groupby(['suburb', 'lat', 'long'], as_index=False).agg({'cyclists': sum})
 
     fig = px.scatter_mapbox(
@@ -112,6 +125,9 @@ def crashes_by_time_of_day_and_location(data_set, time_filter_vals):
 
 
 def crashes_by_day_of_week(data_set):
+    """
+    :return: A bar graph containing the crash count by day
+    """
     vis_df = data_set.copy()
 
     vis_df = vis_df.groupby(['day_of_week'], as_index=False).agg({'cyclists': sum})
@@ -138,8 +154,13 @@ def crashes_by_day_of_week(data_set):
 
 
 def crashes_by_time_of_day(data_set, tod_nearest_minute):
+    """
+    :param tod_nearest_minute: The user selected time grouping
+    :return: A bar graph showing the crashes by user selected time grouping
+    """
     vis_df = data_set.copy()
 
+    #   Rounding time based on user input
     vis_df['time'] = pd.to_datetime(vis_df['time']).round(str(tod_nearest_minute) + 'T').dt.time
 
     vis_df = vis_df.groupby(['time'], as_index=False).agg({'cyclists': sum})
@@ -175,6 +196,12 @@ def crashes_by_time_of_day(data_set, tod_nearest_minute):
     ]
 )
 def crashes_by_time_visual(tod_nearest_minute, selected_dow, selected_tod):
+    """
+    :param tod_nearest_minute: the selected time grouping
+    :param selected_dow: the selected day of the week
+    :param selected_tod: the selected time of day
+    :return: crashes by location vis, crashes by day vis, crashes by time vis
+    """
     vis_df = df_crashes[['district', 'suburb', 'date', 'time', 'cyclists', 'lat', 'long']].copy()
 
     vis_df['day_of_week'] = pd.to_datetime(vis_df['date']).dt.day_name()
