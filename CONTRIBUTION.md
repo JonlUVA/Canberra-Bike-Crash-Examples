@@ -27,6 +27,12 @@ and the main contributions were as follows:
   - Maintained gitlab repository.
   - Prepared [NOTES.md](NOTES.md).
 
-* Hugh Porter (u7398670) --- 33%
-  - Developed classes XYZ
-  - Managed meetings, maintained gitlab
+* Hugh Porter (u7398670) --- 33% 
+  - [cycling_dashboard_app](cycling_dashboard_app.py): To Create an application which could be used to make visualisation interactive.
+  - [cycling_app_index](cycling_app_index.py): To act as index for multi-page dashboard application.
+  - [cycling_visual_global_functions](apps/cycling_visual_global_functions.py): To provide a set of global function the visuals could call from.
+  - [cycling_visual_one](apps/cycling_visual_one.py): To provide visualisations of cycling crashes by locations (suburbs and districts).
+  - [cycling_visual_one](apps/cycling_visual_two.py): To provide visualisations of cycling crashes and cycling crash rate by rainfall.
+  - [cycling_visual_one](apps/cycling_visual_three.py): To provide visualisations of cycling crashes which occur during hours of low light.
+  - [cycling_visual_one](apps/cycling_visual_four.py): To provide visualisation of cycling crashes by time, day of the week, and location 
+  - Added extensive detail to the [NOTES.md](NOTES.md).
