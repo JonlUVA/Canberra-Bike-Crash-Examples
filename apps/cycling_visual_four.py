@@ -1,3 +1,8 @@
+"""
+@author:  Hugh Porter
+@uid:     u7398670
+"""
+
 import plotly.express as px
 
 from dash import html
@@ -61,7 +66,7 @@ var_dashboard = html.Div(
                 )
             ], className='visual'),
             html.Div([
-                dcc.Graph(id='crashes_by_time_of_day')
+                dcc.Graph(id='crashes_by_time_of_day', style={'height': '100%', 'width': '100%'})
             ], className='visual'),
         ], className='wrapper_2x1'),
 

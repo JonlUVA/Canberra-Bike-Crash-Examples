@@ -1,3 +1,7 @@
+"""
+@author:  Hugh Porter
+@uid:     u7398670
+"""
 import pandas as pd
 import numpy as np
 
