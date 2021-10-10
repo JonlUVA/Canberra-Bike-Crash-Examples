@@ -10,6 +10,8 @@ from dash.dependencies import Input, Output
 from cycling_dashboard_app import app
 from apps.cycling_visual_global_functions import *
 
+colors_list = get_colors()
+
 df_crashes = get_data_for_vis(0)
 df_crash_data = df_crashes.copy()
 
@@ -22,23 +24,24 @@ var_dashboard = html.Div(
             className='span_horizontal_2'
         ),
         html.Div([
-            dcc.Graph(id='crashes_by_sunset_time')
+            dcc.Graph(id='crashes_by_sunset_time', style={'height': '50vh'})
         ], className='visual'),
         html.Div([
             html.Div([
-                html.H3(children='Show Severity:'),
-                dcc.RadioItems(
-                    id='bool_show_severity',
-                    options=[
-                        {'label': 'Crashes', 'value': 0},
-                        {'label': 'Severity', 'value': 1}
-                    ],
-                    value=0,
-                    labelStyle={'display': 'block'}
-                )
-
-            ]),
-            dcc.Graph(id='crashes_by_street_lights'),
+                html.Div([
+                    html.H3(children='Show Severity:'),
+                    dcc.RadioItems(
+                        id='bool_show_severity',
+                        options=[
+                            {'label': 'Crashes', 'value': 0},
+                            {'label': 'Severity', 'value': 1}
+                        ],
+                        value=0,
+                        labelStyle={'display': 'block'}
+                    )
+                ])
+            ], className='center_items'),
+            dcc.Graph(id='crashes_by_street_lights', style={'height': '50vh'}),
 
         ], className='visual visual_3_wrapper')
     ],
@@ -50,9 +53,6 @@ def crashes_by_month(data_set):
     vis_df = data_set.copy()
     vis_df = vis_df[vis_df['dark'] == 1]
     vis_df['month'] = pd.to_datetime(vis_df['date']).dt.month_name()
-    #vis_df['sunset_min'] = vis_df['sunset'] - pd.Timedelta(hours=1)
-    #vis_df['sunset_max'] = vis_df['sunset'] + pd.Timedelta(hours=1)
-    #vis_df = vis_df[(vis_df['time'] >= vis_df['sunset_min']) & (vis_df['time'] <= vis_df['sunset_max'])]
 
     vis_df = vis_df.groupby(['month'], as_index=False).agg({'cyclists': sum})
 
@@ -60,6 +60,7 @@ def crashes_by_month(data_set):
         vis_df,
         x='month',
         y='cyclists',
+        color_discrete_sequence=colors_list,
         title='Night Crashes by Month',
         labels={
             'cyclists': 'Cyclists',
@@ -87,6 +88,7 @@ def crashes_by_street_lights(data_set, show_severity):
             vis_df,
             x='number_of_lights',
             y='cyclists',
+            color_discrete_sequence=colors_list,
             title='Crashes by Street Light Count',
             labels={
                 'cyclists': 'Cyclists',
@@ -102,6 +104,7 @@ def crashes_by_street_lights(data_set, show_severity):
             x='number_of_lights',
             y='cyclists',
             color='severity',
+            color_discrete_sequence=colors_list,
             title='Crash Severity by Street Light Count',
             labels={
                 'cyclists': 'Cyclists',
