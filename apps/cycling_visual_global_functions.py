@@ -54,9 +54,9 @@ def update_fig_layout(fig):
             t=50,
         ),
         font_color='#73787D',
-        font_size=10,
-        title_font_size=18,
-        legend_font_size=12,
+        font_size=8,
+        title_font_size=12,
+        legend_font_size=8,
         paper_bgcolor='rgba(0,0,0,0)',
         plot_bgcolor='rgba(0,0,0,0)',
         #autosize=False
