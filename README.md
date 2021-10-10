@@ -6,44 +6,49 @@ _An investigation on the uphill battle facing cyclists_
 
 ## System Requirements
 
+### Python Interpreter ###
 __**ATTENTION:**__ This must be run using __**Python 3.9**__
 
-The script may run on pre-Python 3.9 interpreters but there have been issue with data loading
-into the visualisation on the dashboard. If you experience any issues there is the potential that
-they may be remedied with a system upgrade. However, it may be quicker to run the application/visualisations
-in __compatibiity__ mode. This can be accomplished by:
+The script may run on pre-Python 3.9 interpreters but you may experience issues with data loading into the visualisation on the dashboard. A __compatibility mode__ option is provided that may facilitate the correct rendering of the visualisation dashboard without a system upgrade.  This may be achieved by:
 
-1. Running ```$ python3 cycling_main.py -c``` in your preferred commandline
-2. Changing line 16 in cycling_main.py from:
-`COMPATIBILITY_MODE = False` to `COMPATIBILITY_MODE = True`
+1. Running ```$ python3 cycling_main.py -c``` with the `-c` switch from your preferred command line
+2. Setting `cycling_main.py:16` to:
+ `COMPATIBILITY_MODE = True`
 
+### Third-Party Modules ###
+In addition to a `python3` interpreter, please ensure your system has the below third party modules installed.  Version information is provided for reference as it represents a tested compatible system.
 
-In addition to a `python3` interpreter, please ensure your system has the following third party modules installed:  
-
-
-| Module | Version |
-|--------|---------|
-| dash | 2.0.0 |
-| flask | 2.0.1 |
-| numpy | 1.21.2 |
-| pandas | 1.3.2 |
-| plotly | 5.3.1 |
-| requests | 2.26.0 |
-| shapefile | 2.1.3 |
-| shapely | 1.7.1 |
-| suntime | N/A |
+| Module       | Version |
+|--------------|---------|
+| dash         | 2.0.0   |
+| flask        | 2.0.1   |
+| numpy        | 1.20.3  |
+| pandas       | 1.3.2   |
+| plotly       | 5.3.1   |
+| pyshp        | 2.1.3   |
+| requests     | 2.26.0  |
+| shapely      | 1.7.0   |
+| suntime      | 1.2.5   |
 
 For more detailed compatibility information please see [REQUIREMENTS.md](REQUIREMENTS.md).
 
-**Note:** It is also highly recommended that you run the dashboards on a screen with a resolution of 
-1920px(w) X 1080px(H) you can achieve this resolution by zooming in or out in you internet browser of choice. 
+### Screen Resolution ###
+**Note:** It is also highly recommended that you run the dashboards on a screen with a resolution of
+1920px(w) X 1080px(H).  You can mimic this resolution by zooming in or out in you web browser of choice.
 
 ## Execution
 
 Please run `cycling_main.py` from within your preferred IDE, or from the command line:
 
 ```
-$ python3 cycling_main.py
+$ python3 cycling_main.py [-c]
+
+  -c    Optional flag to execute in compatibility mode for pre Python 3.9 systems.
+```
+
+Once the data ingestion and analysis is complete a visualisation dashboard will be available as an HTTP server that you can access through a web browser.  The program execution will advise the server address, but it will likely be:
+```
+http://127.0.0.1:8050/
 ```
 
 ## Using The Dashboard App
