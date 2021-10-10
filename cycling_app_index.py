@@ -69,6 +69,10 @@ def display_dashboard(pathname):
     elif pathname == '/apps/visual_four':
         return cycling_visual_four.var_dashboard
     elif pathname == '/close':
+        """
+            Code taken from https://stackoverflow.com/questions/55620642/plotly-dash-python-how-to-stop-execution-after-time
+            this is mentioned in ORIGINALITY.md
+        """
         func = request.environ.get('werkzeug.server.shutdown')
         func()
         return html.P('Sever Closed Successfully')
