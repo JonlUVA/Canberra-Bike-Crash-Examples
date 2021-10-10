@@ -6,20 +6,26 @@ _An investigation on the uphill battle facing cyclists_
 
 ## System Requirements
 
+__**ATTENTION:**__ This must be run using __**Python 3.9**__
+
 In addition to a `python3` interpreter, please ensure your system has the following third party modules installed:  
 
-| Module |
-|--------|
-| dash |
-| numpy |
-| pandas |
-| plotly |
-| requests |
-| shapefile |
-| shapely |
-| suntime |
+| Module | Version |
+|--------|---------|
+| dash | 2.0.0 |
+| flask | 2.0.1 |
+| numpy | 1.21.2 |
+| pandas | 1.3.2 |
+| plotly | 5.3.1 |
+| requests | 2.26.0 |
+| shapefile | 2.1.3 |
+| shapely | 1.7.1 |
+| suntime | N/A |
 
 For more detailed compatibility information please see [REQUIREMENTS.md](REQUIREMENTS.md).
+
+**Note:** It is also highly recommended that you run the dashboards on a screen with a resolution of 1600px(w) X 900px(H)
+you can achieve this resolution by zooming in or out in you internet browser of choice. 
 
 ## Execution
 
