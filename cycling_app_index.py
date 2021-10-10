@@ -85,7 +85,8 @@ def run_vis(compatibility_mode=False):
     try:
         app.run_server(dev_tools_silence_routes_logging=True, use_reloader=compatibility_mode)
     except OSError:
-        print('Unfortunately your O/S is currently occupying our HTTP port, please try again shortly.')
-        sys.exit(1)
+        print('\nUnfortunately your operating system is currently occupying our HTTP port, \n'
+              'please try again shortly.')
+        sys.exit()
 #if __name__ == '__main__':
 #    app.run_server(debug=True, dev_tools_ui=False)
