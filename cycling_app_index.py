@@ -72,7 +72,7 @@ def display_dashboard(pathname):
         return html.P('Error 404: Page not found...')
 
 
-def run_vis(reload=False):
+def run_vis(debug=False):
     if reload:
         app.run_server(dev_tools_silence_routes_logging=True, use_reloader=True)
     else:

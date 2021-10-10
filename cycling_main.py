@@ -191,7 +191,21 @@ if __name__ == '__main__':
 
     from cycling_app_index import *
 
-    run_vis(reload=False)
+    if len(sys.argv) > 1:
+        arg = sys.argv[1].strip().lower()
+        
+        if arg.startswith('-d'):
+            debug=True
+        else:
+            debug=False
+    else:
+        arg = input('Would you like to run in debug mode (y/n): ')
+        if arg.lower().startswith('y'):
+            debug=True
+        else:
+            debug=False
+
+    run_vis(debug=debug)
     
     print()
     print('END :)')
