@@ -130,43 +130,45 @@ var_dashboard = html.Div(
         html.Div(
             id='rainfall_crash_count_and_rate',
             children=[
-                html.Div(
-                    [
-                        html.H3(children='Choose Calculation:'),
-                        dcc.RadioItems(
-                            id='selected_crash_calc',
-                            options=[
-                                {
-                                    'value': 1,
-                                    'label': 'Crash Rate %'
-                                },
-                                {
-                                    'value': 0,
-                                    'label': 'Crash Count'
-                                }
-                            ],
-                            value=1,
-                            labelStyle={'display': 'block'}
-                        ),
-                        html.H3(children='Choose Visualisation:', className='mt-10'),
-                        dcc.RadioItems(
-                            id='selected_chart_type',
-                            options=[
-                                {
-                                    'value': 1,
-                                    'label': 'Pie Chart'
-                                },
-                                {
-                                    'value': 0,
-                                    'label': 'Bar Chart'
-                                }
-                            ],
-                            value=0,
-                            labelStyle={'display': 'block'}
-                        )
-                    ],
-                    className='pt-50'
-                ),
+                html.Div([
+                    html.Div(
+                        [
+                            html.H3(children='Choose Calculation:'),
+                            dcc.RadioItems(
+                                id='selected_crash_calc',
+                                options=[
+                                    {
+                                        'value': 1,
+                                        'label': 'Crash Rate %'
+                                    },
+                                    {
+                                        'value': 0,
+                                        'label': 'Crash Count'
+                                    }
+                                ],
+                                value=1,
+                                labelStyle={'display': 'block'}
+                            ),
+                            html.H3(children='Choose Visualisation:', className='mt-10'),
+                            dcc.RadioItems(
+                                id='selected_chart_type',
+                                options=[
+                                    {
+                                        'value': 1,
+                                        'label': 'Pie Chart'
+                                    },
+                                    {
+                                        'value': 0,
+                                        'label': 'Bar Chart'
+                                    }
+                                ],
+                                value=0,
+                                labelStyle={'display': 'block'}
+                            )
+                        ],
+                        className='pt-50'
+                    )
+                ], className='center_items'),
                 dcc.Graph(id='crashes_by_rainfall')
             ],
             className='visual'
