@@ -24,8 +24,8 @@ In addition to a `python3` interpreter, please ensure your system has the follow
 
 For more detailed compatibility information please see [REQUIREMENTS.md](REQUIREMENTS.md).
 
-**Note:** It is also highly recommended that you run the dashboards on a screen with a resolution of 1600px(w) X 900px(H)
-you can achieve this resolution by zooming in or out in you internet browser of choice. 
+**Note:** It is also highly recommended that you run the dashboards on a screen with a resolution of 
+1920px(w) X 1080px(H) you can achieve this resolution by zooming in or out in you internet browser of choice. 
 
 ## Execution
 
