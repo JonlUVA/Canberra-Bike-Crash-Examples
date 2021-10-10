@@ -7,6 +7,10 @@ import pandas as pd
 
 
 def get_data_for_vis(return_both):
+    """
+    :param return_both: Are both cyclist and crashes data required for the vis 0 = no, 1 = yes
+    :return: the dataset(s) required
+    """
     for i in os.listdir('apps/temp_data'):
         if i.startswith('temp_crashes_'):
             crashes_raw_data = pd.read_csv('apps/temp_data/'+i)
@@ -21,9 +25,10 @@ def get_data_for_vis(return_both):
 ######################################################################
 #                   GLOBAL FUNCTIONS FOR VISUALS                     #
 ######################################################################
-
-
 def get_colors():
+    """
+    :return: A colour list for use in the visuals
+    """
     colors_list = [
         '#003f5c',
         '#2f4b7c',
@@ -42,17 +47,6 @@ def update_fig_layout(fig):
     """
         FUNCTION USED TO MAKE VISUALS LOOK SIMILAR IN STYLING
     """
-    list_colors = [
-        '#003f5c',
-        '#2f4b7c',
-        '#665191',
-        '#a05195',
-        '#d45087',
-        '#f95d6a',
-        '#ff7c43',
-        '#ffa600'
-    ]
-
     fig = fig
 
     fig.update_layout(
@@ -75,8 +69,3 @@ def update_fig_layout(fig):
     fig.update_xaxes(showgrid=False)
 
     return fig
-
-    #plot_bgcolor='rgba(0,0,0,0)'
-
-
-#https://learnui.design/tools/data-color-picker.html#palette
