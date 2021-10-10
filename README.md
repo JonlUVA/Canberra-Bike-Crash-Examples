@@ -115,10 +115,3 @@ This visual shows the number of crashed by time. This visual can be group in 15 
 #### Annotated Screenshot
 
 ![Dashboard Visual Four](img/vis-imgs/visual_four_instructions.png)
-
-## References
-[Just Into Data](https://www.justintodata.com/python-interactive-dashboard-with-plotly-dash-tutorial/)
-
-[Python in Plain English](https://python.plainenglish.io/how-to-create-a-interative-map-using-plotly-express-geojson-to-brazil-in-python-fb5527ae38fc)
-
-[Towards Data Science](https://towardsdatascience.com/choropleth-maps-in-practice-with-plotly-and-python-672a5eef3a19)

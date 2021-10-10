@@ -1,6 +1,12 @@
 """
 @author:  Hugh Porter
 @uid:     u7398670
+
+This visualisation contains a choropleth visualisation  which utilises code from T. Lamothe
+(https://towardsdatascience.com/choropleth-maps-in-practice-with-plotly-and-python-672a5eef3a19).
+The code has since been somewhat alternated but would not have been possible without the help of Lamothe's article.
+This is also mentioned in ORIGINALITY.md
+
 """
 import json
 import plotly.express as px

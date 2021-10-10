@@ -30,6 +30,10 @@ def get_data_for_vis(return_both):
 def get_colors():
     """
     :return: A colour list for use in the visuals
+
+    color palete taken from Learn UI Design:
+    https://learnui.design/tools/data-color-picker.html#palette
+    This is also mentioned in ORIGINALITY.md
     """
     colors_list = [
         '#003f5c',

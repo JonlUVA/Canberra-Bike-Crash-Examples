@@ -19,10 +19,9 @@ work, with the following documented exceptions:
 | Streetlight locations | [ACT Government Open Data Portal](https://www.data.act.gov.au) |
 | Suburb boundaries | [Data.gov.au](https://data.gov.au/) |
 
-- The idea of using <...> for <...> came from a discussion with <...> (noted in source code comments)
-- The code for <...> is based on a solution we found when researching the problem (URL provided in source code comments)
-
-    ...
+- The initial setup of plotly visualisations was inspired by Lianne and Justine form [Just Into Data](https://www.justintodata.com/python-interactive-dashboard-with-plotly-dash-tutorial/)
+- The choropleth map configuration utilises code from T. Lamothe from [Towards Data Science](https://towardsdatascience.com/choropleth-maps-in-practice-with-plotly-and-python-672a5eef3a19)
+- The color palette for the visualisation was taken from [Learn UI Design](https://learnui.design/tools/data-color-picker.html#palette)
 
 **Signed:**
 - Jonathon Longden (u7333077),
