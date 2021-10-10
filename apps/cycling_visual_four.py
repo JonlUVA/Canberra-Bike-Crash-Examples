@@ -10,8 +10,9 @@ import numpy as np
 from cycling_dashboard_app import app
 from apps.cycling_visual_global_functions import *
 
-df_crashes = get_data_for_vis(0)
+colors_list = get_colors()
 
+df_crashes = get_data_for_vis(0)
 
 var_dashboard = html.Div(
     [
@@ -37,7 +38,7 @@ var_dashboard = html.Div(
         #   VISUAL ONE AND TWO
         html.Div([
             html.Div([
-                dcc.Graph(id='crashes_by_time_of_day_and_location'),
+                dcc.Graph(id='crashes_by_time_of_day_and_location', style={'height': '30vh', 'width': '40vw'}),
                 html.H3(children='Filter by Time of Day:'),
                 dcc.RangeSlider(
                     id='selected_time_of_day',
@@ -101,6 +102,7 @@ def crashes_by_time_of_day_and_location(data_set, time_filter_vals):
         title='Crashes between ' + start_time + ' and ' + finish_time,
         mapbox_style='carto-darkmatter',
         zoom=9.25,
+        color_discrete_sequence=colors_list,
         center={'lat': -35.3222, 'lon': 149.1287}
     )
 
@@ -119,6 +121,7 @@ def crashes_by_day_of_week(data_set):
         x='day_of_week',
         y='cyclists',
         title='Crashes by Day of the Week',
+        color_discrete_sequence=colors_list,
         labels={
             'cyclists': 'Cyclists',
             'time': 'Time',
@@ -146,6 +149,7 @@ def crashes_by_time_of_day(data_set, tod_nearest_minute):
         x='time',
         y='cyclists',
         title='Crashes by Time',
+        color_discrete_sequence=colors_list,
         labels={
             'cyclists': 'Cyclists',
             'time': 'Time',

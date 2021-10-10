@@ -110,9 +110,8 @@ h4 {
 
 .wrapper_1x3 {
     display: grid;
-    grid-template-rows: 100px 1fr 1fr;
+    grid-template-rows: 100px 45vh 30vh;
     grid-gap: 25px;
-    height: 1px;
 }
 
 .center_items {
@@ -153,7 +152,6 @@ h4 {
 .visual_3_wrapper {
     display: grid;
     grid-template-columns: 175px 1fr;
-    height:600px;
     grid-gap: 25px;
 }
 
