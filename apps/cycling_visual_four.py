@@ -61,7 +61,7 @@ var_dashboard = html.Div(
                 )
             ], className='visual'),
             html.Div([
-                dcc.Graph(id='crashes_by_time_of_day')
+                dcc.Graph(id='crashes_by_time_of_day', style={'height': '100%', 'width': '100%'})
             ], className='visual'),
         ], className='wrapper_2x1'),
 
