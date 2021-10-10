@@ -77,7 +77,7 @@ def display_dashboard(pathname):
 
 
 def run_vis(debug=False):
-    app.run_server(debug=debug, dev_tools_silence_routes_logging=True, use_reloader=debug)
+    app.run_server(dev_tools_silence_routes_logging=True, use_reloader=debug)
     
 #if __name__ == '__main__':
 #    app.run_server(debug=True, dev_tools_ui=False)
